@@ -1,3 +1,3 @@
 # IMAGE-GPT
 
-front-end-practice
+back-end-practice
