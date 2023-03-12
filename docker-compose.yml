@@ -17,6 +17,9 @@ services:
       - MYSQL_PASSWORD=test
     ports:
       - "8000:8000"
+    volumes:
+      - ./test_backend/app/:/app
+      - fastapi_data:/app/__pycache__
     depends_on:
       - db
 
@@ -31,3 +34,4 @@ services:
 
 volumes:
   db_data:
+  fastapi_data:
