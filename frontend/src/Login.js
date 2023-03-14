@@ -1,49 +1,106 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
- 
-function Login() {
-    const [inputId, setInputId] = useState('')
-    const [inputPw, setInputPw] = useState('')
- 
-	// input data 의 변화가 있을 때마다 value 값을 변경해서 useState 해준다
-    const handleInputId = (e) => {
-        setInputId(e.target.value)
-    }
- 
-    const handleInputPw = (e) => {
-        setInputPw(e.target.value)
-    }
- 
-	// login 버튼 클릭 이벤트
-    const onClickLogin = () => {
-        console.log('click login')
-    }
- 
-	// 페이지 렌더링 후 가장 처음 호출되는 함수
-    useEffect(() => {
-        axios.get('/user_inform/login')
-        .then(res => console.log(res))
-        .catch()
-    },
-    // 페이지 호출 후 처음 한번만 호출될 수 있도록 [] 추가
-    [])
- 
-    return(
-        <div>
-            <h2>Login</h2>
-            <div>
-                <label htmlFor='input_id'>ID : </label>
-                <input type='text' name='input_id' value={inputId} onChange={handleInputId} />
-            </div>
-            <div>
-                <label htmlFor='input_pw'>PW : </label>
-                <input type='password' name='input_pw' value={inputPw} onChange={handleInputPw} />
-            </div>
-            <div>
-                <button type='button' onClick={onClickLogin}>Login</button>
-            </div>
-        </div>
-    )
+import React, { useEffect, useState } from 'react'
+
+const User = {                                    //유저의 아이디와 비밀번호를 비교하기 위해 가지고있는거
+  email: 'test@example.com',
+  pw: 'test2323@@@'
 }
- 
-export default Login;
+
+
+export default function Login() {
+    const [email, setEmail] = useState('');
+    const [pw, setPw] = useState('');
+
+    const [emailValid, setEmailValid] = useState(false);
+    const [pwValid, setPwValid] = useState(false);
+    const [notAllow, setNotAllow] = useState(true);
+
+    useEffect(() => {
+      if(emailValid && pwValid) {
+        setNotAllow(false);
+        return;
+      }
+      setNotAllow(true);
+    }, [emailValid, pwValid]);
+
+    const handleEmail = (e) => {
+      setEmail(e.target.value);
+      const regex =
+        /^(([^<>()\[\].,;:\s@"]+(\.[^<>()\[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
+      if (regex.test(e.target.value)) {
+        setEmailValid(true);
+      } else {
+        setEmailValid(false);
+      }
+    };
+    const handlePw = (e) => {
+      setPw(e.target.value);
+      const regex =
+        /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+])(?!.*[^a-zA-z0-9$`~!@$!%*#^?&\\(\\)\-_=+]).{8,20}$/;
+      if (regex.test(e.target.value)) {
+        setPwValid(true);
+      } else {
+        setPwValid(false);
+      }
+    };
+    const onClickConfirmButton = () => {
+      if(email === User.email && pw === User.pw) {
+        alert('로그인에 성공했습니다.')
+      } else {
+        alert("등록되지 않은 회원입니다.");
+      }
+    }
+
+    return (
+      <div className="page">
+        <div className="titleWrap">
+          이메일과 비밀번호를
+          <br />
+          입력해주세요
+        </div>
+
+        <div className="contentWrap">
+          <div className="inputTitle">이메일 주소</div>
+          <div
+            className="inputWrap"
+          >
+            <input
+              className="input"
+              type="text"
+              placeholder="test@gmail.com"
+              value={email}
+              onChange={handleEmail}
+            />
+          </div>
+          <div className="errorMessageWrap">
+            {!emailValid && email.length > 0 && (
+              <div>올바른 이메일을 입력해주세요.</div>
+            )}
+          </div>
+
+          <div style={{ marginTop: "26px" }} className="inputTitle">
+            비밀번호
+          </div>
+          <div className="inputWrap">
+            <input
+              className="input"
+              type="password"
+              placeholder="영문, 숫자, 특수문자 포함 8자 이상"
+              value={pw}
+              onChange={handlePw}
+            />
+          </div>
+          <div className="errorMessageWrap">
+            {!pwValid && pw.length > 0 && (
+              <div>영문, 숫자, 특수문자 포함 8자 이상 입력해주세요.</div>
+            )}
+          </div>
+        </div>
+
+        <div>
+          <button onClick={onClickConfirmButton} disabled={notAllow} className="bottomButton">
+            확인
+          </button>
+        </div>
+      </div>
+    );
+}
