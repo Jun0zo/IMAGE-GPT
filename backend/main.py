@@ -1,31 +1,48 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
+from flask import Flask, jsonify, request
+from flask_cors import CORS
+import jwt
+import datetime
 
-app = FastAPI()
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'your-secret-key'
+CORS(app)
 
-db = [
-    {"id": "choiwonjun", "pw": "1234"},
-    {"id": "jun0jo", "pw": "12345"},
-    {"id": "jeong1park", "pw": "321"},
-]
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.json.get('username')
+    password = request.json.get('password')
 
+    # Check if the credentials are valid (this is just an example, you should use your own authentication mechanism)
+    if username == 'admin' and password == 'password':
+        # Create a JWT token that expires in 1 day
+        token = jwt.encode({'username': username, 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1)}, app.config['SECRET_KEY'])
 
-class Login(BaseModel):
-    id: str
-    pw: str
+        # Return the token
+        return jsonify({'token': token.decode('UTF-8')})
 
+    # If the credentials are invalid, return an error message
+    return jsonify({'error': 'Invalid credentials'})
 
-@app.post("/")
-async def read_root():
-    return {"Hello": "World"}
+@app.route('/protected', methods=['GET'])
+def protected():
+    # Get the token from the request headers
+    token = request.headers.get('Authorization').split()[1]
 
+    try:
+        # Decode the token and get the username
+        payload = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+        username = payload['username']
 
-@app.post("/login")
-async def read_login(login: Login):
-    print({"login_id": login.id, "login_pw": login.pw})
-    for user in db:
-        if login.id == user["id"] and login.pw == user["pw"]:
-            print(login.id, login.pw)
-            return {"로그인 성공"}
-    print(login.id, login.pw)
-    return {"로그인 실패"}
+        # Return a message indicating that the user is logged in
+        return jsonify({'message': f'Welcome {username}!'})
+
+    except jwt.ExpiredSignatureError:
+        # If the token has expired, return an error message
+        return jsonify({'error': 'Token has expired'})
+
+    except jwt.InvalidTokenError:
+        # If the token is invalid, return an error message
+        return jsonify({'error': 'Invalid token'})
+
+if __name__ == '__main__':
+    app.run(debug=True)
