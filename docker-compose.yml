@@ -17,6 +17,7 @@ services:
       - MYSQL_PASSWORD=test
     ports:
       - "8000:8000"
+      # For hot-reload
     volumes:
       - ./test_backend/app/:/app
       - fastapi_data:/app/__pycache__
