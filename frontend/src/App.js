@@ -1,25 +1,21 @@
-/*import Login from "./Login";
+import React from "react";
+import "./App.css";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
 
-function App() {
-  return (
-    <div>
-      <Login />
-    </div>
-  );
-}
-
-export default App;*/
-
-import Login from "./Login";
-import { BrowserRouter, Route, Switch } from "react-router-dom"; 
 function App() {
   return (
     <Router>
-      <Route exact path="/" component={Home} />
-      <Route path="/Login" component={Login} />
-      <Route path="/JoinToMembership" component={JoinToMembership} />
+      <div>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route exact path="/register" element={<Home />} />
+        </Routes>
+      </div>
     </Router>
   );
-} 
+}
 
 export default App;

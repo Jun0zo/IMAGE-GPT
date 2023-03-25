@@ -1,58 +1,28 @@
-.page {
-  position: absolute;
-top: 0;
-bottom: 0;
-width: 100%;
-max-width: 500px;
-  padding: 0 20px;
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 
-left: 50%;
-transform: translate(-50%, 0);
-
-  background-color: #F7F7F7;
-
-overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  background-color: black;
+  /* background: radial-gradient(rgb(0, 0, 0) 0px, #d9d9d9 30%, #ffffff 50%); */
+  height: 100vh;
 }
 
-.titleWrap {
-  margin-top: 87px;
-  font-size: 26px;
-font-weight: bold;
-color: #262626;
-}
-
-.contentWrap {
-  margin-top: 26px;
-  flex: 1;
-}
-
-.inputTitle {
-  font-size: 12px;
-font-weight: 600;
-color: #262626;
-}
-
-.inputWrap {
-  display: flex;
-  border-radius: 8px;
-  padding: 16px;
-  margin-top: 8px;
-  background-color: white;
-  border: 1px solid #e2e0e0;
-}
-.inputWrap:focus-within {
-  border: 1px solid #9e30f4;
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
 }
 
 .input {
   width: 100%;
   outline: none;
-border: none;
+  border: none;
   height: 17px;
   font-size: 14px;
-font-weight: 400;
+  font-weight: 400;
 }
 
 .input::placeholder {
@@ -61,7 +31,7 @@ font-weight: 400;
 
 .bottomButton {
   width: 100%;
-height: 48px;
+  height: 48px;
   border: none;
   font-weight: bold;
   border-radius: 64px;
