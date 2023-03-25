@@ -1,21 +1,19 @@
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import Login from './components/Login';
+import React from "react";
+import "./App.css";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Home from "./pages/Home"
+import Login from "./pages/Login"
 
 function App() {
-  // 토큰이 없으면 로그인 페이지로 이동합니다.
-  const token = localStorage.getItem('token');
-  const isLoggedIn = !!token;
-
   return (
     <Router>
-      <Switch>
-        <Route exact path="/">
-          {isLoggedIn ? <h1>메인 페이지</h1> : <Redirect to="/login" />}
-        </Route>
-        <Route path="/login">
-          {isLoggedIn ? <Redirect to="/" /> : <Login />}
-        </Route>
-      </Switch>
+      <div>
+        <Routes>
+          <Route path="/" element={<Home/>} />
+          <Route path="/login" element={<Login/>} />
+          <Route exact path="/register" element={<Home/>} />
+        </Routes>
+      </div>
     </Router>
   );
 }
