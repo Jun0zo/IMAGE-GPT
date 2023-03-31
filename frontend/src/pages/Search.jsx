@@ -1,9 +1,12 @@
 import * as React from "react";
 import { useParams } from "react-router-dom";
 
+import { Box } from "@mui/material";
+
 import NavBar from "../component/NavBar";
 import SearchBar from "../component/Home/SearchBar";
 import ImageList from "../component/Search/ImageList";
+import OverviewChart from "../component/Search/OverviewChart";
 
 const Search = () => {
   const { keyword } = useParams();
@@ -15,6 +18,7 @@ const Search = () => {
       >
         <SearchBar />
         <ImageList />
+        <OverviewChart />
       </div>
       {keyword}
     </div>

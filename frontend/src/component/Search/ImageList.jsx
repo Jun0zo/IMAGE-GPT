@@ -4,7 +4,6 @@ import {
   ImageList as MUIImageList,
   ImageListItem,
   ImageListItemBar,
-  ListSubheader,
   IconButton,
   Box,
 } from "@mui/material";
