@@ -1,53 +1,74 @@
 import {
   Paper,
   InputBase,
-  Divider,
   IconButton,
   Box,
   InputLabel,
   MenuItem,
   FormControl,
   Select,
-  TextField,
+  Typography,
 } from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
 import DirectionsIcon from "@mui/icons-material/Directions";
+import CommentIcon from "@mui/icons-material/Comment";
 
 import GPTIcon from "../../component/GPTIcon.png";
 
 const SearchBar = () => {
   return (
     <Box sx={{ minWidth: 120, display: "flex", justifyContent: "center" }}>
-      <Paper>
+      <Paper
+        elevation={0}
+        sx={{
+          borderRadius: "4px 0px 0px 4px",
+          border: "0px",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            height: "100%",
+            paddingLeft: "10px",
+          }}
+        >
+          <CommentIcon sx={{ width: "30px" }} />
+        </Box>
+      </Paper>
+      <Paper elevation={0}>
         <FormControl
           fullWidth
           sx={{
             width: "100px",
             backgroundColor: "white",
             border: "0px",
+            paddingLeft: 0,
           }}
         >
           <InputLabel id="demo-simple-select-label" shrink={false}>
-            Age
+            <Typography sx={{ textAlign: "right" }}>자막</Typography>
           </InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={"age"}
+            value={"자막"}
             label="자막"
             displayEmpty
             disableUnderline
             sx={{
               width: "100%",
+              paddingLeft: "0px",
               "& fieldset": {
                 display: "none",
               },
             }}
           >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+            <MenuItem value={10}>자막</MenuItem>
+            <MenuItem value={20}>영상제목</MenuItem>
+            <MenuItem value={30}>영상</MenuItem>
           </Select>
         </FormControl>
       </Paper>
@@ -59,11 +80,12 @@ const SearchBar = () => {
           display: "flex",
           alignItems: "center",
           width: 400,
-          borderLeft: "0px",
+          borderTopLeftRadius: "0px",
+          borderBottomLeftRadius: "0px",
         }}
       >
         <InputBase
-          sx={{ ml: 1, flex: 1 }}
+          sx={{ ml: 1, flex: 1, borderLeft: 0 }}
           placeholder="검색하실 키워드를 입력하세요"
           inputProps={{ "aria-label": "search" }}
         />
