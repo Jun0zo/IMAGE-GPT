@@ -11,10 +11,7 @@ import {
 } from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
-import DirectionsIcon from "@mui/icons-material/Directions";
 import CommentIcon from "@mui/icons-material/Comment";
-
-import GPTIcon from "../../component/GPTIcon.png";
 
 const SearchBar = () => {
   return (
