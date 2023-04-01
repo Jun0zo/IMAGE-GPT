@@ -7,6 +7,7 @@ if '/app' not in sys.path: sys.path.append('/app')
 
 from fastapi import FastAPI
 from routes.user import user
+from routes.statistics import statistics
 
 app = FastAPI(
     title="Users API",
@@ -16,3 +17,4 @@ app = FastAPI(
 )
 
 app.include_router(user)
+app.include_router(statistics)

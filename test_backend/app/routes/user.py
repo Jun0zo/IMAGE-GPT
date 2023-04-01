@@ -1,5 +1,6 @@
 from fastapi import APIRouter
-from config.db import conn
+# from config.db import conn
+# from database.session import
 from models.user import User as UserModel
 from schemas.user import UserCount as UserCountSchema
 from typing import List

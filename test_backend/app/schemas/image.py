@@ -1,6 +1,6 @@
 from typing import Optional, List
 from pydantic import BaseModel
-from schemas import Download
+from schemas.download import Download
 
 class Image(BaseModel):
     id: Optional[int]

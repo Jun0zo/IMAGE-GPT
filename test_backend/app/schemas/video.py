@@ -1,6 +1,6 @@
 from typing import Optional, List
 from pydantic import BaseModel
-
+from schemas.image import Image
 
 class Video(BaseModel):
     id: Optional[int]

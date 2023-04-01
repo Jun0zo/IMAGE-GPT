@@ -1,7 +1,7 @@
 # db.py
 
 from sqlalchemy import create_engine, MetaData
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import declarative_base, sessionmaker
 
 DB = {
     'user':'root',
@@ -16,4 +16,6 @@ engine = create_engine(
 
 meta = MetaData()
 Base = declarative_base()
+
+SessionLocal = sessionmaker(autocommit=False,autoflush=False,bind=engine)
 conn = engine.connect()

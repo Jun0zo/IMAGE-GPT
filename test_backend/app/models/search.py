@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Float, TIMESTAMP
 from sqlalchemy.orm import relationship
-from config.db import meta, engine, Base
+from database.session import meta, engine, Base
 
 class Search(Base):
     __tablename__ = 'searches'

@@ -27,34 +27,34 @@ CREATE TABLE videos (
 CREATE TABLE images (
     id INT AUTO_INCREMENT PRIMARY KEY,
     url VARCHAR(255) NOT NULL,
-    videoid INT NOT NULL,
+    video_id INT NOT NULL,
     subtitle VARCHAR(255),
     emotion_score FLOAT,
-    FOREIGN KEY (videoid) REFERENCES videos(id)
+    FOREIGN KEY (video_id) REFERENCES videos(id)
 );
 
 
 CREATE TABLE downloads (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    userid INT NOT NULL,
-    imageid INT NOT NULL,
+    user_id INT NOT NULL,
+    image_id INT NOT NULL,
     downloaded_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     keyword VARCHAR(50),
-    FOREIGN KEY (userid) REFERENCES users(id),
-    FOREIGN KEY (imageid) REFERENCES images(id)
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (image_id) REFERENCES images(id)
 );
 
 CREATE TABLE searches (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    userid INT NOT NULL,
+    user_id INT NOT NULL,
     keyword VARCHAR(50) NOT NULL,
     searched_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (userid) REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE likes (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    userid INT NOT NULL,
+    user_id INT NOT NULL,
     keyword VARCHAR(50) NOT NULL
 );
 
@@ -64,10 +64,10 @@ CREATE TABLE likes (
 INSERT INTO users (name, email, password, age, sex)
 VALUES ('John Doe', 'johndoe@example.com', 'password', 30, 'Male');
 
-INSERT INTO downloads (userid, imageid, keyword)
+INSERT INTO downloads (user_id, image_id, keyword)
 VALUES (1, 1, 'beach');
 
-INSERT INTO searches (userid, keyword)
+INSERT INTO searches (user_id, keyword)
 VALUES (1, 'sunset');
 
 
@@ -75,8 +75,8 @@ VALUES (1, 'sunset');
 INSERT INTO videos (title, url, tag, hash_tag, emotion_score)
 VALUES ('Sunset at the Beach', 'https://example.com/sunset.mp4', 'beach, sunset', '#beach #sunset', 0.8);
 
-INSERT INTO images (url, videoid, subtitle, emotion_score)
+INSERT INTO images (url, video_id, subtitle, emotion_score)
 VALUES ('a.jpg', 1, 'A beautiful sunset at the beach', 0.8);
 
-INSERT INTO likes (userid, keyword)
+INSERT INTO likes (user_id, keyword)
 VALUES (1, 'sunset');
