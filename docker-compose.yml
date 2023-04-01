@@ -10,7 +10,7 @@ services:
     volumes:
       - db_data:/var/lib/mysql
   fastapi:
-    build: ./test_backend
+    build: ./backend
     environment:
       - MYSQL_HOST=db
       - MYSQL_USER=root
@@ -19,13 +19,13 @@ services:
       - "8000:8000"
       # For hot-reload
     volumes:
-      - ./test_backend/app/:/app
+      - ./backend/app/:/app
       - fastapi_data:/app/__pycache__
     depends_on:
       - db
 
 #   react:
-#     build: ./test_frontend
+#     build: ./frontend
 #     environment:
 #       - REACT_APP_API_URL=http://fastapi:8000
 #     ports:
