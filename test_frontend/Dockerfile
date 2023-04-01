@@ -23,4 +23,5 @@ RUN npm run build
 EXPOSE 3000
 
 # Serve the application using serve
+
 CMD ["npm", "run", "serve"]

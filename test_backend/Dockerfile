@@ -7,6 +7,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application code into the container
 COPY . .
+RUN pip install --no-cache-dir --upgrade -r ./requirements.txt
 
 # Set environment variables for the FastAPI app
 ENV PYTHONUNBUFFERED=1

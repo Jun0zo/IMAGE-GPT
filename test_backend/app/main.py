@@ -1,16 +1,18 @@
+# main.py
 import os
+import sys
+
+if '/' not in sys.path: sys.path.append('/')
+if '/app' not in sys.path: sys.path.append('/app')
+
 from fastapi import FastAPI
+from routes.user import user
 
-app = FastAPI()
+app = FastAPI(
+    title="Users API",
+    description="a REST API using python and mysql",
+    version="0.0.1",
+    # openapi_tags=tags_metadata,
+)
 
-print(os.environ['MYSQL_HOST'])
-print(os.environ['MYSQL_USER'])
-print(os.environ['MYSQL_PASSWORD'])
-
-@app.get("/")
-def read_root():
-    return {"Hello": "test"}
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: str | None = None):
-    return {"item_id": item_id, "q": q}
+app.include_router(user)
