@@ -6,7 +6,19 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  background-color: black;
+  background-color: #0e1117;
   /* background: radial-gradient(rgb(0, 0, 0) 0px, #d9d9d9 30%, #ffffff 50%); */
   height: 100vh;
+}
+
+.apexcharts-canvas {
+  border: none !important;
+}
+
+.apexcharts-donut-series .apexcharts-slice {
+  transition: fill 700ms ease;
+}
+
+.apexcharts-donut-series .apexcharts-slice:hover {
+  fill: #ff5722 !important;
 }
