@@ -6,6 +6,7 @@ class Image(Base):
     __tablename__ = 'images'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
+    url = Column(String(255))
     video_id = Column(Integer, ForeignKey('videos.id'), nullable=False)
     subtitle = Column(String(255))
     emotion_score = Column(Float)
