@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+  db:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=test
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+  fastapi:
+    build: ./test_backend
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=test
+    ports:
+      - "8000:8000"
+      # For hot-reload
+    volumes:
+      - ./test_backend/app/:/app
+      - fastapi_data:/app/__pycache__
+    depends_on:
+      - db
+
+#   react:
+#     build: ./test_frontend
+#     environment:
+#       - REACT_APP_API_URL=http://fastapi:8000
+#     ports:
+#       - "3000:3000"
+#     depends_on:
+#       - fastapi
+
+volumes:
+  db_data:
+  fastapi_data:
