@@ -16,9 +16,14 @@ const Search = () => {
       <div
         style={{ display: "flex", flexDirection: "column", marginTop: "50px" }}
       >
-        <SearchBar />
-        <ImageList />
-        <OverviewChart />
+        <Box sx={{ height: "100vh" }}>
+          <SearchBar />
+          <ImageList />
+        </Box>
+
+        <Box sx={{ height: "100vh" }}>
+          <OverviewChart />
+        </Box>
       </div>
       {keyword}
     </div>
