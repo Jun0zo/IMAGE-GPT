@@ -13,7 +13,7 @@ import InfoIcon from "@mui/icons-material/Info";
 const ImageList = () => {
   return (
     <Box sx={{ display: "flex", justifyContent: "center", marginTop: "50px" }}>
-      <MUIImageList cols={4} gap={20} sx={{ gap: "20px", width: "80vw" }}>
+      <MUIImageList cols={4} gap={20} sx={{ gap: "20px", width: "70vw" }}>
         {itemData.map((item) => (
           <ImageListItem key={item.img}>
             <img
