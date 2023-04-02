@@ -3,7 +3,7 @@ const API_ENDPOINTS = {
   USERS: "/users",
   STATISTICS: {
     SIMILAR_KEYWORDS: "/statistics/similar_keywords",
-    RELATED_VIDEO: "/statistics/related_videos",
+    RELATED_VIDEOS: "/statistics/related_videos",
     SATISFACTION: "/statistics/satisfaction",
     AGE: "/statistics/age",
     TREND: "/statistics/trend",

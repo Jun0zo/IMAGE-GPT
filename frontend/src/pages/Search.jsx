@@ -25,15 +25,17 @@ const Search = () => {
           API_ENDPOINTS.STATISTICS.SIMILAR_KEYWORDS,
           { params: { keyword } }
         );
+        console.log("res1");
         const response2 = await server.get(
           API_ENDPOINTS.STATISTICS.RELATED_VIDEOS,
           { params: { keyword } }
         );
+        console.log("res2");
         const response3 = await server.get(
           API_ENDPOINTS.STATISTICS.SATISFACTION,
           { params: { keyword } }
         );
-
+        console.log("res3");
         const response4 = await server.get(API_ENDPOINTS.STATISTICS.AGE, {
           params: { keyword },
         });
