@@ -23,31 +23,31 @@ const Search = () => {
         setIsLoading(true);
         const response1 = await server.get(
           API_ENDPOINTS.STATISTICS.SIMILAR_KEYWORDS,
-          { keyword }
+          { params: { keyword } }
         );
         const response2 = await server.get(
           API_ENDPOINTS.STATISTICS.RELATED_VIDEOS,
-          { keyword }
+          { params: { keyword } }
         );
         const response3 = await server.get(
           API_ENDPOINTS.STATISTICS.SATISFACTION,
-          { keyword }
+          { params: { keyword } }
         );
 
         const response4 = await server.get(API_ENDPOINTS.STATISTICS.AGE, {
-          keyword,
+          params: { keyword },
         });
         const response5 = await server.get(API_ENDPOINTS.STATISTICS.TREND, {
-          keyword,
+          params: { keyword },
         });
         const response6 = await server.get(API_ENDPOINTS.STATISTICS.GENDER, {
-          keyword,
+          params: { keyword },
         });
         const response7 = await server.get(API_ENDPOINTS.STATISTICS.TREND, {
-          keyword,
+          params: { keyword },
         });
         const response8 = await server.get(API_ENDPOINTS.STATISTICS.DOWNLOAD, {
-          keyword,
+          params: { keyword },
         });
 
         setStatisticsData({

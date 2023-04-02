@@ -24,4 +24,4 @@ EXPOSE 3000
 
 # Serve the application using serve
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "start"]
