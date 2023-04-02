@@ -17,7 +17,6 @@ const SearchBar = ({ keyword }) => {
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
-    alert("!!");
     event.preventDefault();
     navigate(`/search?keyword=${keyword}`);
   };

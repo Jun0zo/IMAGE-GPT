@@ -19,7 +19,6 @@ const Search = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      alert(keyword);
       try {
         setIsLoading(true);
         const response1 = await server.get(
