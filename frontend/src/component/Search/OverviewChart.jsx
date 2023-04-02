@@ -26,7 +26,11 @@ const rows = [
 const KeywordTable = () => {
   return (
     <TableContainer
-      sx={{ height: "100%", backgroundColor: "#0e1117" }}
+      sx={{
+        height: "100%",
+        color: "#949aa3",
+        backgroundColor: "rgba(0,0,0,0)",
+      }}
       component={Paper}
     >
       <Table aria-label="simple table">
@@ -133,25 +137,49 @@ const SearchTrendByPeriodChart = () => {
           show: false,
         },
       },
-
       grid: {
         show: false,
       },
       xaxis: {
         categories: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec",
+          "2022/04",
+          "2022/05",
+          "2022/06",
+          "2022/07",
+          "2022/08",
+          "2022/09",
+          "2022/10",
+          "2022/11",
+          "2022/12",
+          "2023/01",
+          "2023/02",
+          "2023/03",
         ],
+        labels: {
+          style: {
+            colors: [
+              "#666666",
+              "#666666",
+              "#666666",
+              "#666666",
+              "#666666",
+              "#666666",
+              "#666666",
+              "#666666",
+              "#666666",
+              "#666666",
+              "#666666",
+              "#666666",
+            ],
+          },
+        },
+      },
+      yaxis: {
+        labels: {
+          style: {
+            colors: ["#666666"],
+          },
+        },
       },
     },
     series: [
@@ -335,19 +363,19 @@ const OverviewChart = () => {
       <Grid container sx={{ width: "81%" }}>
         <Grid item xs={12} lg={3} sx={{ padding: "10px" }}>
           {/* SearchTrendWeeklyChart */}
-          <ChartCard small_title="일주일간 검색추이" sx={{ height: "100px" }}>
+          <ChartCard big_title="일주일간 검색추이" sx={{ height: "100px" }}>
             <SearchTrendWeeklyChart />
           </ChartCard>
         </Grid>
         <Grid item xs={12} lg={3} sx={{ padding: "10px" }}>
           {/* SearchByGenderChart */}
-          <ChartCard small_title="성별별 검색수" sx={{ height: "100px" }}>
+          <ChartCard big_title="성별별 검색수" sx={{ height: "100px" }}>
             <SearchByGenderChart />
           </ChartCard>
         </Grid>
         <Grid item xs={12} lg={6} sx={{ padding: "10px" }}>
           {/* SearchSatisfaction */}
-          <ChartCard small_title="검색 결과 만족도" sx={{ height: "100px" }}>
+          <ChartCard big_title="검색 결과 만족도" sx={{ height: "100px" }}>
             abc123
           </ChartCard>
         </Grid>
