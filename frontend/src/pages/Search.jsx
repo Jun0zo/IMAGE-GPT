@@ -3,10 +3,10 @@ import { useParams } from "react-router-dom";
 
 import { Box } from "@mui/material";
 
-import NavBar from "../component/NavBar";
-import SearchBar from "../component/Home/SearchBar";
-import ImageList from "../component/Search/ImageList";
-import OverviewChart from "../component/Search/OverviewChart";
+import NavBar from "component/NavBar";
+import SearchBar from "component/Home/SearchBar";
+import ImageList from "component/Search/ImageList";
+import OverviewChart from "component/Search/OverviewChart";
 
 const Search = () => {
   const { keyword } = useParams();

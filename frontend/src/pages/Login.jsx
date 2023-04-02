@@ -1,4 +1,4 @@
-import NavBar from "../component/NavBar";
+import NavBar from "component/NavBar";
 // import Button from
 
 function Home() {
