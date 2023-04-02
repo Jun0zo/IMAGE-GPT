@@ -36,7 +36,7 @@ function NavBar() {
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: "black" }}>
+    <AppBar position="static" sx={{ backgroundColor: "#161f2b" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <img src={GPTIcon} alt="" style={{ height: "30px" }} />

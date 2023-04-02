@@ -23,6 +23,11 @@ const rows = [
   createData("Cupcake", 305, 3.7, 67, 4.3),
 ];
 
+const rows2 = [
+  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
+  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
+];
+
 const KeywordTable = () => {
   return (
     <TableContainer
@@ -36,11 +41,16 @@ const KeywordTable = () => {
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell sx={{ color: "white" }}>
-              Dessert (100g serving)
+            <TableCell
+              sx={{ color: "#e2e2e2", borderBottom: "1px solid #515151" }}
+            >
+              키워드
             </TableCell>
-            <TableCell align="right" sx={{ color: "white" }}>
-              Calories
+            <TableCell
+              align="right"
+              sx={{ color: "#e2e2e2", borderBottom: "1px solid #515151" }}
+            >
+              유사도
             </TableCell>
           </TableRow>
         </TableHead>
@@ -52,10 +62,78 @@ const KeywordTable = () => {
                 "&:last-child td, &:last-child th": { border: 0 },
               }}
             >
-              <TableCell component="th" scope="row" sx={{ color: "white" }}>
+              <TableCell
+                component="th"
+                scope="row"
+                sx={{
+                  color: "#e2e2e2",
+                  borderBottom: "1px solid #515151",
+                }}
+              >
                 {row.name}
               </TableCell>
-              <TableCell align="right" sx={{ color: "white" }}>
+              <TableCell
+                align="right"
+                sx={{ color: "#e2e2e2", borderBottom: "1px solid #515151" }}
+              >
+                {row.calories}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+};
+
+const VideoTable = () => {
+  return (
+    <TableContainer
+      sx={{
+        height: "100%",
+        color: "#949aa3",
+        backgroundColor: "rgba(0,0,0,0)",
+      }}
+      component={Paper}
+    >
+      <Table aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell
+              sx={{ color: "#e2e2e2", borderBottom: "1px solid #515151" }}
+            >
+              Dessert (100g serving)
+            </TableCell>
+            <TableCell
+              align="right"
+              sx={{ color: "#e2e2e2", borderBottom: "1px solid #515151" }}
+            >
+              Calories
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows2.map((row) => (
+            <TableRow
+              key={row.name}
+              sx={{
+                "&:last-child td, &:last-child th": { border: 0 },
+              }}
+            >
+              <TableCell
+                component="th"
+                scope="row"
+                sx={{
+                  color: "#e2e2e2",
+                  borderBottom: "1px solid #515151",
+                }}
+              >
+                {row.name}
+              </TableCell>
+              <TableCell
+                align="right"
+                sx={{ color: "#e2e2e2", borderBottom: "1px solid #515151" }}
+              >
                 {row.calories}
               </TableCell>
             </TableRow>
@@ -396,7 +474,7 @@ const OverviewChart = () => {
         <Grid item xs={12} lg={3} sx={{ padding: "10px" }}>
           <ChartCard big_title="비디오 정보" sx={{ height: "250px" }}>
             {/* VideoInfoTable */}
-            <KeywordTable />
+            <VideoTable />
           </ChartCard>
         </Grid>
         <Grid item xs={12} lg={6} sx={{ padding: "10px" }}>
