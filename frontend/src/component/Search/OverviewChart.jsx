@@ -144,6 +144,10 @@ const VideoTable = () => {
   );
 };
 
+const SafisfactionTable = () => {
+  return null;
+};
+
 const SearchCountByAgeGroupChart = () => {
   const [chartData, setChartData] = useState({
     series: [
@@ -313,7 +317,7 @@ const SearchByGenderChart = () => {
   });
 
   return (
-    <Box sx={{ height: "100%" }}>
+    <Box sx={{ height: "100%", display: "flex", alignItems: "flex-end" }}>
       <Chart
         options={chartData.options}
         series={chartData.series}
@@ -441,54 +445,55 @@ const OverviewChart = () => {
       <Grid container sx={{ width: "81%" }}>
         <Grid item xs={12} lg={3} sx={{ padding: "10px" }}>
           {/* SearchTrendWeeklyChart */}
-          <ChartCard big_title="일주일간 검색추이" sx={{ height: "100px" }}>
+          <ChartCard
+            isSmallCard
+            title="일주일간 검색추이2"
+            sx={{ height: "150px" }}
+          >
             <SearchTrendWeeklyChart />
           </ChartCard>
         </Grid>
         <Grid item xs={12} lg={3} sx={{ padding: "10px" }}>
           {/* SearchByGenderChart */}
-          <ChartCard big_title="성별별 검색수" sx={{ height: "100px" }}>
+          <ChartCard isSmallCard sx={{ height: "200px", paddingTop: "0px" }}>
             <SearchByGenderChart />
           </ChartCard>
         </Grid>
         <Grid item xs={12} lg={6} sx={{ padding: "10px" }}>
           {/* SearchSatisfaction */}
-          <ChartCard big_title="검색 결과 만족도" sx={{ height: "100px" }}>
+          <ChartCard title="검색 결과 만족도" sx={{ height: "100px" }}>
             abc123
           </ChartCard>
         </Grid>
 
         <Grid item xs={12} lg={6} sx={{ padding: "10px" }}>
-          <ChartCard big_title="유사 키워드" sx={{ height: "300px" }}>
+          <ChartCard title="유사 키워드" sx={{ height: "300px" }}>
             {/* KeywordTable */}
             <KeywordTable />
           </ChartCard>
         </Grid>
         <Grid item xs={12} lg={6} sx={{ padding: "10px" }}>
           {/* SearchTrendByPeriodChart */}
-          <ChartCard big_title="기간별 검색 추이" sx={{ height: "300px" }}>
+          <ChartCard title="기간별 검색 추이" sx={{ height: "300px" }}>
             <SearchTrendByPeriodChart />
           </ChartCard>
         </Grid>
 
         <Grid item xs={12} lg={3} sx={{ padding: "10px" }}>
-          <ChartCard big_title="비디오 정보" sx={{ height: "250px" }}>
+          <ChartCard title="비디오 정보" sx={{ height: "250px" }}>
             {/* VideoInfoTable */}
             <VideoTable />
           </ChartCard>
         </Grid>
         <Grid item xs={12} lg={6} sx={{ padding: "10px" }}>
-          <ChartCard big_title="연령대별 검색 횟수" sx={{ height: "250px" }}>
+          <ChartCard title="연령대별 검색 횟수" sx={{ height: "250px" }}>
             {/* SearchCountByAgeGroupChart */}
             <SearchCountByAgeGroupChart />
           </ChartCard>
         </Grid>
         <Grid item xs={12} lg={3} sx={{ padding: "10px" }}>
           {/* SearchDownloadRatioChart */}
-          <ChartCard
-            big_title="검색 대비 다운로드 비율"
-            sx={{ height: "250px" }}
-          >
+          <ChartCard title="검색 대비 다운로드 비율" sx={{ height: "250px" }}>
             <SearchDownloadRatioChart />
           </ChartCard>
         </Grid>

@@ -2,11 +2,12 @@ const API_ENDPOINTS = {
   LOGIN: "/login",
   USERS: "/users",
   STATISTICS: {
-    GENDER: "/statistics/gender",
+    SIMILAR_KEYWORDS: "/statistics/similar_keywords",
+    RELATED_VIDEO: "/statistics/related_videos",
     SATISFACTION: "/statistics/satisfaction",
-    TREND: "/statistics/trend",
-    RELATED_VIDEO: "/statistics/related_video",
     AGE: "/statistics/age",
+    TREND: "/statistics/trend",
+    GENDER: "/statistics/gender",
     DOWNLOAD: "/statistics/download",
   },
 };

@@ -2,7 +2,8 @@ import { Box, IconButton } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 const ChartCard = (props) => {
-  const { sx, small_title, big_title, children } = props;
+  const { sx, title, isSmallCard, children } = props;
+  console.log(isSmallCard);
   return (
     <Box
       sx={{
@@ -11,8 +12,7 @@ const ChartCard = (props) => {
         borderRadius: "15px",
       }}
     >
-      {small_title ? <Box sx={{ color: "white" }}>{small_title}</Box> : null}
-      {big_title ? (
+      {title ? (
         <Box
           sx={{
             borderTopLeftRadius: "15px",
@@ -22,10 +22,11 @@ const ChartCard = (props) => {
             color: "#dedede",
             display: "flex",
             justifyContent: "space-between",
+
             // backgroundColor: "#262626",
           }}
         >
-          <Box sx={{ display: "flex", alignItems: "center" }}>{big_title}</Box>
+          <Box sx={{ display: "flex", alignItems: "center" }}>{title}</Box>
           <Box>
             <IconButton aria-label="more">
               <MoreVertIcon sx={{ color: "#dedede" }} />
@@ -33,7 +34,17 @@ const ChartCard = (props) => {
           </Box>
         </Box>
       ) : null}
-      <Box sx={{ padding: "20px", height: "100%", ...sx }}>{children}</Box>
+      <Box
+        sx={{
+          padding: "20px",
+          height: "100%",
+          paddingTop: isSmallCard ? "5px" : "20px",
+          paddingBottom: isSmallCard ? "5px" : "20px",
+          ...sx,
+        }}
+      >
+        {children}
+      </Box>
     </Box>
   );
 };
