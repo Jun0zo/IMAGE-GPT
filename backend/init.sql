@@ -64,23 +64,22 @@ CREATE TABLE likes (
 INSERT INTO users (name, email, password, age, sex)
 VALUES ('John Doe', 'johndoe@example.com', 'password', 30, 'Male');
 
+
+INSERT INTO videos (title, url, tag, hash_tag, emotion_score)
+VALUES ('Sunset at the Beach', 'https://example.com/sunset.mp4', 'beach, sunset', '#beach #sunset', 0.8);
+
+
+INSERT INTO images (url, video_id, subtitle, emotion_score)
+VALUES ('a.jpg', 1, 'A beautiful sunset at the beach', 0.8);
+
 INSERT INTO downloads (user_id, image_id, keyword)
 VALUES (1, 1, 'beach');
 
 INSERT INTO searches (user_id, keyword)
 VALUES (1, 'sunset');
 
-
-
-INSERT INTO videos (title, url, tag, hash_tag, emotion_score)
-VALUES ('Sunset at the Beach', 'https://example.com/sunset.mp4', 'beach, sunset', '#beach #sunset', 0.8);
-
-INSERT INTO images (url, video_id, subtitle, emotion_score)
-VALUES ('a.jpg', 1, 'A beautiful sunset at the beach', 0.8);
-
 INSERT INTO likes (user_id, keyword)
 VALUES (1, 'sunset');
-
 
 
 DELIMITER $$
