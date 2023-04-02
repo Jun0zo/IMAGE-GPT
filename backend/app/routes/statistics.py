@@ -26,8 +26,7 @@ from schemas.trend_chart import TrendChartData
 statistics = APIRouter()
 
 # 일주일간 검색추이 (기간별)
-# 성별별 검색수 SearchByGenderChart
-
+# 성별별 검색수
 # 검색 결과 만족도 
 # 기간별 검색 추이
 # 유사 키워드
@@ -35,8 +34,24 @@ statistics = APIRouter()
 # 연령대별 검색 횟수 
 # 검색 대비 다운로드 비율
 
+# 성별별 검색수 SearchByGenderChart
+@statistics.get("/search_gender", tags=["statistics"])
+def search_by_gender(sex: str, keyword: str = None, db: Session = Depends(get_db)):
+    # SELECT COUNT(*) FROM (SELECT user_id, sex FROM downloads WHERE keyword = 'keyword') AS users WHERE sex = 'sex';
+    
+    result = db.query(func.count('*')).select_from(
+        db.query(Download.user_id, User.sex).
+        join(User, Download.user_id == User.id).
+        filter(Download.keyword == keyword).
+        subquery()
+    ).filter_by(sex=sex).scalar()
+    
+    return result
+
+
+
 # 검색 결과 만족도
-@statistics.get("/search_satisfaction/{keyword}")
+@statistics.get("/search_satisfaction/{keyword}", tags=["statistics"])
 def get_search_satisfaction(keyword: str, db: Session = Depends(get_db)):
     # Get the number of likes for the keyword
     # SELECT user_id, keyword FROM likes WHERE keyword LIKE '%<keyword>%';
