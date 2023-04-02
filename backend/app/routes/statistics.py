@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 # from schemas.video import UserCount as UserCountSchema
 
 from typing import List
-from sqlalchemy import func, select
+from sqlalchemy import func, select, desc
 from models.user import User
 from models.image import Image
 from models.like import Like
@@ -28,9 +28,9 @@ statistics = APIRouter()
 # 일주일간 검색추이 (기간별)
 # 성별별 검색수 SearchByGenderChart
 # 검색 결과 만족도 SearchSatisfaction
-# 유사 키워드 KeywordTable
+
 # 기간별 검색 추이
-# 비디오 정보 VideoInfoTable
+# 비디오 정보
 # 연령대별 검색 횟수 
 # 검색 대비 다운로드 비율
 
@@ -82,7 +82,17 @@ def get_search_trend_by_period_chart(db: Session = Depends(get_db)) -> TrendChar
     return {"data": chart_data}
 
 
-
+# 유사 키워드 KeywordTable
+@statistics.get("/similar_keywords", response_model=List[str])
+def get_similar_keywords(keyword: str, db: Session = Depends(get_db)):
+    keywords = (
+        db.query(Image.subtitle, func.levenshtein(Image.subtitle, keyword).label("distance"))
+            .filter(Image.subtitle.ilike(f"%{keyword}%"))
+            .order_by("distance")
+            .limit(10)
+            .all()
+    )
+    return [kw[0] for kw in keywords]
 
 # 비디오 정보
 @statistics.get("/videoInfo", tags=["statistics"])
