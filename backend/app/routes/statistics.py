@@ -87,7 +87,6 @@ def get_search_trend_by_period_chart(db: Session = Depends(get_db)) -> TrendChar
     elif period == "month":
         date_format = "%Y-%m"
         date_column = func.date_format(Search.searched_time, '%Y-%m-01')
-        print('date_', date_column)
         group_by = date_column
         date_range = timedelta(days=30)
 
@@ -102,7 +101,6 @@ def get_search_trend_by_period_chart(db: Session = Depends(get_db)) -> TrendChar
     chart_data = []
     start_date = datetime.today() - date_range * 30 if period == 'week' else datetime.today() - date_range * 12
     end_date = datetime.today()
-    print(date_range)
     date_range = end_date - start_date
     for i in range(0, date_range.days + 1, 0 if period == 'week' else 30):
         date = start_date + timedelta(days=i)
@@ -111,7 +109,6 @@ def get_search_trend_by_period_chart(db: Session = Depends(get_db)) -> TrendChar
         chart_data.append((date_str, search_count))
 
         # return {"chart_type": "line", "data": chart_data}
-    print(date_range, start_date, end_date)
     return {"data": chart_data}
 
 # 유사 키워드
@@ -156,8 +153,6 @@ def search_download_ratio_chart(db: Session = Depends(get_db)):
 
     # Query all downloads for the age group
     downloads = db.query(Download).join(Download.user).all()
-    print('search :', searches)
-    print('downloads :', downloads)
 
     # Calculate the count of each keyword in searches and downloads
     search_counts = {}

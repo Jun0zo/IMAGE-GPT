@@ -9,6 +9,7 @@ services:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+    command: ["--bind-address=0.0.0.0"]
   fastapi:
     build: ./backend
     environment:
