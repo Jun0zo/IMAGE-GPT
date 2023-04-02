@@ -24,14 +24,14 @@ services:
     depends_on:
       - db
 
-#   react:
-#     build: ./frontend
-#     environment:
-#       - REACT_APP_API_URL=http://fastapi:8000
-#     ports:
-#       - "3000:3000"
-#     depends_on:
-#       - fastapi
+  react:
+    build: ./frontend
+    environment:
+      - REACT_APP_API_URL=http://fastapi:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - fastapi
 
 volumes:
   db_data:
