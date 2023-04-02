@@ -11,8 +11,9 @@ from typing import List
 from sqlalchemy import func, select
 from models.user import User
 from models.image import Image
-from models.video import Video
 from models.like import Like
+from models.video import Video
+
 from models.download import Download
 from models.search import Search
 
@@ -24,17 +25,19 @@ from schemas.trend_chart import TrendChartData
 
 statistics = APIRouter()
 
-
-@statistics.get("/videos", response_model=List[VideoSchema], tags=["statistics"])
-def get_videos(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    videos = db.query(Video).offset(skip).limit(limit).all()
-    print('videos :', videos)
-    return videos
+# 일주일간 검색추이 (기간별)
+# 성별별 검색수 SearchByGenderChart
+# 검색 결과 만족도 SearchSatisfaction
+# 유사 키워드 KeywordTable
+# 기간별 검색 추이
+# 비디오 정보 VideoInfoTable
+# 연령대별 검색 횟수 
+# 검색 대비 다운로드 비율
 
 
 
 # 기간별 검색 추이
-@statistics.get("/search-trend-by-period-chart")
+@statistics.get("/search-trend-by-period-chart", tags=["statistics"])
 def get_search_trend_by_period_chart(db: Session = Depends(get_db)) -> TrendChartData:
     # Define the period (daily, weekly, monthly)
     period = "month"
@@ -78,8 +81,33 @@ def get_search_trend_by_period_chart(db: Session = Depends(get_db)) -> TrendChar
     print(date_range, start_date, end_date)
     return {"data": chart_data}
 
+
+
+
+# 비디오 정보
+@statistics.get("/videoInfo", tags=["statistics"])
+def get_videos_by_keyword(keyword: str, db: Session = Depends(get_db)):
+    images = db.query(Image).filter(Image.subtitle.like(f'%{keyword}%')).all()
+    video_ids = set([image.video_id for image in images])
+    videos = db.query(Video).filter(Video.id.in_(video_ids)).all()
+    return videos
+
+# 연령대별 검색 횟수
+@statistics.get("/search_count_by_age_group_chart", tags=["statistics"])
+def get_search_count_by_age_group_chart(keyword: str, db: Session = Depends(get_db)):
+    age_groups = [(18, 24), (25, 34), (35, 44), (45, 54), (55, 64), (65, 100)]
+    chart_data = []
+    for age_group in age_groups:
+        age_group_count = db.query(User)\
+            .filter(User.age >= age_group[0], User.age <= age_group[1])\
+            .join(User.searches)\
+            .filter(Search.keyword == keyword)\
+            .count()
+        chart_data.append({"age_group": f"{age_group[0]}-{age_group[1]}", "count": age_group_count})
+    return chart_data
+
 # 검색 대비 다운로드 비율 
-@statistics.get("/search_download_ratio_chart")
+@statistics.get("/search_download_ratio_chart", tags=["statistics"])
 def search_download_ratio_chart(db: Session = Depends(get_db)):
     # Query all searches for the age group
     searches = db.query(Search).join(Search.user).all()
@@ -111,16 +139,3 @@ def search_download_ratio_chart(db: Session = Depends(get_db)):
             ratios.append({'keyword': keyword, 'ratio': ratio})
 
     return ratios
-
-# 연령대별 검색 횟수
-@statistics.get("/search_count_by_age_group_chart",  tags=["statistics"])
-def get_search_count_by_age_group_chart(db: Session = Depends(get_db)):
-    age_groups = [(18, 24), (25, 34), (35, 44), (45, 54), (55, 64), (65, 100)]
-    chart_data = []
-    for age_group in age_groups:
-        age_group_count = db.query(User)\
-            .filter(User.age >= age_group[0], User.age <= age_group[1])\
-            .join(User.searches)\
-            .count()
-        chart_data.append({"age_group": f"{age_group[0]}-{age_group[1]}", "count": age_group_count})
-    return chart_data
