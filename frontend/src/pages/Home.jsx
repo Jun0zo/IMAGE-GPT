@@ -1,10 +1,10 @@
-import NavBar from "../component/NavBar";
+import NavBar from "component/NavBar";
 import * as React from "react";
 
 import { Box } from "@mui/material";
 
-import Header from "../component/Home/Header";
-import SearchBar from "../component/Home/SearchBar";
+import Header from "component/Home/Header";
+import SearchBar from "component/Home/SearchBar";
 
 export default function Home() {
   const [age, setAge] = React.useState("");

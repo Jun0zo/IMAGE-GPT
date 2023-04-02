@@ -9,11 +9,19 @@ import {
   Select,
   Typography,
 } from "@mui/material";
-
+import { useNavigate } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import CommentIcon from "@mui/icons-material/Comment";
 
-const SearchBar = () => {
+const SearchBar = ({ keyword }) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = (event) => {
+    alert("!!");
+    event.preventDefault();
+    navigate(`/search?keyword=${keyword}`);
+  };
+
   return (
     <Box sx={{ minWidth: 120, display: "flex", justifyContent: "center" }}>
       <Paper
@@ -85,6 +93,10 @@ const SearchBar = () => {
           sx={{ ml: 1, flex: 1, borderLeft: 0 }}
           placeholder="검색하실 키워드를 입력하세요"
           inputProps={{ "aria-label": "search" }}
+          value={keyword}
+          onChange={(e) => {
+            handleSubmit(e);
+          }}
         />
         <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
           <SearchIcon />
