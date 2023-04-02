@@ -27,14 +27,32 @@ statistics = APIRouter()
 
 # 일주일간 검색추이 (기간별)
 # 성별별 검색수 SearchByGenderChart
-# 검색 결과 만족도 SearchSatisfaction
 
+# 검색 결과 만족도 
 # 기간별 검색 추이
+# 유사 키워드
 # 비디오 정보
 # 연령대별 검색 횟수 
 # 검색 대비 다운로드 비율
 
+# 검색 결과 만족도
+@statistics.get("/search_satisfaction/{keyword}")
+def get_search_satisfaction(keyword: str, db: Session = Depends(get_db)):
+    # Get the number of likes for the keyword
+    # SELECT user_id, keyword FROM likes WHERE keyword LIKE '%<keyword>%';
+    likes = likes = db.query(Like).filter(Like.keyword == keyword).all()
+    likes_count = likes.count()
 
+    # Get the number of searches for the keyword 
+    # SELECT user_id, keyword FROM searches WHERE keyword LIKE '%<keyword>%';
+    searches = db.query(Search).filter(Search.keyword == keyword).all()
+    searches_count = searches.count()
+
+    # Calculate the SearchSatisfaction score
+    if searches_count == 0:
+        return {"SearchSatisfaction": 0}
+    else:
+        return {"SearchSatisfaction": likes_count / searches_count}
 
 # 기간별 검색 추이
 @statistics.get("/search-trend-by-period-chart", tags=["statistics"])
@@ -81,8 +99,7 @@ def get_search_trend_by_period_chart(db: Session = Depends(get_db)) -> TrendChar
     print(date_range, start_date, end_date)
     return {"data": chart_data}
 
-
-# 유사 키워드 KeywordTable
+# 유사 키워드
 @statistics.get("/similar_keywords", response_model=List[str])
 def get_similar_keywords(keyword: str, db: Session = Depends(get_db)):
     keywords = (
