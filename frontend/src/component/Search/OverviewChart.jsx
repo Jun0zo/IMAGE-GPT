@@ -12,6 +12,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
+import "styles/chart-animation.css";
+
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
@@ -27,6 +29,16 @@ const rows2 = [
   createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
   createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
 ];
+
+const animationConfig = {
+  enabled: true,
+  easing: "easeinout",
+  speed: 3000, // Change this to adjust the animation speed
+  animateGradually: {
+    enabled: true,
+    delay: 150, // Change this to adjust the delay between animations
+  },
+};
 
 const KeywordTable = () => {
   return (
@@ -159,6 +171,7 @@ const SearchCountByAgeGroupChart = () => {
     options: {
       chart: {
         id: "column-chart",
+        animations: animationConfig,
       },
 
       xaxis: {
@@ -208,6 +221,10 @@ const SearchCountByAgeGroupChart = () => {
 };
 
 const SearchTrendByPeriodChart = () => {
+  const handleChartCreated = (chart) => {
+    chart.container.classList.add("apexcharts-draw-animation");
+  };
+
   const [chartData, setChartData] = useState({
     options: {
       chart: {
@@ -218,6 +235,7 @@ const SearchTrendByPeriodChart = () => {
         stroke: {
           show: false,
         },
+        animations: animationConfig,
       },
       grid: {
         show: false,
@@ -290,6 +308,8 @@ const SearchByGenderChart = () => {
     options: {
       chart: {
         type: "donut",
+        offsetY: 0,
+        animations: animationConfig,
       },
 
       stroke: {
@@ -305,6 +325,7 @@ const SearchByGenderChart = () => {
       colors: ["#008FFB", "#FF4560"],
       legend: {
         position: "left",
+        offsetY: 20,
       },
       plotOptions: {
         pie: {
@@ -339,6 +360,7 @@ const SearchTrendWeeklyChart = () => {
     options: {
       chart: {
         id: "column-chart",
+        animations: animationConfig,
       },
 
       xaxis: {
@@ -409,6 +431,7 @@ const SearchDownloadRatioChart = () => {
       chart: {
         height: 350,
         type: "radialBar",
+        animations: animationConfig,
       },
       plotOptions: {
         radialBar: {
@@ -455,13 +478,21 @@ const OverviewChart = () => {
         </Grid>
         <Grid item xs={6} lg={3} sx={{ padding: "10px" }}>
           {/* SearchByGenderChart */}
-          <ChartCard isSmallCard sx={{ height: "200px", paddingTop: "0px" }}>
+          <ChartCard
+            isSmallCard
+            title="검색 결과 만족도"
+            sx={{ height: "150px", paddingTop: "0px" }}
+          >
             <SearchByGenderChart />
           </ChartCard>
         </Grid>
         <Grid item xs={12} lg={6} sx={{ padding: "10px" }}>
           {/* SearchSatisfaction */}
-          <ChartCard title="검색 결과 만족도" sx={{ height: "100px" }}>
+          <ChartCard
+            isSmallCard
+            title="검색 결과 만족도"
+            sx={{ height: "150px" }}
+          >
             abc123
           </ChartCard>
         </Grid>
