@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from datetime import datetime, timedelta
 # from config.db import conn
 from database.connection import get_db
@@ -17,11 +17,13 @@ from models.video import Video
 from models.download import Download
 from models.search import Search
 
-from schemas.user import User as UserSchema
-from schemas.image import Image as ImageSchema
-from schemas.video import Video as VideoSchema
-from schemas.download import Download as DownloadSchema
-from schemas.trend_chart import TrendChartData
+from schemas.responses.SimilarKeywords import SimilarKeywordsResponse
+from schemas.responses.RelatedVideos import RelatedVideosResponse
+from schemas.responses.Satisfaction import SatisfactionResponse
+from schemas.responses.Age import AgeResponse
+from schemas.responses.Trend import TrendResponse
+from schemas.responses.Gender import GenderResponse
+from schemas.responses.Download import DownloadResponse
 
 statistics = APIRouter()
 
@@ -37,8 +39,10 @@ statistics = APIRouter()
 
 
 # 유사 키워드
-@statistics.get("/statistics/similar_keywords", tags=["statistics"], response_model=List[str])
+@statistics.get("/statistics/similar_keywords", tags=["statistics"], response_model=SimilarKeywordsResponse)
 def get_similar_keywords(keyword: str, db: Session = Depends(get_db)):
+    if keyword == '':
+        raise HTTPException(status_code=404, detail="Item not found by kms")
     keywords = (
         db.query(Image.subtitle, func.levenshtein(Image.subtitle, keyword).label("distance"))
             .filter(Image.subtitle.ilike(f"%{keyword}%"))
@@ -46,38 +50,39 @@ def get_similar_keywords(keyword: str, db: Session = Depends(get_db)):
             .limit(10)
             .all()
     )
-    return [kw[0] for kw in keywords]
+    
+    return {'result' : [kw[0] for kw in keywords]}
 
 # 비디오 정보
-@statistics.get("/statistics/videoInfo", tags=["statistics"])
+@statistics.get("/statistics/related_videos", tags=["statistics"], response_model=RelatedVideosResponse)
 def get_videos_by_keyword(keyword: str, db: Session = Depends(get_db)):
     images = db.query(Image).filter(Image.subtitle.like(f'%{keyword}%')).all()
     video_ids = set([image.video_id for image in images])
     videos = db.query(Video).filter(Video.id.in_(video_ids)).all()
-    return videos
+    return {'result' : videos}
 
 
 # 검색 결과 만족도
-@statistics.get("/statistics/satisfaction", tags=["statistics"])
+@statistics.get("/statistics/satisfaction", tags=["statistics"], response_model=SatisfactionResponse)
 def get_search_satisfaction(keyword: str, db: Session = Depends(get_db)):
     # Get the number of likes for the keyword
     # SELECT user_id, keyword FROM likes WHERE keyword LIKE '%<keyword>%';
-    likes = likes = db.query(Like).filter(Like.keyword == keyword).all()
-    likes_count = likes.count()
+    likes = db.query(Like).filter(Like.keyword == keyword).all()
+    likes_count = len(likes)
 
     # Get the number of searches for the keyword 
     # SELECT user_id, keyword FROM searches WHERE keyword LIKE '%<keyword>%';
     searches = db.query(Search).filter(Search.keyword == keyword).all()
-    searches_count = searches.count()
+    searches_count = len(searches)
 
     # Calculate the SearchSatisfaction score
     if searches_count == 0:
-        return {"SearchSatisfaction": 0}
+        return {"result": 0}
     else:
-        return {"SearchSatisfaction": likes_count / searches_count}
+        return {"result": likes_count / searches_count}
     
 # 연령대별 검색 횟수
-@statistics.get("/statistics/age", tags=["statistics"])
+@statistics.get("/statistics/age", tags=["statistics"], response_model=AgeResponse)
 def get_search_count_by_age_group_chart(keyword: str, db: Session = Depends(get_db)):
     age_groups = [(18, 24), (25, 34), (35, 44), (45, 54), (55, 64), (65, 100)]
     chart_data = []
@@ -92,8 +97,8 @@ def get_search_count_by_age_group_chart(keyword: str, db: Session = Depends(get_
 
 
 # 기간별 검색 추이
-@statistics.get("/statistics/trend", tags=["statistics"])
-def get_search_trend_by_period_chart(db: Session = Depends(get_db)) -> TrendChartData:
+@statistics.get("/statistics/trend", tags=["statistics"], response_model=TrendResponse)
+def get_search_trend_by_period_chart(keyword: str, period: str = 'month', db: Session = Depends(get_db)):
     # Define the period (daily, weekly, monthly)
     period = "month"
     if period == "week":
@@ -116,7 +121,7 @@ def get_search_trend_by_period_chart(db: Session = Depends(get_db)) -> TrendChar
     result = db.query(
         func.date_format(Search.searched_time, '%Y-%m-01').label('period'),
         func.count(Search.id).label('search_count')
-    ).group_by(group_by).all()
+    ).filter(Search.keyword == keyword).group_by(group_by).all()
     
 
     # Format the result into a chart data format
@@ -128,29 +133,30 @@ def get_search_trend_by_period_chart(db: Session = Depends(get_db)) -> TrendChar
         date = start_date + timedelta(days=i)
         date_str = date.strftime(date_format)
         search_count = next((r.search_count for r in result if r.period == date_str), 0)
-        chart_data.append((date_str, search_count))
+        chart_data.append({'date':date_str, 'count':search_count})
 
         # return {"chart_type": "line", "data": chart_data}
-    return {"data": chart_data}
+    return {"result": chart_data}
 
 
 
 # 성별별 검색수
-@statistics.get("/statistics/gender", tags=["statistics"])
-def search_by_gender(sex: str, keyword: str = None, db: Session = Depends(get_db)):
-    # SELECT COUNT(*) FROM (SELECT user_id, sex FROM downloads WHERE keyword = 'keyword') AS users WHERE sex = 'sex';
+@statistics.get("/statistics/gender", tags=["statistics"], response_model=GenderResponse)
+def search_by_gender(keyword: str = None, db: Session = Depends(get_db)):
+    # SELECT users.sex, COUNT(*) FROM searches JOIN users ON searches.user_id = users.id WHERE searches.keyword = '<keyword>'GROUP BY users.sex;
     
-    result = db.query(func.count('*')).select_from(
-        db.query(Download.user_id, User.sex).
-        join(User, Download.user_id == User.id).
-        filter(Download.keyword == keyword).
-        subquery()
-    ).filter_by(sex=sex).scalar()
+    result = db.query(User.sex, func.count('*')).\
+        join(Search, User.id == Search.user_id).\
+        filter(Search.keyword == keyword).\
+        group_by(User.sex).\
+        all()
+
+    print(result)
     
-    return result
+    return {'result': {r[0]: r[1] for r in result}}
 
 # 검색 대비 다운로드 비율 
-@statistics.get("/statistics/download", tags=["statistics"])
+@statistics.get("/statistics/download", tags=["statistics"], response_model=DownloadResponse)
 def search_download_ratio_chart(db: Session = Depends(get_db)):
     # Query all searches for the age group
     searches = db.query(Search).join(Search.user).all()
@@ -179,4 +185,4 @@ def search_download_ratio_chart(db: Session = Depends(get_db)):
             ratio = search_counts[keyword] / download_counts[keyword]
             ratios.append({'keyword': keyword, 'ratio': ratio})
 
-    return ratios
+    return {'result':ratios}

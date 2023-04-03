@@ -342,7 +342,7 @@ const SearchTrendWeeklyChart = () => {
       },
 
       xaxis: {
-        categories: ["월", "화", "수", "40대", "50대", "60대", "70대"],
+        categories: ["월", "화", "수", "목", "금", "토", "일"],
         howAxisLines: false,
         labels: {
           show: false, // set show to false to hide the x-axis labels

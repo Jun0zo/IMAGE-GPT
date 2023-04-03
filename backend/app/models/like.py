@@ -7,8 +7,6 @@ class Like(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
-    video_id = Column(Integer, ForeignKey('videos.id'), nullable=False)
     keyword = Column(String(50))
 
     user = relationship('User', back_populates='likes')
-    video = relationship('Video', back_populates='likes')

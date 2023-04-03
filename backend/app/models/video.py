@@ -13,4 +13,3 @@ class Video(Base):
     emotion_score = Column(Float)
 
     images = relationship('Image', back_populates='video')
-    likes = relationship('Like', back_populates='video')
