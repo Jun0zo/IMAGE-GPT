@@ -443,7 +443,7 @@ const OverviewChart = () => {
       }}
     >
       <Grid container sx={{ width: "81%" }}>
-        <Grid item xs={12} lg={3} sx={{ padding: "10px" }}>
+        <Grid item xs={6} lg={3} sx={{ padding: "10px" }}>
           {/* SearchTrendWeeklyChart */}
           <ChartCard
             isSmallCard
@@ -453,7 +453,7 @@ const OverviewChart = () => {
             <SearchTrendWeeklyChart />
           </ChartCard>
         </Grid>
-        <Grid item xs={12} lg={3} sx={{ padding: "10px" }}>
+        <Grid item xs={6} lg={3} sx={{ padding: "10px" }}>
           {/* SearchByGenderChart */}
           <ChartCard isSmallCard sx={{ height: "200px", paddingTop: "0px" }}>
             <SearchByGenderChart />

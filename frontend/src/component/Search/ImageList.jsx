@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   ImageList as MUIImageList,
@@ -11,9 +11,33 @@ import {
 import InfoIcon from "@mui/icons-material/Info";
 
 const ImageList = () => {
+  const [cols, setCols] = useState(getColumns());
+  function getColumns() {
+    const width = window.innerWidth;
+    if (width >= 1300) {
+      return 4;
+    } else if (width >= 900) {
+      return 3;
+    } else if (width >= 600) {
+      return 2;
+    } else {
+      return 1;
+    }
+  }
+
+  useEffect(() => {
+    function handleResize() {
+      setCols(getColumns());
+    }
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <Box sx={{ display: "flex", justifyContent: "center", marginTop: "50px" }}>
-      <MUIImageList cols={4} gap={20} sx={{ gap: "20px", width: "70vw" }}>
+      <MUIImageList cols={cols} gap={20} sx={{ gap: "20px", width: "70vw" }}>
         {itemData.map((item) => (
           <ImageListItem key={item.img}>
             <img
