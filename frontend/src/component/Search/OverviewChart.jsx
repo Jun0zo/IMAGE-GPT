@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import Chart from "react-apexcharts";
 
-import { Box, Grid, Chip } from "@mui/material";
+import { Box, Grid, Chip, Avatar, LinearProgress } from "@mui/material";
 import ChartCard from "./ChartCard";
 import TableCard from "./TableCard";
 
@@ -12,6 +12,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+
+import CheckIcon from "@mui/icons-material/Check";
 
 import "styles/chart-animation.css";
 
@@ -31,12 +33,13 @@ const rows = [
 const rows2 = [
   createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
   createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
+  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
 ];
 
 const animationConfig = {
   enabled: true,
   easing: "easeinout",
-  speed: 3000, // Change this to adjust the animation speed
+  speed: 1500, // Change this to adjust the animation speed
   animateGradually: {
     enabled: true,
     delay: 150, // Change this to adjust the delay between animations
@@ -83,15 +86,42 @@ const KeywordTable = () => {
                 sx={{
                   color: "#e2e2e2",
                   borderBottom: "1px solid #242e3c",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "15px",
+                  height: "35px",
+                  fontSize: "14px",
                 }}
               >
+                <Avatar />
                 {row.name}
               </TableCell>
               <TableCell
                 align="right"
-                sx={{ color: "#e2e2e2", borderBottom: "1px solid #242e3c" }}
+                sx={{
+                  color: "#e2e2e2",
+                  borderBottom: "1px solid #242e3c",
+                }}
               >
-                {row.calories}
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "end",
+                    gap: "10px",
+                  }}
+                >
+                  <LinearProgress
+                    variant="determinate"
+                    value={50}
+                    sx={{
+                      backgroundColor: "#242e3c",
+                      borderRadius: "50px",
+                      width: "50%",
+                    }}
+                  />
+                  <Box sx={{ fontSize: "12px" }}>{row.calories}</Box>
+                </Box>
               </TableCell>
             </TableRow>
           ))}
@@ -117,13 +147,13 @@ const VideoTable = () => {
             <TableCell
               sx={{ color: "#e2e2e2", borderBottom: "1px solid #242e3c" }}
             >
-              Dessert (100g serving)
+              영상 이름
             </TableCell>
             <TableCell
               align="right"
               sx={{ color: "#e2e2e2", borderBottom: "1px solid #242e3c" }}
             >
-              Calories
+              유사도
             </TableCell>
           </TableRow>
         </TableHead>
@@ -141,8 +171,14 @@ const VideoTable = () => {
                 sx={{
                   color: "#e2e2e2",
                   borderBottom: "1px solid #242e3c",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "15px",
+                  height: "35px",
+                  fontSize: "14px",
                 }}
               >
+                <Avatar />
                 {row.name}
               </TableCell>
               <TableCell
@@ -253,22 +289,64 @@ const SearchCountByAgeGroupChart = () => {
   const [chartData, setChartData] = useState({
     series: [
       {
-        name: "Sales",
-        data: [30, 40, 200, 50, 49, 60, 10],
+        name: "남성",
+        data: [44, 55, 57, 30, 17, 20],
+        color: "#008FFB",
+      },
+      {
+        name: "여성",
+        data: [76, 85, 101, 24, 22, 10],
+        color: "#FF4560",
+      },
+      {
+        name: "총합",
+        data: [113, 135, 151, 67, 38, 31],
+        color: "#354050",
       },
     ],
     options: {
       chart: {
-        id: "column-chart",
-        animations: animationConfig,
-        toolbar: {
-          show: false,
+        type: "bar",
+        height: 350,
+      },
+      grid: {
+        borderColor: "#424f5e",
+        strokeDashArray: 5,
+        position: "back",
+        xaxis: {
+          lines: {
+            show: false,
+          },
+        },
+        yaxis: {
+          lines: {
+            show: true,
+            style: {
+              colors: "#424f5e",
+              type: "dotted",
+            },
+          },
         },
       },
-
+      plotOptions: {
+        bar: {
+          borderRadius: 7,
+          borderRadiusApplication: "end",
+          horizontal: false,
+          columnWidth: "45%",
+          endingShape: "rounded",
+        },
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        show: true,
+        width: 2,
+        colors: ["transparent"],
+      },
       xaxis: {
-        categories: ["10대", "20대", "30대", "40대", "50대", "60대", "70대"],
-
+        categories: ["10대", "20대", "30대", "40대", "50대", "60대"],
         labels: {
           style: {
             colors: [
@@ -282,28 +360,15 @@ const SearchCountByAgeGroupChart = () => {
           },
         },
       },
-      grid: {
-        show: false,
-      },
       yaxis: {
         title: {
-          text: "Search Count",
+          text: " 회 검색",
         },
         labels: {
           style: {
             colors: ["#424f5e"],
           },
         },
-      },
-      plotOptions: {
-        bar: {
-          horizontal: false,
-          endingShape: "rounded",
-          columnWidth: "55%",
-        },
-      },
-      dataLabels: {
-        enabled: false,
       },
       fill: {
         opacity: 1,
@@ -314,6 +379,7 @@ const SearchCountByAgeGroupChart = () => {
             return "$ " + val + " thousands";
           },
         },
+        theme: "dark",
       },
     },
   });
@@ -342,21 +408,40 @@ const SearchTrendByPeriodChart = () => {
         zoom: {
           enabled: false,
         },
-        stroke: {
-          show: false,
-        },
+
         animations: animationConfig,
         toolbar: {
           show: false,
         },
       },
-      fill: {
-        type: "solid",
-        colors: ["#F44336", "#E91E63", "#9C27B0"],
+      stroke: {
+        width: 3,
+      },
+      markers: {
+        size: 6,
+        colors: "#0b1827",
+        strokeWidth: 2,
+        strokeColors: "#0980df",
       },
 
       grid: {
-        show: false,
+        borderColor: "#424f5e",
+        strokeDashArray: 5,
+        position: "back",
+        xaxis: {
+          lines: {
+            show: false,
+          },
+        },
+        yaxis: {
+          lines: {
+            show: true,
+            style: {
+              colors: "#424f5e",
+              type: "dotted",
+            },
+          },
+        },
       },
       xaxis: {
         categories: [
@@ -399,7 +484,20 @@ const SearchTrendByPeriodChart = () => {
           },
         },
       },
+      tooltip: {
+        enabled: true,
+        y: {
+          formatter: (val) => {
+            return "$" + val;
+          },
+        },
+        marker: {
+          show: true,
+        },
+        theme: "dark",
+      },
     },
+
     series: [
       {
         name: "Sales",
@@ -422,7 +520,7 @@ const SearchTrendByPeriodChart = () => {
 
 const SearchByGenderChart = () => {
   const [chartData, setChartData] = useState({
-    series: [44, 55],
+    series: [29, 45, 11],
     options: {
       chart: {
         type: "donut",
@@ -442,8 +540,8 @@ const SearchByGenderChart = () => {
           color: "red",
         },
       },
-      labels: ["남성", "여성"],
-      colors: ["#008FFB", "#FF4560"],
+      labels: ["남성", "여성", "기타"],
+      colors: ["#008FFB", "#FF4560", "#354050"],
       legend: {
         show: false,
         position: "left",
@@ -452,6 +550,10 @@ const SearchByGenderChart = () => {
       plotOptions: {
         pie: {
           donut: {
+            labels: {
+              show: false,
+            },
+
             size: "80%",
           },
         },
@@ -475,7 +577,7 @@ const SearchTrendWeeklyChart = ({ sx }) => {
   const [chartData, setChartData] = useState({
     series: [
       {
-        name: "Sales",
+        name: "검색 수",
         data: [30, 40, 90, 50, 49, 60, 30],
       },
     ],
@@ -530,9 +632,10 @@ const SearchTrendWeeklyChart = ({ sx }) => {
       tooltip: {
         y: {
           formatter: function (val) {
-            return "$ " + val + " thousands";
+            return val + " 회 검색";
           },
         },
+        theme: "dark",
       },
     },
   });
@@ -566,14 +669,18 @@ const SearchDownloadRatioChart = () => {
           hollow: {
             size: "70%",
           },
+          track: {
+            background: "#242e3c",
+            borderRadius: "10px",
+          },
         },
       },
-      labels: ["Cricket"],
+      labels: ["다운로드 비율"],
     },
   });
 
   return (
-    <Box sx={{ height: "90%" }}>
+    <Box sx={{ height: "75%" }}>
       <Chart
         options={chartData.options}
         series={chartData.series}
@@ -594,7 +701,7 @@ const OverviewChart = () => {
       }}
     >
       <Grid container sx={{ width: "81%" }}>
-        <Grid item xs={6} lg={3} sx={{ padding: "10px" }}>
+        <Grid item xs={12} md={6} xl={3} sx={{ padding: "10px" }}>
           {/* SearchTrendWeeklyChart */}
           <ChartCard
             isSmallCard
@@ -621,7 +728,7 @@ const OverviewChart = () => {
             </Grid>
           </ChartCard>
         </Grid>
-        <Grid item xs={6} lg={3} sx={{ padding: "10px" }}>
+        <Grid item xs={12} md={6} xl={3} sx={{ padding: "10px" }}>
           {/* SearchByGenderChart */}
           <ChartCard
             isSmallCard
@@ -629,18 +736,79 @@ const OverviewChart = () => {
             sx={{ height: "150px", paddingTop: "0px" }}
           >
             <Grid container>
-              <Grid item xs={8}>
-                <Box>231</Box>
-                <Box>231</Box>
-                <Box>231</Box>
+              <Grid
+                item
+                xs={6}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  gap: "5px",
+                  width: "100%",
+                  padding: "5px 0px 20px 0px",
+                  color: "rgb(157,169,187)",
+                  fontSize: "12px",
+                }}
+              >
+                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        bgcolor: "#008FFB",
+                        borderRadius: "50%",
+                        height: "10px",
+                        width: "10px",
+                        marginRight: "6px",
+                      }}
+                    />
+                    <span>남성</span>
+                  </Box>
+                  <span>43%</span>
+                </Box>
+                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Box
+                      sx={{
+                        bgcolor: "#FF4560",
+                        borderRadius: "50%",
+                        height: "10px",
+                        width: "10px",
+                        marginRight: "6px",
+                      }}
+                    />
+                    <span>여성</span>
+                  </Box>
+                  <span>12%</span>
+                </Box>
+                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Box
+                      sx={{
+                        bgcolor: "#354050",
+                        borderRadius: "50%",
+                        height: "10px",
+                        width: "10px",
+                        marginRight: "6px",
+                      }}
+                    />
+                    <span>기타</span>
+                  </Box>
+                  <span>32%</span>
+                </Box>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={1}></Grid>
+              <Grid item xs={5}>
                 <SearchByGenderChart />
               </Grid>
             </Grid>
           </ChartCard>
         </Grid>
-        <Grid item xs={6} lg={3} sx={{ padding: "10px" }}>
+        <Grid item xs={12} md={6} xl={3} sx={{ padding: "10px" }}>
           {/* SearchSatisfaction */}
           <ChartCard
             isSmallCard
@@ -650,7 +818,7 @@ const OverviewChart = () => {
             <SafisfactionShowTable />
           </ChartCard>
         </Grid>
-        <Grid item xs={6} lg={3} sx={{ padding: "10px" }}>
+        <Grid item xs={12} md={6} xl={3} sx={{ padding: "10px" }}>
           {/* SearchSatisfaction */}
           <ChartCard
             isSmallCard
@@ -690,6 +858,25 @@ const OverviewChart = () => {
           {/* SearchDownloadRatioChart */}
           <ChartCard title="검색 대비 다운로드 비율" sx={{ height: "250px" }}>
             <SearchDownloadRatioChart />
+            <Box sx={{ textAlign: "center" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <CheckIcon
+                  sx={{ marginRight: "3px", color: "rgb(0,210,122)" }}
+                />
+                <p style={{ margin: 0, fontSize: "16px" }}>
+                  현재 "안녕" 키워드는 적절합니다.
+                </p>
+              </Box>
+
+              <p style={{ fontSize: "12px" }}>전체 검색 n건중 m건 다운로드</p>
+            </Box>
           </ChartCard>
         </Grid>
       </Grid>

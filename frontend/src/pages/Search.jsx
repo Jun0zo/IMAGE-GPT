@@ -73,15 +73,15 @@ const Search = () => {
   return (
     <div>
       <NavBar />
-      <div
-        style={{ display: "flex", flexDirection: "column", marginTop: "50px" }}
-      >
-        <Box sx={{ height: "100vh" }}>
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        {/* <Box sx={{ height: "100vh" }}> */}
+        <Box sx={{ padding: "30px 0px" }}>
           <SearchBar />
           <ImageList />
         </Box>
 
-        <Box sx={{ height: "100vh" }}>
+        {/* <Box sx={{ height: "100vh" }}> */}
+        <Box sx={{ padding: "30px 0px" }}>
           <OverviewChart />
         </Box>
       </div>
