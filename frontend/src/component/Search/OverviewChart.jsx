@@ -19,21 +19,43 @@ import "styles/chart-animation.css";
 
 import good from "images/good.svg";
 
-function createData(name, calories, fat, carbs, protein) {
+function createData1(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
 
+function createData2(name, url, tags, score) {
+  return { name, url, tags, score };
+}
+
 const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
+  createData1("Frozen yoghurt", 159, 6.0, 24, 4.0),
+  createData1("Ice cream sandwich", 237, 9.0, 37, 4.3),
+  createData1("Eclair", 262, 16.0, 24, 6.0),
+  createData1("Cupcake", 305, 3.7, 67, 4.3),
 ];
 
 const rows2 = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
+  createData2(
+    "갈아버리는 거 아니었어?",
+    "https://img.youtube.com/vi/q1cSkIbGCAI/0.jpg",
+    159,
+    6.0,
+    24
+  ),
+  createData2(
+    "배고플 때 먹는 영상",
+    "https://img.youtube.com/vi/LWpGpK0QbOQ/0.jpg",
+    237,
+    9.0,
+    37
+  ),
+  createData2(
+    "침펄 만두 먹방",
+    "https://img.youtube.com/vi/miKN0Gyz9H0/0.jpg",
+    237,
+    9.0,
+    12
+  ),
 ];
 
 const animationConfig = {
@@ -153,7 +175,7 @@ const VideoTable = () => {
               align="right"
               sx={{ color: "#e2e2e2", borderBottom: "1px solid #242e3c" }}
             >
-              유사도
+              감성점수
             </TableCell>
           </TableRow>
         </TableHead>
@@ -178,7 +200,9 @@ const VideoTable = () => {
                   fontSize: "14px",
                 }}
               >
-                <Avatar />
+                <Box>
+                  <img src={row.url} alt="" height="30px" />
+                </Box>
                 {row.name}
               </TableCell>
               <TableCell
@@ -274,7 +298,7 @@ const SafisfactionShowTable = () => {
           >
             31
           </span>
-          <span style={{ fontSize: "14px" }}>31 / 3212</span>
+          <span style={{ fontSize: "12px" }}>31 / 3212</span>
         </Box>
       </Box>
     </Box>
@@ -709,7 +733,15 @@ const OverviewChart = () => {
             sx={{ height: "150px", paddingTop: "0px" }}
           >
             <Grid container>
-              <Grid item xs={4} sx={{ padding: "30px 0px" }}>
+              <Grid
+                item
+                xs={4}
+                sx={{
+                  padding: "30px 0px",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
                 <span style={{ fontSize: "40px" }}>125회</span>
                 <Chip
                   label="+13%"
@@ -719,6 +751,7 @@ const OverviewChart = () => {
                     color: "#5ce2aa",
                     fontSize: "12px",
                     marginTop: "5px",
+                    width: "50px",
                   }}
                 />
               </Grid>
