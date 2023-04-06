@@ -12,13 +12,12 @@ import server from "config/axiosConfig";
 import API_ENDPOINTS from "config/endpointConfig";
 
 const Search = () => {
-  alert("!");
   const { keyword } = useParams();
   const [statisticsData, setStatisticsData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(keyword);
 
   useEffect(() => {
     const fetchData = async () => {

@@ -22,7 +22,7 @@ export default function Home() {
       >
         <Box>
           <Header />
-          <SearchBar keyword={""} value={value} handleValue={setValue} />
+          <SearchBar value={value} handleValue={setValue} />
         </Box>
       </Box>
     </div>

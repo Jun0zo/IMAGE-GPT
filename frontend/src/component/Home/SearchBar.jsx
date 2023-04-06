@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Paper,
   InputBase,
@@ -19,18 +20,13 @@ const SearchBar = (props) => {
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
-    event.preventDefault();
     handleValue(event.target.value);
-    console.log(event.target);
-    console.log("value :", event.target.value);
-
     if (event.key === "Enter") {
-      // enter는 13이다!
-      // navigate(`/search?keyword=${value}`);
       alert(`/search/${event.target.value}`);
       navigate(`/search/${event.target.value}`);
       return false; // 추가적인 이벤트 실행을 방지하기 위해 false 리턴
     }
+    //
   };
 
   return (
@@ -104,6 +100,9 @@ const SearchBar = (props) => {
           placeholder="검색하실 키워드를 입력하세요"
           inputProps={{ "aria-label": "search" }}
           value={value}
+          onChange={(event) => {
+            handleValue(event.target.value);
+          }}
           onKeyDown={(event) => {
             handleSubmit(event);
           }}
