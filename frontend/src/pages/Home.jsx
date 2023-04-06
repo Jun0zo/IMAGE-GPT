@@ -1,17 +1,13 @@
-import NavBar from "component/NavBar";
-import * as React from "react";
+import React, { useState } from "react";
 
 import { Box } from "@mui/material";
 
+import NavBar from "component/NavBar";
 import Header from "component/Home/Header";
 import SearchBar from "component/Home/SearchBar";
 
 export default function Home() {
-  const [age, setAge] = React.useState("");
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
+  const [value, setValue] = useState("");
 
   return (
     <div>
@@ -26,7 +22,7 @@ export default function Home() {
       >
         <Box>
           <Header />
-          <SearchBar />
+          <SearchBar keyword={""} value={value} handleValue={setValue} />
         </Box>
       </Box>
     </div>

@@ -19,8 +19,8 @@ import "styles/chart-animation.css";
 
 import good from "images/good.svg";
 
-function createData1(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
+function createData1(name, score, similarity) {
+  return { name, score, similarity };
 }
 
 function createData2(name, url, tags, score) {
@@ -28,10 +28,10 @@ function createData2(name, url, tags, score) {
 }
 
 const rows = [
-  createData1("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData1("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData1("Eclair", 262, 16.0, 24, 6.0),
-  createData1("Cupcake", 305, 3.7, 67, 4.3),
+  createData1("안녕하세요", 159, 62.1),
+  createData1("안녕히 계세요 여러분", 237, 34.9),
+  createData1("재.롱.이.귀.여.워", 262, 11.3),
+  createData1("얀녕?", 305, 73.7),
 ];
 
 const rows2 = [
@@ -117,7 +117,16 @@ const KeywordTable = () => {
               >
                 <Avatar />
                 {row.name}
+                <Chip
+                  size="small"
+                  label={row.score + "점"}
+                  sx={{
+                    backgroundColor: "rgb(35,46,68)",
+                    color: "rgb(44,123,229)",
+                  }}
+                />
               </TableCell>
+
               <TableCell
                 align="right"
                 sx={{
@@ -130,19 +139,20 @@ const KeywordTable = () => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "end",
-                    gap: "10px",
+                    gap: "20px",
                   }}
                 >
                   <LinearProgress
                     variant="determinate"
-                    value={50}
+                    value={row.similarity}
                     sx={{
                       backgroundColor: "#242e3c",
                       borderRadius: "50px",
-                      width: "50%",
+                      width: "40%",
+                      height: "10px",
                     }}
                   />
-                  <Box sx={{ fontSize: "12px" }}>{row.calories}</Box>
+                  <Box sx={{ fontSize: "12px" }}>{row.similarity}</Box>
                 </Box>
               </TableCell>
             </TableRow>

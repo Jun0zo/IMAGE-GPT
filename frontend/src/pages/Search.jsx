@@ -12,10 +12,13 @@ import server from "config/axiosConfig";
 import API_ENDPOINTS from "config/endpointConfig";
 
 const Search = () => {
+  alert("!");
   const { keyword } = useParams();
   const [statisticsData, setStatisticsData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const [value, setValue] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -76,7 +79,7 @@ const Search = () => {
       <div style={{ display: "flex", flexDirection: "column" }}>
         {/* <Box sx={{ height: "100vh" }}> */}
         <Box sx={{ padding: "30px 0px" }}>
-          <SearchBar />
+          <SearchBar keyword={keyword} value={value} handleValue={setValue} />
           <ImageList />
         </Box>
 
