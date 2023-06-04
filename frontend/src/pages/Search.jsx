@@ -14,7 +14,7 @@ import API_ENDPOINTS from "config/endpointConfig";
 const Search = () => {
   const { keyword } = useParams();
   const [statisticsData, setStatisticsData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const [value, setValue] = useState(keyword);
@@ -39,17 +39,17 @@ const Search = () => {
           params: { keyword },
         });
         const response5 = await server.get(API_ENDPOINTS.STATISTICS.TREND, {
-          params: { keyword },
+          params: { keyword, period:'month' },
         });
         const response6 = await server.get(API_ENDPOINTS.STATISTICS.GENDER, {
           params: { keyword },
         });
         const response7 = await server.get(API_ENDPOINTS.STATISTICS.TREND, {
-          params: { keyword },
+          params: { keyword, period:'month' },
         });
-        const response8 = await server.get(API_ENDPOINTS.STATISTICS.DOWNLOAD, {
-          params: { keyword },
-        });
+        // const response8 = await server.get(API_ENDPOINTS.STATISTICS.DOWNLOAD, {
+        //   params: { keyword },
+        // });
 
         setStatisticsData({
           similarKeywords: response1.data,
@@ -59,15 +59,17 @@ const Search = () => {
           monthlyTrend: response5.data,
           gender: response6.data,
           weeklyTrend: response7.data,
-          download: response8.data,
+          download: response7.data,
         });
       } catch (err) {
+        alert(err)
         setError(err.message);
       } finally {
         setIsLoading(false);
       }
     };
     fetchData();
+    console.log('or data ', statisticsData)
   }, [keyword]);
   return (
     <div>
@@ -81,7 +83,8 @@ const Search = () => {
 
         {/* <Box sx={{ height: "100vh" }}> */}
         <Box sx={{ padding: "30px 0px" }}>
-          <OverviewChart />
+          {isLoading ? <div></div> : <OverviewChart isLoading={isLoading} statisticsData={statisticsData}/>}
+          
         </Box>
       </div>
       {keyword}

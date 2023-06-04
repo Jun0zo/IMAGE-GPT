@@ -725,7 +725,86 @@ const SearchDownloadRatioChart = () => {
   );
 };
 
-const OverviewChart = () => {
+const GenderChart = (data) => {
+  console.log('gender data:',  data)
+  return (
+    <Grid container>
+      <Grid
+        item
+        xs={6}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          gap: "5px",
+          width: "100%",
+          padding: "5px 0px 20px 0px",
+          color: "rgb(157,169,187)",
+          fontSize: "12px",
+        }}
+      >
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <Box
+              sx={{
+                bgcolor: "#008FFB",
+                borderRadius: "50%",
+                height: "10px",
+                width: "10px",
+                marginRight: "6px",
+              }}
+            />
+            <span>남성</span>
+          </Box>
+          <span>43%</span>
+        </Box>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box
+              sx={{
+                bgcolor: "#FF4560",
+                borderRadius: "50%",
+                height: "10px",
+                width: "10px",
+                marginRight: "6px",
+              }}
+            />
+            <span>여성</span>
+          </Box>
+          <span>12%</span>
+        </Box>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box
+              sx={{
+                bgcolor: "#354050",
+                borderRadius: "50%",
+                height: "10px",
+                width: "10px",
+                marginRight: "6px",
+              }}
+            />
+            <span>기타</span>
+          </Box>
+          <span>32%</span>
+        </Box>
+      </Grid>
+      <Grid item xs={1}></Grid>
+      <Grid item xs={5}>
+        <SearchByGenderChart />
+      </Grid>
+    </Grid>
+  )
+}
+
+const OverviewChart = ({isLoading, statisticsData}) => {
+  console.log(isLoading)
+  console.log(statisticsData)
   return (
     <div
       style={{
@@ -734,7 +813,7 @@ const OverviewChart = () => {
         alignItems: "stretch",
       }}
     >
-      <Grid container sx={{ width: "81%" }}>
+      {isLoading ? null : <Grid container sx={{ width: "81%" }}>
         <Grid item xs={12} md={6} xl={3} sx={{ padding: "10px" }}>
           {/* SearchTrendWeeklyChart */}
           <ChartCard
@@ -778,77 +857,7 @@ const OverviewChart = () => {
             title="성별별 검색수"
             sx={{ height: "150px", paddingTop: "0px" }}
           >
-            <Grid container>
-              <Grid
-                item
-                xs={6}
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  gap: "5px",
-                  width: "100%",
-                  padding: "5px 0px 20px 0px",
-                  color: "rgb(157,169,187)",
-                  fontSize: "12px",
-                }}
-              >
-                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        bgcolor: "#008FFB",
-                        borderRadius: "50%",
-                        height: "10px",
-                        width: "10px",
-                        marginRight: "6px",
-                      }}
-                    />
-                    <span>남성</span>
-                  </Box>
-                  <span>43%</span>
-                </Box>
-                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <Box
-                      sx={{
-                        bgcolor: "#FF4560",
-                        borderRadius: "50%",
-                        height: "10px",
-                        width: "10px",
-                        marginRight: "6px",
-                      }}
-                    />
-                    <span>여성</span>
-                  </Box>
-                  <span>12%</span>
-                </Box>
-                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <Box
-                      sx={{
-                        bgcolor: "#354050",
-                        borderRadius: "50%",
-                        height: "10px",
-                        width: "10px",
-                        marginRight: "6px",
-                      }}
-                    />
-                    <span>기타</span>
-                  </Box>
-                  <span>32%</span>
-                </Box>
-              </Grid>
-              <Grid item xs={1}></Grid>
-              <Grid item xs={5}>
-                <SearchByGenderChart />
-              </Grid>
-            </Grid>
+           <GenderChart data={statisticsData.gender}/> 
           </ChartCard>
         </Grid>
         <Grid item xs={12} md={6} xl={3} sx={{ padding: "10px" }}>
@@ -922,7 +931,8 @@ const OverviewChart = () => {
             </Box>
           </ChartCard>
         </Grid>
-      </Grid>
+      </Grid>}
+      
     </div>
   );
 };
