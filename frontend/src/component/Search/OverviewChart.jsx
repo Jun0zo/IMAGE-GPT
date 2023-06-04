@@ -68,7 +68,8 @@ const animationConfig = {
   },
 };
 
-const KeywordTable = () => {
+const KeywordTable = ({data}) => {
+  console.log(data)
   return (
     <TableContainer
       sx={{
@@ -95,9 +96,15 @@ const KeywordTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+        {/* const rows = [
+          createData1("안녕하세요", 159, 62.1),
+          createData1("안녕히 계세요 여러분", 237, 34.9),
+          createData1("재.롱.이.귀.여.워", 262, 11.3),
+          createData1("얀녕?", 305, 73.7),
+        ]; */}
+          {data.map((info, idx) => (
             <TableRow
-              key={row.name}
+              key={idx}
               sx={{
                 "&:last-child td, &:last-child th": { border: 0 },
               }}
@@ -116,10 +123,10 @@ const KeywordTable = () => {
                 }}
               >
                 <Avatar />
-                {row.name}
+                {info.subtitle}
                 <Chip
                   size="small"
-                  label={row.score + "점"}
+                  label={info.distance + "점"}
                   sx={{
                     backgroundColor: "rgb(35,46,68)",
                     color: "rgb(44,123,229)",
@@ -144,7 +151,7 @@ const KeywordTable = () => {
                 >
                   <LinearProgress
                     variant="determinate"
-                    value={row.similarity}
+                    value={info.distance}
                     sx={{
                       backgroundColor: "#242e3c",
                       borderRadius: "50px",
@@ -152,7 +159,7 @@ const KeywordTable = () => {
                       height: "10px",
                     }}
                   />
-                  <Box sx={{ fontSize: "12px" }}>{row.similarity}</Box>
+                  <Box sx={{ fontSize: "12px" }}>{info.similarity}</Box>
                 </Box>
               </TableCell>
             </TableRow>
@@ -552,9 +559,10 @@ const SearchTrendByPeriodChart = () => {
   );
 };
 
-const SearchByGenderChart = () => {
+const SearchByGenderChart = ({data}) => {
+  console.log('ii', data)
   const [chartData, setChartData] = useState({
-    series: [29, 45, 11],
+    series: [data['male']['count'], data['female']['count'], data['others']['count']],
     options: {
       chart: {
         type: "donut",
@@ -725,7 +733,7 @@ const SearchDownloadRatioChart = () => {
   );
 };
 
-const GenderChart = (data) => {
+const GenderCard = ({data}) => {
   console.log('gender data:',  data)
   return (
     <Grid container>
@@ -761,7 +769,7 @@ const GenderChart = (data) => {
             />
             <span>남성</span>
           </Box>
-          <span>43%</span>
+          <span>{data['male']['ratio']}%</span>
         </Box>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -776,7 +784,7 @@ const GenderChart = (data) => {
             />
             <span>여성</span>
           </Box>
-          <span>12%</span>
+          <span>{data['female']['ratio']}%</span>
         </Box>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -791,12 +799,12 @@ const GenderChart = (data) => {
             />
             <span>기타</span>
           </Box>
-          <span>32%</span>
+          <span>{data['others']['ratio']}%</span>
         </Box>
       </Grid>
       <Grid item xs={1}></Grid>
       <Grid item xs={5}>
-        <SearchByGenderChart />
+        <SearchByGenderChart data={data}/>
       </Grid>
     </Grid>
   )
@@ -857,7 +865,7 @@ const OverviewChart = ({isLoading, statisticsData}) => {
             title="성별별 검색수"
             sx={{ height: "150px", paddingTop: "0px" }}
           >
-           <GenderChart data={statisticsData.gender}/> 
+           <GenderCard data={statisticsData.gender.result}/> 
           </ChartCard>
         </Grid>
         <Grid item xs={12} md={6} xl={3} sx={{ padding: "10px" }}>
@@ -884,7 +892,7 @@ const OverviewChart = ({isLoading, statisticsData}) => {
         <Grid item xs={12} lg={6} sx={{ padding: "10px" }}>
           <TableCard title="유사 키워드" sx={{ height: "330px" }}>
             {/* KeywordTable */}
-            <KeywordTable />
+            <KeywordTable data={statisticsData.similarKeywords.result}/>
           </TableCard>
         </Grid>
         <Grid item xs={12} lg={6} sx={{ padding: "10px" }}>
