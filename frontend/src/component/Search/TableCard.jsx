@@ -1,7 +1,7 @@
 import { Box, IconButton } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
-const ChartCard = (props) => {
+const TableCard = (props) => {
   const { sx, title, isSmallCard, children } = props;
   return (
     <Box
@@ -18,32 +18,23 @@ const ChartCard = (props) => {
           sx={{
             borderTopLeftRadius: "15px",
             borderTopRightRadius: "15px",
-            padding: "10px 20px 0px 20px",
             fontWeight: "700",
             color: "#d8e2ef",
             display: "flex",
             justifyContent: "space-between",
 
-            // backgroundColor: "#262626",
+            backgroundColor: "#172230",
+            padding: "20px",
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center", fontSize: "14px" }}>
             {title}
           </Box>
-          <Box sx={{}}>
-            <IconButton aria-label="more">
-              <MoreVertIcon sx={{ color: "#dedede" }} />
-            </IconButton>
-          </Box>
         </Box>
       ) : null}
       <Box
         sx={{
-          color: "rgb(182,193,210)",
-          padding: "20px",
           height: "100%",
-          paddingTop: isSmallCard ? "5px" : "20px",
-          paddingBottom: isSmallCard ? "5px" : "20px",
           ...sx,
         }}
       >
@@ -53,4 +44,4 @@ const ChartCard = (props) => {
   );
 };
 
-export default ChartCard;
+export default TableCard;

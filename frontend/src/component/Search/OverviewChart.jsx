@@ -1,8 +1,9 @@
 import React, { useState, useRef } from "react";
 import Chart from "react-apexcharts";
 
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Chip, Avatar, LinearProgress } from "@mui/material";
 import ChartCard from "./ChartCard";
+import TableCard from "./TableCard";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -12,21 +13,60 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
+import CheckIcon from "@mui/icons-material/Check";
+
+import "styles/chart-animation.css";
+
+import good from "images/good.svg";
+
+function createData1(name, score, similarity) {
+  return { name, score, similarity };
+}
+
+function createData2(name, url, tags, score) {
+  return { name, url, tags, score };
 }
 
 const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
+  createData1("안녕하세요", 159, 62.1),
+  createData1("안녕히 계세요 여러분", 237, 34.9),
+  createData1("재.롱.이.귀.여.워", 262, 11.3),
+  createData1("얀녕?", 305, 73.7),
 ];
 
 const rows2 = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
+  createData2(
+    "갈아버리는 거 아니었어?",
+    "https://img.youtube.com/vi/q1cSkIbGCAI/0.jpg",
+    159,
+    6.0,
+    24
+  ),
+  createData2(
+    "배고플 때 먹는 영상",
+    "https://img.youtube.com/vi/LWpGpK0QbOQ/0.jpg",
+    237,
+    9.0,
+    37
+  ),
+  createData2(
+    "침펄 만두 먹방",
+    "https://img.youtube.com/vi/miKN0Gyz9H0/0.jpg",
+    237,
+    9.0,
+    12
+  ),
 ];
+
+const animationConfig = {
+  enabled: true,
+  easing: "easeinout",
+  speed: 1500, // Change this to adjust the animation speed
+  animateGradually: {
+    enabled: true,
+    delay: 150, // Change this to adjust the delay between animations
+  },
+};
 
 const KeywordTable = () => {
   return (
@@ -42,13 +82,13 @@ const KeywordTable = () => {
         <TableHead>
           <TableRow>
             <TableCell
-              sx={{ color: "#e2e2e2", borderBottom: "1px solid #515151" }}
+              sx={{ color: "#e2e2e2", borderBottom: "1px solid #242e3c" }}
             >
               키워드
             </TableCell>
             <TableCell
               align="right"
-              sx={{ color: "#e2e2e2", borderBottom: "1px solid #515151" }}
+              sx={{ color: "#e2e2e2", borderBottom: "1px solid #242e3c" }}
             >
               유사도
             </TableCell>
@@ -67,16 +107,53 @@ const KeywordTable = () => {
                 scope="row"
                 sx={{
                   color: "#e2e2e2",
-                  borderBottom: "1px solid #515151",
+                  borderBottom: "1px solid #242e3c",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "15px",
+                  height: "35px",
+                  fontSize: "14px",
                 }}
               >
+                <Avatar />
                 {row.name}
+                <Chip
+                  size="small"
+                  label={row.score + "점"}
+                  sx={{
+                    backgroundColor: "rgb(35,46,68)",
+                    color: "rgb(44,123,229)",
+                  }}
+                />
               </TableCell>
+
               <TableCell
                 align="right"
-                sx={{ color: "#e2e2e2", borderBottom: "1px solid #515151" }}
+                sx={{
+                  color: "#e2e2e2",
+                  borderBottom: "1px solid #242e3c",
+                }}
               >
-                {row.calories}
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "end",
+                    gap: "20px",
+                  }}
+                >
+                  <LinearProgress
+                    variant="determinate"
+                    value={row.similarity}
+                    sx={{
+                      backgroundColor: "#242e3c",
+                      borderRadius: "50px",
+                      width: "40%",
+                      height: "10px",
+                    }}
+                  />
+                  <Box sx={{ fontSize: "12px" }}>{row.similarity}</Box>
+                </Box>
               </TableCell>
             </TableRow>
           ))}
@@ -100,15 +177,15 @@ const VideoTable = () => {
         <TableHead>
           <TableRow>
             <TableCell
-              sx={{ color: "#e2e2e2", borderBottom: "1px solid #515151" }}
+              sx={{ color: "#e2e2e2", borderBottom: "1px solid #242e3c" }}
             >
-              Dessert (100g serving)
+              영상 이름
             </TableCell>
             <TableCell
               align="right"
-              sx={{ color: "#e2e2e2", borderBottom: "1px solid #515151" }}
+              sx={{ color: "#e2e2e2", borderBottom: "1px solid #242e3c" }}
             >
-              Calories
+              감성점수
             </TableCell>
           </TableRow>
         </TableHead>
@@ -125,14 +202,22 @@ const VideoTable = () => {
                 scope="row"
                 sx={{
                   color: "#e2e2e2",
-                  borderBottom: "1px solid #515151",
+                  borderBottom: "1px solid #242e3c",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "15px",
+                  height: "35px",
+                  fontSize: "14px",
                 }}
               >
+                <Box>
+                  <img src={row.url} alt="" height="30px" />
+                </Box>
                 {row.name}
               </TableCell>
               <TableCell
                 align="right"
-                sx={{ color: "#e2e2e2", borderBottom: "1px solid #515151" }}
+                sx={{ color: "#e2e2e2", borderBottom: "1px solid #242e3c" }}
               >
                 {row.calories}
               </TableCell>
@@ -144,7 +229,93 @@ const VideoTable = () => {
   );
 };
 
-const SafisfactionTable = () => {
+const SafisfactionShowTable = () => {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        height: "100%",
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          height: "100px",
+          justifyContent: "space-between",
+        }}
+      >
+        <Box sx={{ display: "flex" }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
+          >
+            <img
+              src={good}
+              alt=""
+              height="100px"
+              style={{ paddingRight: "20px" }}
+            />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              fontSize: "12px",
+            }}
+          >
+            <span
+              style={{
+                marginBottom: "10px",
+                fontSize: "14px",
+                fontWeight: "700",
+              }}
+            >
+              좋아요 현황
+            </span>
+            <span
+              style={{
+                fontSize: "13px",
+                fontWeight: "600",
+                color: "#00d27a",
+                marginBottom: "2px",
+              }}
+            >
+              평균
+            </span>
+            <span>좋아요 비율 : 32%</span>
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            textAlign: "center",
+          }}
+        >
+          <span
+            style={{
+              color: "rgb(44,123,229",
+              fontWeight: "700",
+              fontSize: "40px",
+              margin: "8px 0px",
+            }}
+          >
+            31
+          </span>
+          <span style={{ fontSize: "12px" }}>31 / 3212</span>
+        </Box>
+      </Box>
+    </Box>
+  );
+};
+
+const SatisfactionVoteTable = () => {
   return null;
 };
 
@@ -152,35 +323,86 @@ const SearchCountByAgeGroupChart = () => {
   const [chartData, setChartData] = useState({
     series: [
       {
-        name: "Sales",
-        data: [30, 40, 200, 50, 49, 60, 10],
+        name: "남성",
+        data: [44, 55, 57, 30, 17, 20],
+        color: "#008FFB",
+      },
+      {
+        name: "여성",
+        data: [76, 85, 101, 24, 22, 10],
+        color: "#FF4560",
+      },
+      {
+        name: "총합",
+        data: [113, 135, 151, 67, 38, 31],
+        color: "#354050",
       },
     ],
     options: {
       chart: {
-        id: "column-chart",
-      },
-
-      xaxis: {
-        categories: ["10대", "20대", "30대", "40대", "50대", "60대", "70대"],
+        type: "bar",
+        height: 350,
       },
       grid: {
-        show: false,
-      },
-      yaxis: {
-        title: {
-          text: "Search Count",
+        borderColor: "#424f5e",
+        strokeDashArray: 5,
+        position: "back",
+        xaxis: {
+          lines: {
+            show: false,
+          },
+        },
+        yaxis: {
+          lines: {
+            show: true,
+            style: {
+              colors: "#424f5e",
+              type: "dotted",
+            },
+          },
         },
       },
       plotOptions: {
         bar: {
+          borderRadius: 7,
+          borderRadiusApplication: "end",
           horizontal: false,
+          columnWidth: "45%",
           endingShape: "rounded",
-          columnWidth: "55%",
         },
       },
       dataLabels: {
         enabled: false,
+      },
+      stroke: {
+        show: true,
+        width: 2,
+        colors: ["transparent"],
+      },
+      xaxis: {
+        categories: ["10대", "20대", "30대", "40대", "50대", "60대"],
+        labels: {
+          style: {
+            colors: [
+              "#424f5e",
+              "#424f5e",
+              "#424f5e",
+              "#424f5e",
+              "#424f5e",
+              "#424f5e",
+            ],
+          },
+        },
+      },
+      yaxis: {
+        title: {
+          text: " 회 검색",
+        },
+        labels: {
+          style: {
+            colors: ["#424f5e"],
+          },
+        },
       },
       fill: {
         opacity: 1,
@@ -191,6 +413,7 @@ const SearchCountByAgeGroupChart = () => {
             return "$ " + val + " thousands";
           },
         },
+        theme: "dark",
       },
     },
   });
@@ -208,6 +431,10 @@ const SearchCountByAgeGroupChart = () => {
 };
 
 const SearchTrendByPeriodChart = () => {
+  const handleChartCreated = (chart) => {
+    chart.container.classList.add("apexcharts-draw-animation");
+  };
+
   const [chartData, setChartData] = useState({
     options: {
       chart: {
@@ -215,12 +442,40 @@ const SearchTrendByPeriodChart = () => {
         zoom: {
           enabled: false,
         },
-        stroke: {
+
+        animations: animationConfig,
+        toolbar: {
           show: false,
         },
       },
+      stroke: {
+        width: 3,
+      },
+      markers: {
+        size: 6,
+        colors: "#0b1827",
+        strokeWidth: 2,
+        strokeColors: "#0980df",
+      },
+
       grid: {
-        show: false,
+        borderColor: "#424f5e",
+        strokeDashArray: 5,
+        position: "back",
+        xaxis: {
+          lines: {
+            show: false,
+          },
+        },
+        yaxis: {
+          lines: {
+            show: true,
+            style: {
+              colors: "#424f5e",
+              type: "dotted",
+            },
+          },
+        },
       },
       xaxis: {
         categories: [
@@ -240,18 +495,18 @@ const SearchTrendByPeriodChart = () => {
         labels: {
           style: {
             colors: [
-              "#666666",
-              "#666666",
-              "#666666",
-              "#666666",
-              "#666666",
-              "#666666",
-              "#666666",
-              "#666666",
-              "#666666",
-              "#666666",
-              "#666666",
-              "#666666",
+              "#424f5e",
+              "#424f5e",
+              "#424f5e",
+              "#424f5e",
+              "#424f5e",
+              "#424f5e",
+              "#424f5e",
+              "#424f5e",
+              "#424f5e",
+              "#424f5e",
+              "#424f5e",
+              "#424f5e",
             ],
           },
         },
@@ -259,11 +514,24 @@ const SearchTrendByPeriodChart = () => {
       yaxis: {
         labels: {
           style: {
-            colors: ["#666666"],
+            colors: ["#424f5e"],
           },
         },
       },
+      tooltip: {
+        enabled: true,
+        y: {
+          formatter: (val) => {
+            return "$" + val;
+          },
+        },
+        marker: {
+          show: true,
+        },
+        theme: "dark",
+      },
     },
+
     series: [
       {
         name: "Sales",
@@ -286,10 +554,15 @@ const SearchTrendByPeriodChart = () => {
 
 const SearchByGenderChart = () => {
   const [chartData, setChartData] = useState({
-    series: [44, 55],
+    series: [29, 45, 11],
     options: {
       chart: {
         type: "donut",
+        offsetY: 0,
+        animations: animationConfig,
+        toolbar: {
+          show: false,
+        },
       },
 
       stroke: {
@@ -301,14 +574,20 @@ const SearchByGenderChart = () => {
           color: "red",
         },
       },
-      labels: ["남성", "여성"],
-      colors: ["#008FFB", "#FF4560"],
+      labels: ["남성", "여성", "기타"],
+      colors: ["#008FFB", "#FF4560", "#354050"],
       legend: {
+        show: false,
         position: "left",
+        offsetY: 20,
       },
       plotOptions: {
         pie: {
           donut: {
+            labels: {
+              show: false,
+            },
+
             size: "80%",
           },
         },
@@ -328,17 +607,21 @@ const SearchByGenderChart = () => {
   );
 };
 
-const SearchTrendWeeklyChart = () => {
+const SearchTrendWeeklyChart = ({ sx }) => {
   const [chartData, setChartData] = useState({
     series: [
       {
-        name: "Sales",
+        name: "검색 수",
         data: [30, 40, 90, 50, 49, 60, 30],
       },
     ],
     options: {
       chart: {
         id: "column-chart",
+        animations: animationConfig,
+        toolbar: {
+          show: false,
+        },
       },
 
       xaxis: {
@@ -383,15 +666,16 @@ const SearchTrendWeeklyChart = () => {
       tooltip: {
         y: {
           formatter: function (val) {
-            return "$ " + val + " thousands";
+            return val + " 회 검색";
           },
         },
+        theme: "dark",
       },
     },
   });
 
   return (
-    <Box sx={{ height: "100%" }}>
+    <Box sx={{ height: "100%", ...sx }}>
       <Chart
         options={chartData.options}
         series={chartData.series}
@@ -409,20 +693,28 @@ const SearchDownloadRatioChart = () => {
       chart: {
         height: 350,
         type: "radialBar",
+        animations: animationConfig,
+        toolbar: {
+          show: false,
+        },
       },
       plotOptions: {
         radialBar: {
           hollow: {
             size: "70%",
           },
+          track: {
+            background: "#242e3c",
+            borderRadius: "10px",
+          },
         },
       },
-      labels: ["Cricket"],
+      labels: ["다운로드 비율"],
     },
   });
 
   return (
-    <Box sx={{ height: "90%" }}>
+    <Box sx={{ height: "75%" }}>
       <Chart
         options={chartData.options}
         series={chartData.series}
@@ -443,34 +735,148 @@ const OverviewChart = () => {
       }}
     >
       <Grid container sx={{ width: "81%" }}>
-        <Grid item xs={12} lg={3} sx={{ padding: "10px" }}>
+        <Grid item xs={12} md={6} xl={3} sx={{ padding: "10px" }}>
           {/* SearchTrendWeeklyChart */}
           <ChartCard
             isSmallCard
-            title="일주일간 검색추이2"
-            sx={{ height: "150px" }}
+            title="일주일간 검색추이"
+            sx={{ height: "150px", paddingTop: "0px" }}
           >
-            <SearchTrendWeeklyChart />
+            <Grid container>
+              <Grid
+                item
+                xs={4}
+                sx={{
+                  padding: "30px 0px",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <span style={{ fontSize: "40px" }}>125회</span>
+                <Chip
+                  label="+13%"
+                  size="small"
+                  style={{
+                    backgroundColor: "#022b18",
+                    color: "#5ce2aa",
+                    fontSize: "12px",
+                    marginTop: "5px",
+                    width: "50px",
+                  }}
+                />
+              </Grid>
+              <Grid item xs={8}>
+                <SearchTrendWeeklyChart sx={{ height: "90%" }} />
+              </Grid>
+            </Grid>
           </ChartCard>
         </Grid>
-        <Grid item xs={12} lg={3} sx={{ padding: "10px" }}>
+        <Grid item xs={12} md={6} xl={3} sx={{ padding: "10px" }}>
           {/* SearchByGenderChart */}
-          <ChartCard isSmallCard sx={{ height: "200px", paddingTop: "0px" }}>
-            <SearchByGenderChart />
+          <ChartCard
+            isSmallCard
+            title="성별별 검색수"
+            sx={{ height: "150px", paddingTop: "0px" }}
+          >
+            <Grid container>
+              <Grid
+                item
+                xs={6}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  gap: "5px",
+                  width: "100%",
+                  padding: "5px 0px 20px 0px",
+                  color: "rgb(157,169,187)",
+                  fontSize: "12px",
+                }}
+              >
+                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        bgcolor: "#008FFB",
+                        borderRadius: "50%",
+                        height: "10px",
+                        width: "10px",
+                        marginRight: "6px",
+                      }}
+                    />
+                    <span>남성</span>
+                  </Box>
+                  <span>43%</span>
+                </Box>
+                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Box
+                      sx={{
+                        bgcolor: "#FF4560",
+                        borderRadius: "50%",
+                        height: "10px",
+                        width: "10px",
+                        marginRight: "6px",
+                      }}
+                    />
+                    <span>여성</span>
+                  </Box>
+                  <span>12%</span>
+                </Box>
+                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Box
+                      sx={{
+                        bgcolor: "#354050",
+                        borderRadius: "50%",
+                        height: "10px",
+                        width: "10px",
+                        marginRight: "6px",
+                      }}
+                    />
+                    <span>기타</span>
+                  </Box>
+                  <span>32%</span>
+                </Box>
+              </Grid>
+              <Grid item xs={1}></Grid>
+              <Grid item xs={5}>
+                <SearchByGenderChart />
+              </Grid>
+            </Grid>
           </ChartCard>
         </Grid>
-        <Grid item xs={12} lg={6} sx={{ padding: "10px" }}>
+        <Grid item xs={12} md={6} xl={3} sx={{ padding: "10px" }}>
           {/* SearchSatisfaction */}
-          <ChartCard title="검색 결과 만족도" sx={{ height: "100px" }}>
-            abc123
+          <ChartCard
+            isSmallCard
+            title="검색 결과 만족도"
+            sx={{ height: "150px", paddingTop: "0px" }}
+          >
+            <SafisfactionShowTable />
+          </ChartCard>
+        </Grid>
+        <Grid item xs={12} md={6} xl={3} sx={{ padding: "10px" }}>
+          {/* SearchSatisfaction */}
+          <ChartCard
+            isSmallCard
+            title="만족도 투표"
+            sx={{ height: "150px", paddingTop: "0px" }}
+          >
+            <SatisfactionVoteTable />
           </ChartCard>
         </Grid>
 
         <Grid item xs={12} lg={6} sx={{ padding: "10px" }}>
-          <ChartCard title="유사 키워드" sx={{ height: "300px" }}>
+          <TableCard title="유사 키워드" sx={{ height: "330px" }}>
             {/* KeywordTable */}
             <KeywordTable />
-          </ChartCard>
+          </TableCard>
         </Grid>
         <Grid item xs={12} lg={6} sx={{ padding: "10px" }}>
           {/* SearchTrendByPeriodChart */}
@@ -480,10 +886,10 @@ const OverviewChart = () => {
         </Grid>
 
         <Grid item xs={12} lg={3} sx={{ padding: "10px" }}>
-          <ChartCard title="비디오 정보" sx={{ height: "250px" }}>
+          <TableCard title="비디오 정보" sx={{ height: "280px" }}>
             {/* VideoInfoTable */}
             <VideoTable />
-          </ChartCard>
+          </TableCard>
         </Grid>
         <Grid item xs={12} lg={6} sx={{ padding: "10px" }}>
           <ChartCard title="연령대별 검색 횟수" sx={{ height: "250px" }}>
@@ -495,6 +901,25 @@ const OverviewChart = () => {
           {/* SearchDownloadRatioChart */}
           <ChartCard title="검색 대비 다운로드 비율" sx={{ height: "250px" }}>
             <SearchDownloadRatioChart />
+            <Box sx={{ textAlign: "center" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <CheckIcon
+                  sx={{ marginRight: "3px", color: "rgb(0,210,122)" }}
+                />
+                <p style={{ margin: 0, fontSize: "16px" }}>
+                  현재 "안녕" 키워드는 적절합니다.
+                </p>
+              </Box>
+
+              <p style={{ fontSize: "12px" }}>전체 검색 n건중 m건 다운로드</p>
+            </Box>
           </ChartCard>
         </Grid>
       </Grid>

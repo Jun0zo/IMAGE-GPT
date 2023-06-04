@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Paper,
   InputBase,
@@ -13,12 +14,19 @@ import { useNavigate } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import CommentIcon from "@mui/icons-material/Comment";
 
-const SearchBar = ({ keyword }) => {
+const SearchBar = (props) => {
+  const { keyword, value, handleValue } = props;
+  console.log(props);
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
-    event.preventDefault();
-    navigate(`/search?keyword=${keyword}`);
+    handleValue(event.target.value);
+    if (event.key === "Enter") {
+      alert(`/search/${event.target.value}`);
+      navigate(`/search/${event.target.value}`);
+      return false; // 추가적인 이벤트 실행을 방지하기 위해 false 리턴
+    }
+    //
   };
 
   return (
@@ -78,7 +86,6 @@ const SearchBar = ({ keyword }) => {
       </Paper>
 
       <Paper
-        component="form"
         sx={{
           p: "2px 4px",
           display: "flex",
@@ -92,9 +99,12 @@ const SearchBar = ({ keyword }) => {
           sx={{ ml: 1, flex: 1, borderLeft: 0 }}
           placeholder="검색하실 키워드를 입력하세요"
           inputProps={{ "aria-label": "search" }}
-          value={keyword}
-          onChange={(e) => {
-            handleSubmit(e);
+          value={value}
+          onChange={(event) => {
+            handleValue(event.target.value);
+          }}
+          onKeyDown={(event) => {
+            handleSubmit(event);
           }}
         />
         <IconButton type="button" sx={{ p: "10px" }} aria-label="search">

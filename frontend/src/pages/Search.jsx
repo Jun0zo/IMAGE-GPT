@@ -17,6 +17,8 @@ const Search = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const [value, setValue] = useState(keyword);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -26,11 +28,11 @@ const Search = () => {
           { params: { keyword } }
         );
         const response2 = await server.get(
-          API_ENDPOINTS.STATISTICS.RELATED_VIDEOS,
+          API_ENDPOINTS.STATISTICS.SIMILAR_KEYWORDS,
           { params: { keyword } }
         );
         const response3 = await server.get(
-          API_ENDPOINTS.STATISTICS.SATISFACTION,
+          API_ENDPOINTS.STATISTICS.SIMILAR_KEYWORDS,
           { params: { keyword } }
         );
         const response4 = await server.get(API_ENDPOINTS.STATISTICS.AGE, {
@@ -70,15 +72,15 @@ const Search = () => {
   return (
     <div>
       <NavBar />
-      <div
-        style={{ display: "flex", flexDirection: "column", marginTop: "50px" }}
-      >
-        <Box sx={{ height: "100vh" }}>
-          <SearchBar />
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        {/* <Box sx={{ height: "100vh" }}> */}
+        <Box sx={{ padding: "30px 0px" }}>
+          <SearchBar keyword={keyword} value={value} handleValue={setValue} />
           <ImageList />
         </Box>
 
-        <Box sx={{ height: "100vh" }}>
+        {/* <Box sx={{ height: "100vh" }}> */}
+        <Box sx={{ padding: "30px 0px" }}>
           <OverviewChart />
         </Box>
       </div>

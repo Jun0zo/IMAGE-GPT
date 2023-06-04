@@ -1,3 +1,5 @@
+docker-compose build or docker-compose build --no-chache
+
 # (Python -> docker mysql)python script에서 안될때
 
 docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' image-gpt-db-1 로 ip받고
