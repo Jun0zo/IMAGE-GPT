@@ -13,7 +13,7 @@ VIDEO_CNT = 100
 
 # connect to the database
 db = mysql.connector.connect(
-    host="0.0.0.0",
+    host="localhost",
     user="root",
     password="test",
     database="service"
@@ -30,7 +30,7 @@ for i in range(USER_CNT):
     email = fake.email()
     password = fake.password()
     age = random.randint(18, 60)
-    sex = random.choice(['남성', '여성'])
+    sex = random.choice(['male', 'female', 'others'])
     query = "INSERT INTO users (name, email, password, age, sex) VALUES (%s, %s, %s, %s, %s)"
     values = (name, email, password, age, sex)
     cursor.execute(query, values)
