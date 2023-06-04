@@ -51,7 +51,7 @@ def get_similar_keywords(keyword: str, db: Session = Depends(get_db)):
             .all()
     )
     
-    return {'result' : [kw[0] for kw in keywords]}
+    return {'result' : [{'subtitle': kw[0], 'distance': str(kw[1]), 'similarity': str(kw[1])} for kw in keywords]}
 
 # 비디오 정보
 @statistics.get("/statistics/related_videos", tags=["statistics"], response_model=RelatedVideosResponse)
@@ -59,7 +59,8 @@ def get_videos_by_keyword(keyword: str, db: Session = Depends(get_db)):
     images = db.query(Image).filter(Image.subtitle.like(f'%{keyword}%')).all()
     video_ids = set([image.video_id for image in images])
     videos = db.query(Video).filter(Video.id.in_(video_ids)).all()
-    return {'result' : videos}
+    print(videos[0])
+    return {'result' : [{'id': video.id, 'title': video.title, 'url': video.url} for video in videos]}
 
 
 # 검색 결과 만족도
@@ -93,7 +94,7 @@ def get_search_count_by_age_group_chart(keyword: str, db: Session = Depends(get_
             .filter(Search.keyword == keyword)\
             .count()
         chart_data.append({"age_group": f"{age_group[0]}-{age_group[1]}", "count": age_group_count})
-    return chart_data
+    return {"result": chart_data}
 
 
 # 기간별 검색 추이
@@ -151,9 +152,12 @@ def search_by_gender(keyword: str = None, db: Session = Depends(get_db)):
         group_by(User.sex).\
         all()
 
-    print(result)
+    age_dict = {r[0]: r[1] for r in result}
+    age_dict['male'] = {'count':0, 'ratio':0} if not age_dict.get('male') else {'count':age_dict['male'], 'ratio':age_dict['male'] / len(age_dict)}
+    age_dict['female'] = {'count':0, 'ratio':0} if not age_dict.get('female') else {'count':age_dict['female'], 'ratio':age_dict['female'] / len(age_dict)}
+    age_dict['others'] = {'count':0, 'ratio':0} if not age_dict.get('others') else {'count':age_dict['others'], 'ratio':age_dict['others'] / len(age_dict)}
     
-    return {'result': {r[0]: r[1] for r in result}}
+    return {'result': age_dict}
 
 # 검색 대비 다운로드 비율 
 @statistics.get("/statistics/download", tags=["statistics"], response_model=DownloadResponse)
