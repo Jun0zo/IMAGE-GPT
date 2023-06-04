@@ -28,13 +28,21 @@ const Search = () => {
           { params: { keyword } }
         );
         console.log("res1");
+        // const response2 = await server.get(
+        //   API_ENDPOINTS.STATISTICS.RELATED_VIDEOS,
+        //   { params: { keyword } }
+        // );
         const response2 = await server.get(
-          API_ENDPOINTS.STATISTICS.RELATED_VIDEOS,
+          API_ENDPOINTS.STATISTICS.SIMILAR_KEYWORDS,
           { params: { keyword } }
         );
         console.log("res2");
+        // const response3 = await server.get(
+        //   API_ENDPOINTS.STATISTICS.SATISFACTION,
+        //   { params: { keyword } }
+        // );
         const response3 = await server.get(
-          API_ENDPOINTS.STATISTICS.SATISFACTION,
+          API_ENDPOINTS.STATISTICS.SIMILAR_KEYWORDS,
           { params: { keyword } }
         );
         console.log("res3");
