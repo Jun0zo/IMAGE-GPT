@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Chart from "react-apexcharts";
 
 import { Box, Grid, Chip, Avatar, LinearProgress } from "@mui/material";
@@ -437,7 +437,7 @@ const SearchCountByAgeGroupChart = () => {
   );
 };
 
-const SearchTrendByPeriodChart = () => {
+const SearchTrendByPeriodChart = ({data}) => {
   const handleChartCreated = (chart) => {
     chart.container.classList.add("apexcharts-draw-animation");
   };
@@ -541,11 +541,30 @@ const SearchTrendByPeriodChart = () => {
 
     series: [
       {
-        name: "Sales",
+        name: "count",
         data: [30, 40, 35, 50, 49, 60, 70, 91, 125, 150, 200, 220],
       },
     ],
   });
+
+  useEffect(() => {
+    if (data) {
+      setChartData(prevState => {
+        const updatedHook = {...prevState}
+        console.log(updatedHook)
+  
+        if (Object.keys(updatedHook).length) {
+          updatedHook.options.xaxis.categories = data.map(row => row.date)
+          updatedHook.series[0].data = data.map(row => row.count)
+        }
+        console.log(updatedHook)
+        return updatedHook
+        
+      })
+    }
+    
+    
+  }, [data])
 
   return (
     <Box sx={{ height: "100%" }}>
@@ -898,7 +917,7 @@ const OverviewChart = ({isLoading, statisticsData}) => {
         <Grid item xs={12} lg={6} sx={{ padding: "10px" }}>
           {/* SearchTrendByPeriodChart */}
           <ChartCard title="기간별 검색 추이" sx={{ height: "300px" }}>
-            <SearchTrendByPeriodChart />
+            <SearchTrendByPeriodChart data={statisticsData.monthlyTrend.result}/>
           </ChartCard>
         </Grid>
 
