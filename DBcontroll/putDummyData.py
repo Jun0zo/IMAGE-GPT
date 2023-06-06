@@ -44,7 +44,7 @@ for i in range(VIDEO_CNT):
     tag = fake.word()
     hash_tag = '#' + fake.word() + ' #' + fake.word()
     emotion_score = round(random.uniform(0.0, 1.0), 2)
-    query = "INSERT INTO videos (title, url, tag, hash_tag, emotion_score) VALUES (%s, %s, %s, %s, %s)"
+    query = "INSERT INTO videos (title, url, description, tags, emotion_score) VALUES (%s, %s, %s, %s, %s)"
     values = (title, url, tag, hash_tag, emotion_score)
     cursor.execute(query, values)
     
