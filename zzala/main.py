@@ -30,9 +30,10 @@ if __name__ == '__main__':
     zzala = Subtitler(model_name=model, is_debuging=True, is_save=True)
     
     root_path = './video'
-    # video_url_list = ['https://www.youtube.com/watch?v=8S8FPbAFtlQ', 'https://www.youtube.com/watch?v=UTQeUz-KHso']
     video_url_list = [ 'https://www.youtube.com/watch?v=oC3cD-S_HGA', ' https://www.youtube.com/watch?v=VSHWnPfSOWg', 'https://www.youtube.com/watch?v=988TcAz618c', 'https://www.youtube.com/watch?v=qCvWTGJVRnI', 'https://www.youtube.com/watch?v=MgOiA92c534']
     ytd = YoutubeDownloader()
+
+    video_url_list = ['https://www.youtube.com/watch?v=UTQeUz-KHso']
     video_name_list = ytd.download_video('./video', video_url_list)
     print(video_name_list)
     video_info_list = ytd.get_video_infos(video_url_list)
@@ -41,8 +42,8 @@ if __name__ == '__main__':
     for video_info, video_name, video_url in zip(video_info_list, video_name_list, video_url_list):
         query = "INSERT INTO videos (title, url, description, tags, emotion_score) VALUES (%s, %s, %s, %s, %s)"
         title = video_info['title']
-        description = video_info['description'] if video_info.get('title') else ''
-        tags = ", ".join(video_info['tags']) if video_info.get('title') else []
+        description = video_info['description'] if video_info.get('description') else ''
+        tags = ", ".join(video_info['tags']) if video_info.get('tags') else ''
 
         print(title)
         print(description)
@@ -52,9 +53,14 @@ if __name__ == '__main__':
         values = (title, video_url, description, tags, 0)
         cursor.execute(query, values)
 
+        new_row_id = cursor.lastrowid
+
         
-        # video_path = os.path.join(root_path, video_name)
-        # image_name_list = zzala.get_micros(video_path)
+        video_path = os.path.join(root_path, video_name)
+        image_name_list, subtitle_list, emotional_score_list = zzala.get_micros(video_path)
+        print(image_name_list[:5])
+        print(subtitle_list[:5])
+        print(emotional_score_list[:5])
 
     db.commit()
 
