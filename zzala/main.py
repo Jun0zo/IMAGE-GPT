@@ -36,9 +36,6 @@ if __name__ == '__main__':
                       'https://www.youtube.com/watch?v=rfI2-Wkzs74',
                       'https://www.youtube.com/watch?v=3wC22V7g74s',
                       'https://www.youtube.com/watch?v=weogNFa6Uzg']
-    
-    # 4 (sbs) done
-    # 5 Dplus KIA ing
 
     ytd = YoutubeDownloader()
 
