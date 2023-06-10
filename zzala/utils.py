@@ -7,7 +7,9 @@ import functools
 import datetime
 
 API_URL = 'https://dapi.kakao.com/v2/vision/text/ocr'
-KEY = '5b60f7aeb82db9bf02f3eea5a94a69c0'
+KEY = '5b60f7aeb82db9bf02f3eea5a94a69c0' # 
+# KEY = '2b5225795b0e6bba37b57d3450dfc2e5' # j1
+# KEY = 'a23a0eab4f677978b873971e638c0971' #o1
 
 BLACK = (0,0,0)
 RED = (0,0,255)

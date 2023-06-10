@@ -70,6 +70,8 @@ class Subtitler:
                             cv2.putText(c_image, str(percent), tuple(p1), cv2.FONT_HERSHEY_SIMPLEX, 1, RED, 2, cv2.LINE_AA)
                             draw_rectangle(c_image, p1, p3, RED, 2, padding)
                             continue
+                        if not output['recognition_words'] == '':
+                            res += " ".join(output['recognition_words']) + " "
                     
                         draw_rectangle(boxes, p1, p3, WHITE, -1, padding)
                         draw_rectangle(c_image, p1, p3, GREEN, 2, padding)
@@ -83,16 +85,12 @@ class Subtitler:
                             save_image(roi, path_join(self.debug_path, 'no_caption'))
                             cv2.putText(c_image, str(percent), tuple(p1), cv2.FONT_HERSHEY_SIMPLEX, 1, RED, 2, cv2.LINE_AA)
                             
-                    
                 else:
                     draw_rectangle(c_image, p1, p3, GREEN, 2, padding)
                     draw_rectangle(boxes, p1, p3, WHITE, -1, padding)
             except Exception as e:
                 print("out of image !! ", e)
             
-            if not output['recognition_words'] == '':
-                res += " ".join(output['recognition_words']) + " "
-        
         
         res = res.replace('ø', '').strip().replace(' ', '_')
         return {'str':str_encoder(res), 'img':c_image, 'boxes':boxes, 'roi_list':roi_list}
