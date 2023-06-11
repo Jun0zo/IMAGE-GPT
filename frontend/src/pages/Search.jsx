@@ -13,16 +13,23 @@ import API_ENDPOINTS from "config/endpointConfig";
 
 const Search = () => {
   const { keyword } = useParams();
+  const [images, setImages] = useState([]);
   const [statisticsData, setStatisticsData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+
+  // statistics loading and error information
+  const [isStatisticsLoading, setIsStatisticsLoading] = useState(true);
+  const [isStatisticsError, setStatisticsError] = useState(null);
+
+  // images loading and error information
+  const [isImagesLoading, setIsImagesLoading] = useState(true);
+  const [isImagesError, setImagesError] = useState(null);
 
   const [value, setValue] = useState(keyword);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchStatisticsData = async () => {
       try {
-        setIsLoading(true);
+        setIsStatisticsLoading(true);
         const response1 = await server.get(
           API_ENDPOINTS.STATISTICS.SIMILAR_KEYWORDS,
           { params: { keyword } }
@@ -61,14 +68,34 @@ const Search = () => {
           weeklyTrend: response7.data,
           download: response7.data,
         });
+
       } catch (err) {
         alert(err)
-        setError(err.message);
+        setStatisticsError(err.message);
       } finally {
-        setIsLoading(false);
+        setIsStatisticsLoading(false);
       }
     };
-    fetchData();
+
+    const fetchImages = async () => {
+      setIsImagesLoading(true)
+      try {
+        const response = await server.get(API_ENDPOINTS.SEARCH.IMAGES, {
+          params: { keyword }
+        })
+        setImages(response.data.result)
+      } catch (err) {
+        
+      } finally {
+        
+        setIsImagesLoading(false)
+      }
+
+    }
+
+    fetchImages();
+    fetchStatisticsData();
+    
     console.log('or data ', statisticsData)
   }, [keyword]);
   return (
@@ -78,12 +105,12 @@ const Search = () => {
         {/* <Box sx={{ height: "100vh" }}> */}
         <Box sx={{ padding: "30px 0px" }}>
           <SearchBar keyword={keyword} value={value} handleValue={setValue} />
-          <ImageList />
+          {isImagesLoading ? null : <ImageList images={images}/>}  
         </Box>
 
         {/* <Box sx={{ height: "100vh" }}> */}
         <Box sx={{ padding: "30px 0px" }}>
-          {isLoading ? <div></div> : <OverviewChart isLoading={isLoading} statisticsData={statisticsData}/>}
+          {isStatisticsLoading ? <div></div> : <OverviewChart isStatisticsLoading={isStatisticsLoading} statisticsData={statisticsData}/>}
           
         </Box>
       </div>
