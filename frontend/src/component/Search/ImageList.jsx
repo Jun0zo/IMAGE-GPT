@@ -20,6 +20,7 @@ import {
 } from "@mui/material";
 
 import DownloadIcon from '@mui/icons-material/Download';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 import InfoIcon from "@mui/icons-material/Info";
 import YoutubeIcon from "component/youtubeIcon.png"
@@ -119,13 +120,21 @@ const Modal = ({open, handleClose, loadding, data}) => {
               {
                   Object.keys(data).length === 0 ?  <></> :
                   <Grid item xl={6} lg={6} sm={12} sx={{ padding:"15px", maxHeight:"100%"}}>
-                    <div style={{maxHeight:"100%", overflowY:"auto", marginTop:"0px"}}>
-                      <p style={{fontSize:"24px"}}>{data.image_subtitle.replace(/_/g, " ")}</p>
-                      <p>{data.video_title}</p>
-                      <p style={{ whiteSpace: "pre-line" }}>영상 설명 : {data.video_description.substring(0,50)}</p>
-                      <p>태그 정보 : {data.tags}</p>
-                  
+                    <div style={{position:"relative", height:"100%"}}>
+                      <div style={{position:"absolute", right:"0px"}}>
+                        <Chip icon={<VisibilityIcon />} label="AI 분석" />
+                        <Chip icon={<VisibilityIcon />} label="공유" />
+                      </div>
+                      
+                      <div style={{maxHeight:"100%", overflowY:"auto"}}>
+                        <p style={{fontSize:"24px", marginTop:"0px"}}>{data.image_subtitle.replace(/_/g, " ")}</p>
+                        <p>{data.video_title}</p>
+                        <p style={{ whiteSpace: "pre-line" }}>영상 설명 : {data.video_description.substring(0,50)}</p>
+                        <p>태그 정보 : {data.video_tags}</p>
+                    
+                      </div>
                     </div>
+                    
                  </Grid>
               }
               <Grid item xl={12} lg={12} sm={12} sx={{paddingLeft:"15px", paddingRight:"15px", overflowX:"hidden"}}>
@@ -243,6 +252,7 @@ const ImageList = ({images}) => {
               }}
               onClick={(event) => {
                 if(event.currentTarget.className == 'overlay') {
+                  event.stopPropagation();
                   handleModalOpen(image.id)
                 }
               }}
@@ -269,7 +279,9 @@ const ImageList = ({images}) => {
                       backgroundColor:"rgba(181,181,181, .9)",
                       cursor:"pointer"
                     }}}
-                    onClick={(event) => {
+                    onClick={async (event) => {
+                      // await server.get(API_ENDPOINTS.DETAILS.VIDEO_IMAGES, { params : {}})
+                      // window.open(image.video_url)
                       event.stopPropagation();
                     }}
                   />
