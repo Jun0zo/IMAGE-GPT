@@ -9,6 +9,7 @@ import {
   IconButton,
   TextField,
   DialogActions,
+  Grid,
   Box,
   Chip,
   Avatar,
@@ -26,26 +27,51 @@ import YoutubeIcon from "component/youtubeIcon.png"
 import server from "config/axiosConfig";
 import API_ENDPOINTS from "config/endpointConfig";
 
-const Modal = ({open, handleClose, loadding}) => {
+import styles from "./imageListStyles.css";
+
+const Modal = ({open, handleClose, loadding, data}) => {
+
+  const images = Array.from({ length: 30 }).fill("_100.jpg")
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth='xl'>
       {loadding ? <></> : 
       <div>
-        <DialogTitle>Subscribe</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            <img src={`http://unilab.kro.kr:8000/public/zzals/${image_url}`}
-                style={{borderRadius:"10px"}}
-                // srcSet={`${item.img}`}
-                // alt={item.title}
-                loading="lazy"></img>
+          <DialogContentText sx={{ maxHeight: "700px"}}>
+            <Grid container sx={{width:"100%", maxHeight:"100%"}}>
+              <Grid item xl={6} lg={6} sm={12} sx={{ width:"100%", display: "flex", alignItems: "center", padding:"15px"}}>
+                <img src={`http://unilab.kro.kr:8000/public/zzals/org/${data.image_url}`}
+                    style={{borderRadius:"10px", width:"100%"}}
+                    // srcSet={`${item.img}`}
+                    // alt={item.title}
+                    loading="lazy" />
+              </Grid>
+              {
+                  Object.keys(data).length === 0 ?  <></> :
+                  <Grid item xl={6} lg={6} sm={12} sx={{ padding:"15px", maxHeight:"100%"}}>
+                    <div style={{maxHeight:"100%", overflowY:"auto"}}>
+                      <p style={{fontSize:"24px"}}>{data.image_subtitle}</p>
+                      <p>{data.video_title}</p>
+                      <p style={{ whiteSpace: "pre-line" }}>영상 설명 : {data.video_description.substring(0,50)}</p>
+                      <p>태그 정보 : {data.tags}</p>
+                  
+                    </div>
+                 </Grid>
+              }
+              <Grid item xl={12} lg={12} sm={12} sx={{paddingLeft:"15px", paddingRight:"15px", overflowX:"hidden"}}>
+                <div className="imageContainer" style={{display:"flex", gap:"10px"}}>
+                  {images.map(image_url => {
+                    return <img src={`http://unilab.kro.kr:8000/public/zzals/org/${image_url}`} style={{height:"100px"}} />
+                  })}
+                </div>
+                
+              </Grid>
+              
+            </Grid>
+            
           </DialogContentText>
           
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Subscribe</Button>
-        </DialogActions>
       </div>}
         
     </Dialog>
@@ -197,7 +223,7 @@ const ImageList = ({images}) => {
         ))}
       </MUIImageList>
 
-      <Modal open={modalOpen} handleClose={handleModalClose}/>
+      <Modal open={modalOpen} handleClose={handleModalClose} data={modalData}/>
     </Box>
   );
 };
