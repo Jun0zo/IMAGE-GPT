@@ -23,7 +23,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
 import InfoIcon from "@mui/icons-material/Info";
-import YoutubeIcon from "component/youtubeIcon.png"
+import YouTubeIcon from '@mui/icons-material/YouTube';
 
 import server from "config/axiosConfig";
 import API_ENDPOINTS from "config/endpointConfig";
@@ -269,7 +269,7 @@ const ImageList = ({images}) => {
 
                 <div style={{display:"flex", justifyContent:"space-evenly", paddingBottom:"10px"}}>
                   <Chip
-                    avatar={<Avatar alt="Natacha" src={YoutubeIcon} />}
+                    icon={<YouTubeIcon style={{color:"#FF0000"}}/>}
                     label="원본 보기"
                     sx={{backgroundColor:"rgba(181,181,181,.5)", 
                     "& .MuiChip-label": {
