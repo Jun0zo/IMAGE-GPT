@@ -5,18 +5,55 @@ import {
   ImageList as MUIImageList,
   ImageListItem,
   ImageListItemBar,
+  Button,
   IconButton,
+  TextField,
+  DialogActions,
   Box,
   Chip,
-  Avatar
+  Avatar,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText
 } from "@mui/material";
+
+import DownloadIcon from '@mui/icons-material/Download';
 
 import InfoIcon from "@mui/icons-material/Info";
 import YoutubeIcon from "component/youtubeIcon.png"
 
+const Modal = ({open, handleClose}) => {
+  return (
+    <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Subscribe</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            To subscribe to this website, please enter your email address here. We
+            will send updates occasionally.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="Email Address"
+            type="email"
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose}>Subscribe</Button>
+        </DialogActions>
+      </Dialog>
+  )
+}
+
 const ImageList = ({images}) => {
   const [isClickList, setIsClickList] = useState([]);
   const [cols, setCols] = useState(getColumns());
+  const [modalOpen, setModalOpen] = useState(false)
 
   function getColumns() {
     const width = window.innerWidth;
@@ -45,6 +82,14 @@ const ImageList = ({images}) => {
     };
   }, []);
 
+  const handleModalClose = () => {
+    setModalOpen(false)
+  }
+
+  const handleModalOpen = (index) => {
+    setModalOpen(true)
+  }
+
   const showOverlay = (event) => {
     const target = event.currentTarget;
     target.querySelector('.overlay').style.opacity = 1
@@ -67,122 +112,78 @@ const ImageList = ({images}) => {
                 // alt={item.title}
                 loading="lazy"
               />
-             <div className='overlay' style={{
-              opacity:"1",
-              backgroundColor:"rgba(0,0,0,0.3)", 
-              borderRadius:"10px", 
-              position:"absolute", 
-              top:0, 
-              left:0, 
-              width:"100%", 
-              height:"100%",
-              cursor:"zoom-in",
-              display:"flex",
-              flexDirection:"column",
-              justifyContent:"space-between"
-              }}>
-                <div style={{display:"flex", justifyContent:"center"}}>
-                  <Heart isClick={isClickList[index]} onClick={() => setIsClickList(prevClickList => { 
+             <div className='overlay' 
+              style={{
+                opacity:"0",
+                backgroundColor:"rgba(0,0,0,0.3)", 
+                borderRadius:"10px", 
+                position:"absolute", 
+                top:0, 
+                left:0, 
+                width:"100%", 
+                height:"100%",
+                cursor:"zoom-in",
+                display:"flex",
+                flexDirection:"column",
+                justifyContent:"space-between"
+              }}
+              onClick={(event) => {
+                if(event.currentTarget.className == 'overlay') {
+                  console.log(event.currentTarget)
+                  handleModalOpen(index)
+                }
+              }}
+              >
+                <div style={{display:"flex", justifyContent:"center", paddingTop:"10px"}}>
+                  <Heart isClick={isClickList[index]} onClick={(event) => setIsClickList(prevClickList => { 
+                    event.stopPropagation();
                     const newClickList = [...prevClickList]
                     newClickList[index] = !newClickList[index];
-                    console.log(newClickList)
                     return newClickList
                   })}
                   sx={{width:"50px"}}/>
                 </div>
 
-                <div style={{display:"flex", justifyContent:"space-around"}}>
+                <div style={{display:"flex", justifyContent:"space-evenly", paddingBottom:"10px"}}>
                   <Chip
                     avatar={<Avatar alt="Natacha" src={YoutubeIcon} />}
                     label="원본 보기"
-                    sx={{backgroundColor:"rgba(181,181,181,.5)"}}
+                    sx={{backgroundColor:"rgba(181,181,181,.5)", 
+                    "& .MuiChip-label": {
+                      fontWeight: "bold", // Adjust the fontWeight as desired
+                    },
+                    "&:hover": {
+                      backgroundColor:"rgba(181,181,181, .9)",
+                      cursor:"pointer"
+                    }}}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                    }}
                   />
                   <Chip
-                    avatar={<Avatar alt="Natacha" src={YoutubeIcon} />}
+                    icon={<DownloadIcon style={{color:"#3580f2"}}/>}
                     label="다운로드"
-                    sx={{backgroundColor:"rgba(181,181,181,.5)"}}
-                  />
+                    sx={{backgroundColor:"rgba(181,181,181,.5)", 
+                    "& .MuiChip-label": {
+                      fontWeight: "bold", // Adjust the fontWeight as desired
+                    },
+                    "&:hover": {
+                      backgroundColor:"rgba(181,181,181, .9)",
+                      cursor:"pointer"
+                    }}}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                    }}
+                    />
                 </div>
              </div>
           </ImageListItem>
         ))}
       </MUIImageList>
+
+      <Modal open={modalOpen} handleClose={handleModalClose}/>
     </Box>
   );
 };
-
-const itemData = [
-  {
-    img: "http://localhost:8000/public/images/0.jpg",
-    title: "Breakfast",
-    author: "@bkristastucchio",
-    rows: 2,
-    cols: 2,
-    featured: true,
-  },
-  {
-    img: "http://localhost:8000/public/images/101.jpg",
-    title: "Burger",
-    author: "@rollelflex_graphy726",
-  },
-  {
-    img: "http://localhost:8000/public/images/212.jpg",
-    title: "Camera",
-    author: "@helloimnik",
-  },
-  {
-    img: "http://localhost:8000/public/images/3.jpg",
-    title: "Coffee",
-    author: "@nolanissac",
-    cols: 2,
-  },
-  {
-    img: "http://localhost:8000/public/images/4.jpg",
-    title: "Hats",
-    author: "@hjrc33",
-    cols: 2,
-  },
-  {
-    img: "http://localhost:8000/public/images/5.jpg",
-    title: "Honey",
-    author: "@arwinneil",
-    rows: 2,
-    cols: 2,
-    featured: true,
-  },
-  {
-    img: "http://localhost:8000/public/images/18.jpg",
-    title: "Basketball",
-    author: "@tjdragotta",
-  },
-  {
-    img: "http://localhost:8000/public/images/74.jpg",
-    title: "Fern",
-    author: "@katie_wasserman",
-  },
-  {
-    img: "http://localhost:8000/public/images/48.jpg",
-    title: "Mushrooms",
-    author: "@silverdalex",
-    rows: 2,
-    cols: 2,
-  },
-  {
-    img: "http://localhost:8000/public/images/9.jpg",
-    title: "Tomato basil",
-    author: "@shelleypauls",
-  },
-  {
-    img: "http://localhost:8000/public/images/81.jpg",
-    title: "Sea star",
-    author: "@peterlaster",
-  },
-  {
-    img: "http://localhost:8000/public/images/11.jpg",
-    title: "Bike",
-    author: "@southside_customs",
-    cols: 2,
-  },
-];
 
 export default ImageList;
