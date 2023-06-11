@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Heart from "react-animated-heart";
 
 import {
   ImageList as MUIImageList,
@@ -6,12 +7,17 @@ import {
   ImageListItemBar,
   IconButton,
   Box,
+  Chip,
+  Avatar
 } from "@mui/material";
 
 import InfoIcon from "@mui/icons-material/Info";
+import YoutubeIcon from "component/youtubeIcon.png"
 
-const ImageList = () => {
+const ImageList = ({images}) => {
+  const [isClickList, setIsClickList] = useState([]);
   const [cols, setCols] = useState(getColumns());
+
   function getColumns() {
     const width = window.innerWidth;
     if (width >= 1300) {
@@ -26,6 +32,10 @@ const ImageList = () => {
   }
 
   useEffect(() => {
+    setIsClickList(Array(images.length).fill(false))
+  }, [images])
+
+  useEffect(() => {
     function handleResize() {
       setCols(getColumns());
     }
@@ -35,29 +45,65 @@ const ImageList = () => {
     };
   }, []);
 
+  const showOverlay = (event) => {
+    const target = event.currentTarget;
+    target.querySelector('.overlay').style.opacity = 1
+  }
+
+  const hideOverlay = (event) => {
+    const target = event.currentTarget;
+    target.querySelector('.overlay').style.opacity = 0
+  }
+
   return (
     <Box sx={{ display: "flex", justifyContent: "center", marginTop: "50px" }}>
       <MUIImageList cols={cols} gap={20} sx={{ gap: "20px", width: "70vw" }}>
-        {itemData.map((item) => (
-          <ImageListItem key={item.img}>
-            <img
-              src={`${item.img}`}
-              srcSet={`${item.img}`}
-              alt={item.title}
-              loading="lazy"
-            />
-            <ImageListItemBar
-              title={item.title}
-              subtitle={item.author}
-              actionIcon={
-                <IconButton
-                  sx={{ color: "rgba(255, 255, 255, 0.54)" }}
-                  aria-label={`info about ${item.title}`}
-                >
-                  <InfoIcon />
-                </IconButton>
-              }
-            />
+        {images.map((image_url, index) => (
+          <ImageListItem key={index} onMouseEnter={showOverlay} onMouseLeave={hideOverlay}>
+              <img
+                src={`http://unilab.kro.kr:8000/public/zzals/${image_url}`}
+                style={{borderRadius:"10px"}}
+                // srcSet={`${item.img}`}
+                // alt={item.title}
+                loading="lazy"
+              />
+             <div className='overlay' style={{
+              opacity:"1",
+              backgroundColor:"rgba(0,0,0,0.3)", 
+              borderRadius:"10px", 
+              position:"absolute", 
+              top:0, 
+              left:0, 
+              width:"100%", 
+              height:"100%",
+              cursor:"zoom-in",
+              display:"flex",
+              flexDirection:"column",
+              justifyContent:"space-between"
+              }}>
+                <div style={{display:"flex", justifyContent:"center"}}>
+                  <Heart isClick={isClickList[index]} onClick={() => setIsClickList(prevClickList => { 
+                    const newClickList = [...prevClickList]
+                    newClickList[index] = !newClickList[index];
+                    console.log(newClickList)
+                    return newClickList
+                  })}
+                  sx={{width:"50px"}}/>
+                </div>
+
+                <div style={{display:"flex", justifyContent:"space-around"}}>
+                  <Chip
+                    avatar={<Avatar alt="Natacha" src={YoutubeIcon} />}
+                    label="원본 보기"
+                    sx={{backgroundColor:"rgba(181,181,181,.5)"}}
+                  />
+                  <Chip
+                    avatar={<Avatar alt="Natacha" src={YoutubeIcon} />}
+                    label="다운로드"
+                    sx={{backgroundColor:"rgba(181,181,181,.5)"}}
+                  />
+                </div>
+             </div>
           </ImageListItem>
         ))}
       </MUIImageList>
