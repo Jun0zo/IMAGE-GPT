@@ -23,37 +23,39 @@ import DownloadIcon from '@mui/icons-material/Download';
 import InfoIcon from "@mui/icons-material/Info";
 import YoutubeIcon from "component/youtubeIcon.png"
 
-const Modal = ({open, handleClose}) => {
+import server from "config/axiosConfig";
+import API_ENDPOINTS from "config/endpointConfig";
+
+const Modal = ({open, handleClose, loadding}) => {
   return (
     <Dialog open={open} onClose={handleClose}>
+      {loadding ? <></> : 
+      <div>
         <DialogTitle>Subscribe</DialogTitle>
         <DialogContent>
           <DialogContentText>
             To subscribe to this website, please enter your email address here. We
             will send updates occasionally.
           </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Email Address"
-            type="email"
-            fullWidth
-            variant="standard"
-          />
+          
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleClose}>Subscribe</Button>
         </DialogActions>
-      </Dialog>
+      </div>}
+        
+    </Dialog>
   )
 }
 
 const ImageList = ({images}) => {
   const [isClickList, setIsClickList] = useState([]);
   const [cols, setCols] = useState(getColumns());
+
   const [modalOpen, setModalOpen] = useState(false)
+  const [modalLoading, setModalLoading] = useState(true)
+  const [modalData, setModalData] = useState({})
 
   function getColumns() {
     const width = window.innerWidth;
@@ -82,12 +84,20 @@ const ImageList = ({images}) => {
     };
   }, []);
 
-  const handleModalClose = () => {
-    setModalOpen(false)
+  const getImageInfo = async (index) => {
+    return server.get(server.API_ENDPOINTS).data.result
   }
 
-  const handleModalOpen = (index) => {
+  const handleModalClose = () => {
+    setModalOpen(false)
+    setModalLoading(true)
+  }
+
+  const handleModalOpen = async (index) => {
     setModalOpen(true)
+    const imageData = await getImageInfo()
+    setModalData(imageData)
+    setModalLoading(false)
   }
 
   const showOverlay = (event) => {
