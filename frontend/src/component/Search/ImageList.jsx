@@ -67,10 +67,10 @@ const SlidingImageContainer = ({ images }) => {
   return (
     <div style={{ overflow: 'hidden' }}>
       <div ref={containerRef} style={{ display: 'flex', transition: 'transform 0.5s' }}>
-        {images.map((index, image_url) => (
+        {images.map((image, index) => (
           <img
             key={index}
-            src={`http://unilab.kro.kr:8000/public/zzals/org/${image_url}`}
+            src={`http://unilab.kro.kr:8000/public/zzals/org/${image.url}`}
             style={{ height: '100px', width: `${imageWidth}px`, marginRight: `${gap}px` }}
             alt="Image"
           />
@@ -95,7 +95,6 @@ const Modal = ({open, handleClose, loadding, data}) => {
   useEffect(() => {
     const fetchData = async () => {
       console.log(data)
-      alert(data.video_id)
       const images = await getImagesFromVideoID(data.video_id)
       console.log(images)
       setRelatedImages(images)
@@ -218,10 +217,10 @@ const ImageList = ({images}) => {
   return (
     <Box sx={{ display: "flex", justifyContent: "center", marginTop: "50px" }}>
       <MUIImageList cols={cols} gap={20} sx={{ gap: "20px", width: "70vw" }}>
-        {images.map((image_url, index) => (
+        {images.map((image, index) => (
           <ImageListItem key={index} onMouseEnter={showOverlay} onMouseLeave={hideOverlay}>
               <img
-                src={`http://unilab.kro.kr:8000/public/zzals/org/${image_url}`}
+                src={`http://unilab.kro.kr:8000/public/zzals/org/${image.url}`}
                 style={{borderRadius:"10px"}}
                 // srcSet={`${item.img}`}
                 // alt={item.title}
@@ -244,7 +243,7 @@ const ImageList = ({images}) => {
               }}
               onClick={(event) => {
                 if(event.currentTarget.className == 'overlay') {
-                  handleModalOpen(index)
+                  handleModalOpen(image.id)
                 }
               }}
               >
