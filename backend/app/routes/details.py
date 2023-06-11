@@ -29,6 +29,7 @@ def get_videos_by_keyword(id: str, db: Session = Depends(get_db)):
         image_and_video = {
             'image_url':image_info.url,
             'image_subtitle':image_info.subtitle,
+            'video_id':video_info.id,
             'video_title':video_info.title,
             'video_description':video_info.description,
             'video_tags':video_info.tags
