@@ -34,8 +34,11 @@ const Modal = ({open, handleClose, loadding}) => {
         <DialogTitle>Subscribe</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To subscribe to this website, please enter your email address here. We
-            will send updates occasionally.
+            <img src={`http://unilab.kro.kr:8000/public/zzals/${image_url}`}
+                style={{borderRadius:"10px"}}
+                // srcSet={`${item.img}`}
+                // alt={item.title}
+                loading="lazy"></img>
           </DialogContentText>
           
         </DialogContent>
@@ -85,7 +88,10 @@ const ImageList = ({images}) => {
   }, []);
 
   const getImageInfo = async (index) => {
-    return server.get(server.API_ENDPOINTS).data.result
+    const response = await server.get(API_ENDPOINTS.DETAILS.IMAGE, {params: { id: index }})
+    // .data.result
+    console.log(response)
+    return response.data.result
   }
 
   const handleModalClose = () => {
@@ -95,7 +101,8 @@ const ImageList = ({images}) => {
 
   const handleModalOpen = async (index) => {
     setModalOpen(true)
-    const imageData = await getImageInfo()
+    const imageData = await getImageInfo(index)
+    console.log(imageData)
     setModalData(imageData)
     setModalLoading(false)
   }
@@ -139,7 +146,6 @@ const ImageList = ({images}) => {
               }}
               onClick={(event) => {
                 if(event.currentTarget.className == 'overlay') {
-                  console.log(event.currentTarget)
                   handleModalOpen(index)
                 }
               }}
