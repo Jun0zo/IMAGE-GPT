@@ -27,8 +27,6 @@ import YoutubeIcon from "component/youtubeIcon.png"
 import server from "config/axiosConfig";
 import API_ENDPOINTS from "config/endpointConfig";
 
-import styles from "./imageListStyles.css";
-
 
 const SlidingImageContainer = ({ images }) => {
   const containerRef = useRef(null);
@@ -49,6 +47,7 @@ const SlidingImageContainer = ({ images }) => {
   };
 
   useEffect(() => {
+    
     console.log(containerRef.current)
     console.log(containerRef.current.firstChild)
     
@@ -60,12 +59,12 @@ const SlidingImageContainer = ({ images }) => {
     return () => {
       clearInterval(slideInterval); // Clean up the interval when the component unmounts
     };
-  }, []);
+  }, [images]);
 
   return (
     <div style={{ overflow: 'hidden' }}>
       <div ref={containerRef} style={{ display: 'flex', transition: 'transform 0.5s' }}>
-        {images.map((image_url, index) => (
+        {images.map((index, image_url) => (
           <img
             key={index}
             src={`http://unilab.kro.kr:8000/public/zzals/org/${image_url}`}
@@ -80,6 +79,9 @@ const SlidingImageContainer = ({ images }) => {
 
 const Modal = ({open, handleClose, loadding, data}) => {
 
+  useEffect(() => {
+    data.video_id
+  }, [data])
   const images = Array.from({ length: 30 }).fill("_100.jpg")
   return (
     <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth='xl'>
