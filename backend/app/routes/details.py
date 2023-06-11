@@ -22,7 +22,7 @@ details = APIRouter()
 
 @details.get("/details/image", tags=["details"], response_model=ImageDetails)
 def get_videos_by_keyword(id: str, db: Session = Depends(get_db)):
-    result = db.query(Image, Video).options(joinedload(Image.video)).filter(Image.id == id).first()
+    result = db.query(Image, Video).join(Video, Image.video_id == Video.id).filter(Image.id == id).first()
 
     if result:
         image_info, video_info = result
