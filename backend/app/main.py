@@ -10,6 +10,7 @@ from fastapi import FastAPI
 from routes.statistics import statistics
 from routes.search import search
 from routes.auth import auth
+from routes.details import details
 
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -46,3 +47,4 @@ app.mount("/public", StaticFiles(directory="public"), name="public")
 app.include_router(statistics)
 app.include_router(search)
 app.include_router(auth)
+app.include_router(details)
