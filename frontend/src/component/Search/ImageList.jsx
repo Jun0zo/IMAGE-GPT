@@ -24,6 +24,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 
 import InfoIcon from "@mui/icons-material/Info";
 import YouTubeIcon from '@mui/icons-material/YouTube';
+import ShareIcon from '@mui/icons-material/Share';
 
 import server from "config/axiosConfig";
 import API_ENDPOINTS from "config/endpointConfig";
@@ -121,9 +122,9 @@ const Modal = ({open, handleClose, loadding, data}) => {
                   Object.keys(data).length === 0 ?  <></> :
                   <Grid item xl={6} lg={6} sm={12} sx={{ padding:"15px", maxHeight:"100%"}}>
                     <div style={{position:"relative", height:"100%"}}>
-                      <div style={{position:"absolute", right:"0px"}}>
+                      <div style={{display:"flex", gap:"10px", position:"absolute", right:"0px"}}>
                         <Chip icon={<VisibilityIcon />} label="AI 분석" />
-                        <Chip icon={<VisibilityIcon />} label="공유" />
+                        <Chip icon={<ShareIcon />} label="공유" />
                       </div>
                       
                       <div style={{maxHeight:"100%", overflowY:"auto"}}>
