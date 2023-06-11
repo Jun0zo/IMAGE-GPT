@@ -1,0 +1,15 @@
+.imageContainer {
+    display:"flex";
+    gap:"10px";
+    background-color: red;
+    animation: slideAnimation infinite linear;
+  }
+  
+@keyframes slideAnimation {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(calc(-100% - 10px));
+    }
+}
