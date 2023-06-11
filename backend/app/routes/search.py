@@ -19,8 +19,6 @@ search = APIRouter()
 @search.get("/images", tags=["search"], response_model=SearchResponse)
 def get_videos_by_keyword(keyword: str, db: Session = Depends(get_db)):
     images = db.query(Image).filter(Image.subtitle.like(f'%{keyword}%')).all()
-    image_urls = [image.url for image in images]
+    results = [{'id':image.id, 'url':image.url} for image in images]
     
-    print(image_urls[0])
-    return {'result' : image_urls}
-
+    return {'result' : results}
