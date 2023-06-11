@@ -5,7 +5,8 @@ const API_ENDPOINTS = {
     IMAGES: "/images"
   },
   DETAILS: {
-    IMAGE: "/details/image"
+    IMAGE: "/details/image",
+    VIDEO_IMAGES: "/details/video_images"
   },
   STATISTICS: {
     SIMILAR_KEYWORDS: "/statistics/similar_keywords",

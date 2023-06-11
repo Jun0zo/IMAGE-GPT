@@ -47,18 +47,21 @@ const SlidingImageContainer = ({ images }) => {
   };
 
   useEffect(() => {
+    if (containerRef.current && containerRef.current.firstChild) {
+      console.log('con : ', containerRef.current)
+      console.log(containerRef.current)
+      console.log(containerRef.current.firstChild)
+      
+      const firstImage = containerRef.current.firstChild;
+      imageWidth = firstImage.offsetWidth;
+  
+      const slideInterval = setInterval(slideImages, 2000); // Adjust the interval duration as desired
+  
+      return () => {
+        clearInterval(slideInterval); // Clean up the interval when the component unmounts
+      };
+    }
     
-    console.log(containerRef.current)
-    console.log(containerRef.current.firstChild)
-    
-    const firstImage = containerRef.current.firstChild;
-    imageWidth = firstImage.offsetWidth;
-
-    const slideInterval = setInterval(slideImages, 2000); // Adjust the interval duration as desired
-
-    return () => {
-      clearInterval(slideInterval); // Clean up the interval when the component unmounts
-    };
   }, [images]);
 
   return (
@@ -78,9 +81,26 @@ const SlidingImageContainer = ({ images }) => {
 };
 
 const Modal = ({open, handleClose, loadding, data}) => {
+  const [relatedImages, setRelatedImages] = useState([])
+
+  const getImagesFromVideoID = async (video_id) => {
+    const response = await server.get(API_ENDPOINTS.DETAILS.VIDEO_IMAGES, {params: { video_id }})
+    if (response.status === 200) {
+      return response.data.result
+    } else {
+      return []
+    }
+  }
 
   useEffect(() => {
-    data.video_id
+    const fetchData = async () => {
+      console.log(data)
+      alert(data.video_id)
+      const images = await getImagesFromVideoID(data.video_id)
+      console.log(images)
+      setRelatedImages(images)
+    }
+    fetchData()
   }, [data])
   const images = Array.from({ length: 30 }).fill("_100.jpg")
   return (
@@ -115,7 +135,7 @@ const Modal = ({open, handleClose, loadding, data}) => {
                     return <img src={`http://unilab.kro.kr:8000/public/zzals/org/${image_url}`} style={{height:"100px"}} />
                   })}
                 </div> */}
-                <SlidingImageContainer images={images} />
+                <SlidingImageContainer images={relatedImages} />
                 
               </Grid>
               
