@@ -119,8 +119,8 @@ const Modal = ({open, handleClose, loadding, data}) => {
               {
                   Object.keys(data).length === 0 ?  <></> :
                   <Grid item xl={6} lg={6} sm={12} sx={{ padding:"15px", maxHeight:"100%"}}>
-                    <div style={{maxHeight:"100%", overflowY:"auto"}}>
-                      <p style={{fontSize:"24px"}}>{data.image_subtitle}</p>
+                    <div style={{maxHeight:"100%", overflowY:"auto", marginTop:"0px"}}>
+                      <p style={{fontSize:"24px"}}>{data.image_subtitle.replace(/_/g, " ")}</p>
                       <p>{data.video_title}</p>
                       <p style={{ whiteSpace: "pre-line" }}>영상 설명 : {data.video_description.substring(0,50)}</p>
                       <p>태그 정보 : {data.tags}</p>
