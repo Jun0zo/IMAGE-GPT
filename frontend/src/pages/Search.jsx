@@ -35,7 +35,7 @@ const Search = () => {
           { params: { keyword } }
         );
         const response2 = await server.get(
-          API_ENDPOINTS.STATISTICS.SIMILAR_KEYWORDS,
+          API_ENDPOINTS.STATISTICS.RELATED_VIDEOS,
           { params: { keyword } }
         );
         const response3 = await server.get(

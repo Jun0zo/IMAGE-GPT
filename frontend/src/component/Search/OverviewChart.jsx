@@ -69,7 +69,6 @@ const animationConfig = {
 };
 
 const KeywordTable = ({result}) => {
-  console.log(result)
   return (
     <TableContainer
       sx={{
@@ -188,18 +187,12 @@ const VideoTable = ({result}) => {
             >
               영상 이름
             </TableCell>
-            <TableCell
-              align="right"
-              sx={{ color: "#e2e2e2", borderBottom: "1px solid #242e3c" }}
-            >
-              감성점수
-            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {result ? (result.map((row) => (
+          {result ? (result.map((row, index) => (
             <TableRow
-              key={row.name}
+              key={index}
               sx={{
                 "&:last-child td, &:last-child th": { border: 0 },
               }}
@@ -220,13 +213,7 @@ const VideoTable = ({result}) => {
                 <Box>
                   <img src={row.url} alt="" height="30px" />
                 </Box>
-                {row.title}
-              </TableCell>
-              <TableCell
-                align="right"
-                sx={{ color: "#e2e2e2", borderBottom: "1px solid #242e3c" }}
-              >
-                {row.calories}
+                {row.title.slice(0,20)}
               </TableCell>
             </TableRow>
           ))) : (<></>)}
@@ -326,7 +313,7 @@ const SatisfactionVoteTable = () => {
   return null;
 };
 
-const SearchCountByAgeGroupChart = () => {
+const SearchCountByAgeGroupChart = ({result}) => {
   const [chartData, setChartData] = useState({
     series: [
       {
@@ -424,6 +411,23 @@ const SearchCountByAgeGroupChart = () => {
       },
     },
   });
+
+  useEffect(() => {
+    setChartData(prevState => {
+        const updatedHook = {...prevState}
+
+  
+        if (Object.keys(updatedHook).length) {
+          updatedHook.series[0].data = result.map(row => row.male)
+          updatedHook.series[1].data = result.map(row => row.female)
+          updatedHook.series[2].data = result.map(row => row.other)
+        }
+        return updatedHook
+        
+      })
+  
+  
+  }, [result])
 
   return (
     <Box sx={{ height: "100%" }}>
@@ -551,13 +555,11 @@ const SearchTrendByPeriodChart = ({result}) => {
     if (result) {
       setChartData(prevState => {
         const updatedHook = {...prevState}
-        console.log(updatedHook)
   
         if (Object.keys(updatedHook).length) {
           updatedHook.options.xaxis.categories = result.map(row => row.date)
           updatedHook.series[0].data = result.map(row => row.count)
         }
-        console.log(updatedHook)
         return updatedHook
         
       })
@@ -578,7 +580,6 @@ const SearchTrendByPeriodChart = ({result}) => {
 };
 
 const SearchByGenderChart = ({data}) => {
-  console.log('ii', data)
   const [chartData, setChartData] = useState({
     series: [data['male']['count'], data['female']['count'], data['others']['count']],
     options: {
@@ -752,7 +753,6 @@ const SearchDownloadRatioChart = () => {
 };
 
 const GenderCard = ({data}) => {
-  console.log('gender data:',  data)
   return (
     <Grid container>
       <Grid
@@ -829,8 +829,9 @@ const GenderCard = ({data}) => {
 }
 
 const OverviewChart = ({isLoading, statisticsData}) => {
-  console.log(isLoading)
-  console.log(statisticsData)
+  useEffect(()=> {
+    console.log(statisticsData.monthlyTrend.result)
+  }, [statisticsData])
   return (
     <div
       style={{
@@ -910,26 +911,26 @@ const OverviewChart = ({isLoading, statisticsData}) => {
         <Grid item xs={12} lg={6} sx={{ padding: "10px" }}>
           <TableCard title="유사 키워드" sx={{ height: "330px" }}>
             {/* KeywordTable */}
-            <KeywordTable data={statisticsData.similarKeywords.result}/>
+            <KeywordTable result={statisticsData.similarKeywords.result}/>
           </TableCard>
         </Grid>
         <Grid item xs={12} lg={6} sx={{ padding: "10px" }}>
           {/* SearchTrendByPeriodChart */}
           <ChartCard title="기간별 검색 추이" sx={{ height: "300px" }}>
-            <SearchTrendByPeriodChart data={statisticsData.monthlyTrend.result}/>
+            <SearchTrendByPeriodChart result={statisticsData.monthlyTrend.result}/>
           </ChartCard>
         </Grid>
 
         <Grid item xs={12} lg={3} sx={{ padding: "10px" }}>
           <TableCard title="비디오 정보" sx={{ height: "280px" }}>
             {/* VideoInfoTable */}
-            <VideoTable data={statisticsData.relatedVideos.result}/>
+            <VideoTable result={statisticsData.relatedVideos.result}/>
           </TableCard>
         </Grid>
         <Grid item xs={12} lg={6} sx={{ padding: "10px" }}>
           <ChartCard title="연령대별 검색 횟수" sx={{ height: "250px" }}>
             {/* SearchCountByAgeGroupChart */}
-            <SearchCountByAgeGroupChart />
+            <SearchCountByAgeGroupChart result={statisticsData.age.result} />
           </ChartCard>
         </Grid>
         <Grid item xs={12} lg={3} sx={{ padding: "10px" }}>
