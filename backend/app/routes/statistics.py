@@ -187,32 +187,25 @@ def search_by_gender(keyword: str = None, is_random: bool = False, db: Session =
 
 # 검색 대비 다운로드 비율 
 @statistics.get("/statistics/download", tags=["statistics"], response_model=DownloadResponse)
-def search_download_ratio_chart(db: Session = Depends(get_db)):
-    # Query all searches for the age group
-    searches = db.query(Search).join(Search.user).all()
+def search_download_ratio_chart(keyword: str = None, is_random: bool = False,db: Session = Depends(get_db)):
+    # Get the number of likes for the keyword
+    # SELECT user_id, keyword FROM likes WHERE keyword LIKE '%<keyword>%';
 
-    # Query all downloads for the age group
-    downloads = db.query(Download).join(Download.user).all()
+    if is_random:
+        downloads_count = random.randint(1, 100)
+        searches_count = random.randint(downloads_count, downloads_count * 10)
+    else:
+        download = db.query(Download).filter(Download.keyword == keyword).all()
+        downloads_count = len(download)
 
-    # Calculate the count of each keyword in searches and downloads
-    search_counts = {}
-    download_counts = {}
-    for search in searches:
-        if search.keyword in search_counts:
-            search_counts[search.keyword] += 1
-        else:
-            search_counts[search.keyword] = 1
-    for download in downloads:
-        if download.keyword in download_counts:
-            download_counts[download.keyword] += 1
-        else:
-            download_counts[download.keyword] = 1
+        # Get the number of searches for the keyword 
+        # SELECT user_id, keyword FROM searches WHERE keyword LIKE '%<keyword>%';
+        searches = db.query(Search).filter(Search.keyword == keyword).all()
+        searches_count = len(searches)
 
-    # Calculate the search/download ratio for each keyword
-    ratios = []
-    for keyword in search_counts.keys():
-        if keyword in download_counts:
-            ratio = search_counts[keyword] / download_counts[keyword]
-            ratios.append({'keyword': keyword, 'ratio': ratio})
+    if searches_count == 0:
+        ratio = 0
+    else:
+        ratio = int(downloads_count / searches_count * 100)
 
-    return {'result':ratios}
+    return {"result": {"downloads_count": downloads_count, "searches_count":searches_count, "ratio": ratio}}
