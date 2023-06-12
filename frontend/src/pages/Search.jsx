@@ -39,7 +39,7 @@ const Search = () => {
           { params: { keyword } }
         );
         const response3 = await server.get(
-          API_ENDPOINTS.STATISTICS.SIMILAR_KEYWORDS,
+          API_ENDPOINTS.STATISTICS.SATISFACTION,
           { params: { keyword } }
         );
         const response4 = await server.get(API_ENDPOINTS.STATISTICS.AGE, {
@@ -54,9 +54,9 @@ const Search = () => {
         const response7 = await server.get(API_ENDPOINTS.STATISTICS.TREND, {
           params: { keyword, period:'month' },
         });
-        // const response8 = await server.get(API_ENDPOINTS.STATISTICS.DOWNLOAD, {
-        //   params: { keyword },
-        // });
+        const response8 = await server.get(API_ENDPOINTS.STATISTICS.DOWNLOAD, {
+          params: { keyword },
+        });
 
         setStatisticsData({
           similarKeywords: response1.data,
@@ -66,7 +66,7 @@ const Search = () => {
           monthlyTrend: response5.data,
           gender: response6.data,
           weeklyTrend: response7.data,
-          download: response7.data,
+          download: response8.data,
         });
 
       } catch (err) {
@@ -110,7 +110,7 @@ const Search = () => {
 
         {/* <Box sx={{ height: "100vh" }}> */}
         <Box sx={{ padding: "30px 0px" }}>
-          {isStatisticsLoading ? <div></div> : <OverviewChart isStatisticsLoading={isStatisticsLoading} statisticsData={statisticsData}/>}
+          <OverviewChart isStatisticsLoading={isStatisticsLoading} statisticsData={statisticsData}/>
           
         </Box>
       </div>
