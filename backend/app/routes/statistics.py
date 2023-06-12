@@ -66,22 +66,28 @@ def get_videos_by_keyword(keyword: str, db: Session = Depends(get_db)):
 
 # 검색 결과 만족도
 @statistics.get("/statistics/satisfaction", tags=["statistics"], response_model=SatisfactionResponse)
-def get_search_satisfaction(keyword: str, db: Session = Depends(get_db)):
+def get_search_satisfaction(keyword: str, is_random: bool = False, db: Session = Depends(get_db)):
     # Get the number of likes for the keyword
     # SELECT user_id, keyword FROM likes WHERE keyword LIKE '%<keyword>%';
-    likes = db.query(Like).filter(Like.keyword == keyword).all()
-    likes_count = len(likes)
 
-    # Get the number of searches for the keyword 
-    # SELECT user_id, keyword FROM searches WHERE keyword LIKE '%<keyword>%';
-    searches = db.query(Search).filter(Search.keyword == keyword).all()
-    searches_count = len(searches)
-
-    # Calculate the SearchSatisfaction score
-    if searches_count == 0:
-        return {"result": 0}
+    if is_random:
+        likes_count = random.randint(1, 100)
+        searches_count = random.randint(likes_count, likes_count * 10)
     else:
-        return {"result": likes_count / searches_count}
+        likes = db.query(Like).filter(Like.keyword == keyword).all()
+        likes_count = len(likes)
+
+        # Get the number of searches for the keyword 
+        # SELECT user_id, keyword FROM searches WHERE keyword LIKE '%<keyword>%';
+        searches = db.query(Search).filter(Search.keyword == keyword).all()
+        searches_count = len(searches)
+
+    if searches_count == 0:
+        ratio = 0
+    else:
+        ratio = int(likes_count / searches_count * 100)
+
+    return {"result": {"likes_count": likes_count, "searches_count":searches_count, "ratio": ratio}}
     
 # 연령대별 검색 횟수
 @statistics.get("/statistics/age", tags=["statistics"], response_model=AgeResponse)
@@ -110,7 +116,7 @@ def get_search_count_by_age_group_chart(keyword: str, is_random: bool = False, d
 
 # 기간별 검색 추이
 @statistics.get("/statistics/trend", tags=["statistics"], response_model=TrendResponse)
-def get_search_trend_by_period_chart(keyword: str, period: str = 'month', db: Session = Depends(get_db)):
+def get_search_trend_by_period_chart(keyword: str, is_random:bool = False, period: str = 'month', db: Session = Depends(get_db)):
     # Define the period (daily, weekly, monthly)
     period = "month"
     if period == "week":
@@ -145,6 +151,8 @@ def get_search_trend_by_period_chart(keyword: str, period: str = 'month', db: Se
         date = start_date + timedelta(days=i)
         date_str = date.strftime(date_format)
         search_count = next((r.search_count for r in result if r.period == date_str), 0)
+        if is_random:
+            search_count = random.randint(1, 1000)
         chart_data.append({'date':date_str, 'count':search_count})
 
         # return {"chart_type": "line", "data": chart_data}
@@ -154,50 +162,52 @@ def get_search_trend_by_period_chart(keyword: str, period: str = 'month', db: Se
 
 # 성별별 검색수
 @statistics.get("/statistics/gender", tags=["statistics"], response_model=GenderResponse)
-def search_by_gender(keyword: str = None, db: Session = Depends(get_db)):
+def search_by_gender(keyword: str = None, is_random: bool = False, db: Session = Depends(get_db)):
     # SELECT users.sex, COUNT(*) FROM searches JOIN users ON searches.user_id = users.id WHERE searches.keyword = '<keyword>'GROUP BY users.sex;
-    
-    result = db.query(User.sex, func.count('*')).\
-        join(Search, User.id == Search.user_id).\
-        filter(Search.keyword == keyword).\
-        group_by(User.sex).\
-        all()
+    if is_random:
+        male_cnt = random.randint(1,100)
+        female_cnt = random.randint(1,100)
+        others_cnt = random.randint(1,100)
+        all_cnt = male_cnt + female_cnt + others_cnt
 
-    age_dict = {r[0]: r[1] for r in result}
-    age_dict['male'] = {'count':0, 'ratio':0} if not age_dict.get('male') else {'count':age_dict['male'], 'ratio':age_dict['male'] / len(age_dict)}
-    age_dict['female'] = {'count':0, 'ratio':0} if not age_dict.get('female') else {'count':age_dict['female'], 'ratio':age_dict['female'] / len(age_dict)}
-    age_dict['others'] = {'count':0, 'ratio':0} if not age_dict.get('others') else {'count':age_dict['others'], 'ratio':age_dict['others'] / len(age_dict)}
+        age_dict = {'male': {'count':male_cnt, 'ratio': int(male_cnt / all_cnt * 100)},
+                    'female':{'count':female_cnt, 'ratio': int(female_cnt / all_cnt * 100)}, 
+                    'others':{'count':others_cnt, 'ratio':int(others_cnt / all_cnt * 100)}}
+    else:
+        result = db.query(User.sex, func.count('*')).\
+            join(Search, User.id == Search.user_id).\
+            filter(Search.keyword == keyword).\
+            group_by(User.sex).\
+            all()
+
+        age_dict = {r[0]: r[1] for r in result}
+        age_dict['male'] = {'count':0, 'ratio':0} if not age_dict.get('male') else {'count':age_dict['male'], 'ratio': int(age_dict['male'] / len(age_dict) * 100)}
+        age_dict['female'] = {'count':0, 'ratio':0} if not age_dict.get('female') else {'count':age_dict['female'], 'ratio':int(age_dict['female'] / len(age_dict) * 100)}
+        age_dict['others'] = {'count':0, 'ratio':0} if not age_dict.get('others') else {'count':age_dict['others'], 'ratio':int(age_dict['others'] / len(age_dict) * 100)}
     
     return {'result': age_dict}
 
 # 검색 대비 다운로드 비율 
 @statistics.get("/statistics/download", tags=["statistics"], response_model=DownloadResponse)
-def search_download_ratio_chart(db: Session = Depends(get_db)):
-    # Query all searches for the age group
-    searches = db.query(Search).join(Search.user).all()
+def search_download_ratio_chart(keyword: str = None, is_random: bool = False,db: Session = Depends(get_db)):
+    # Get the number of likes for the keyword
+    # SELECT user_id, keyword FROM likes WHERE keyword LIKE '%<keyword>%';
 
-    # Query all downloads for the age group
-    downloads = db.query(Download).join(Download.user).all()
+    if is_random:
+        downloads_count = random.randint(1, 100)
+        searches_count = random.randint(downloads_count, downloads_count * 10)
+    else:
+        download = db.query(Download).filter(Download.keyword == keyword).all()
+        downloads_count = len(download)
 
-    # Calculate the count of each keyword in searches and downloads
-    search_counts = {}
-    download_counts = {}
-    for search in searches:
-        if search.keyword in search_counts:
-            search_counts[search.keyword] += 1
-        else:
-            search_counts[search.keyword] = 1
-    for download in downloads:
-        if download.keyword in download_counts:
-            download_counts[download.keyword] += 1
-        else:
-            download_counts[download.keyword] = 1
+        # Get the number of searches for the keyword 
+        # SELECT user_id, keyword FROM searches WHERE keyword LIKE '%<keyword>%';
+        searches = db.query(Search).filter(Search.keyword == keyword).all()
+        searches_count = len(searches)
 
-    # Calculate the search/download ratio for each keyword
-    ratios = []
-    for keyword in search_counts.keys():
-        if keyword in download_counts:
-            ratio = search_counts[keyword] / download_counts[keyword]
-            ratios.append({'keyword': keyword, 'ratio': ratio})
+    if searches_count == 0:
+        ratio = 0
+    else:
+        ratio = int(downloads_count / searches_count * 100)
 
-    return {'result':ratios}
+    return {"result": {"downloads_count": downloads_count, "searches_count":searches_count, "ratio": ratio}}
