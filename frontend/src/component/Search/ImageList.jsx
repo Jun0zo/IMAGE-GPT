@@ -29,135 +29,9 @@ import ShareIcon from '@mui/icons-material/Share';
 import server from "config/axiosConfig";
 import API_ENDPOINTS from "config/endpointConfig";
 
+import ImageListStles from 'component/Search/imageListStyles.css'
 
-const SlidingImageContainer = ({ images }) => {
-  const containerRef = useRef(null);
-  const gap = 10; // Adjust this value based on the desired gap between images
-  let currentPosition = 0;
-  let imageWidth;
-
-  const slideImages = () => {
-    const container = containerRef.current;
-    currentPosition -= imageWidth + gap;
-    container.style.transform = `translateX(${currentPosition}px)`;
-
-    // Reset position when all images have passed
-    if (currentPosition <= -((imageWidth + gap) * (images.length - 1))) {
-      currentPosition = 0;
-      container.style.transform = 'translateX(0)';
-    }
-  };
-
-  useEffect(() => {
-    if (containerRef.current && containerRef.current.firstChild) {
-      console.log('con : ', containerRef.current)
-      console.log(containerRef.current)
-      console.log(containerRef.current.firstChild)
-      
-      const firstImage = containerRef.current.firstChild;
-      imageWidth = firstImage.offsetWidth;
-  
-      const slideInterval = setInterval(slideImages, 2000); // Adjust the interval duration as desired
-  
-      return () => {
-        clearInterval(slideInterval); // Clean up the interval when the component unmounts
-      };
-    }
-    
-  }, [images]);
-
-  return (
-    <div style={{ overflow: 'hidden' }}>
-      <div ref={containerRef} style={{ display: 'flex', transition: 'transform 0.5s' }}>
-        {images.map((image, index) => (
-          <img
-            key={index}
-            src={`http://unilab.kro.kr:8000/public/zzals/org/${image.url}`}
-            style={{ height: '100px', width: `${imageWidth}px`, marginRight: `${gap}px` }}
-            alt="Image"
-          />
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const Modal = ({open, handleClose, loadding, data}) => {
-  const [relatedImages, setRelatedImages] = useState([])
-
-  const getImagesFromVideoID = async (video_id) => {
-    const response = await server.get(API_ENDPOINTS.DETAILS.VIDEO_IMAGES, {params: { video_id }})
-    if (response.status === 200) {
-      return response.data.result
-    } else {
-      return []
-    }
-  }
-
-  useEffect(() => {
-    const fetchData = async () => {
-      console.log(data)
-      const images = await getImagesFromVideoID(data.video_id)
-      console.log(images)
-      setRelatedImages(images)
-    }
-    fetchData()
-  }, [data])
-  const images = Array.from({ length: 30 }).fill("_100.jpg")
-  return (
-    <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth='xl'>
-      {loadding ? <></> : 
-      <div>
-        <DialogContent>
-          <DialogContentText sx={{ maxHeight: "700px"}}>
-            <Grid container sx={{width:"100%", maxHeight:"100%"}}>
-              <Grid item xl={6} lg={6} sm={12} sx={{ width:"100%", display: "flex", alignItems: "center", padding:"15px"}}>
-                <img src={`http://unilab.kro.kr:8000/public/zzals/org/${data.image_url}`}
-                    style={{borderRadius:"10px", width:"100%"}}
-                    // srcSet={`${item.img}`}
-                    // alt={item.title}
-                    loading="lazy" />
-              </Grid>
-              {
-                  Object.keys(data).length === 0 ?  <></> :
-                  <Grid item xl={6} lg={6} sm={12} sx={{ padding:"15px", maxHeight:"100%"}}>
-                    <div style={{position:"relative", height:"100%"}}>
-                      <div style={{display:"flex", gap:"10px", position:"absolute", right:"0px"}}>
-                        <Chip icon={<VisibilityIcon />} label="AI 분석" />
-                        <Chip icon={<ShareIcon />} label="공유" />
-                      </div>
-                      
-                      <div style={{maxHeight:"100%", overflowY:"auto"}}>
-                        <p style={{fontSize:"24px", marginTop:"0px"}}>{data.image_subtitle.replace(/_/g, " ")}</p>
-                        <p>{data.video_title}</p>
-                        <p style={{ whiteSpace: "pre-line" }}>영상 설명 : {data.video_description.substring(0,50)}</p>
-                        <p>태그 정보 : {data.video_tags}</p>
-                    
-                      </div>
-                    </div>
-                    
-                 </Grid>
-              }
-              <Grid item xl={12} lg={12} sm={12} sx={{paddingLeft:"15px", paddingRight:"15px", overflowX:"hidden"}}>
-                {/* <div className="imageContainer" style={{display:"flex", gap:"10px"}}>
-                  {images.map(image_url => {
-                    return <img src={`http://unilab.kro.kr:8000/public/zzals/org/${image_url}`} style={{height:"100px"}} />
-                  })}
-                </div> */}
-                <SlidingImageContainer images={relatedImages} />
-                
-              </Grid>
-              
-            </Grid>
-            
-          </DialogContentText>
-          
-        </DialogContent>
-      </div>}
-        
-    </Dialog>
-  )
-}
+import {SlidingImageContainer, Modal} from 'component/Search/DetailModal'
 
 const ImageList = ({images}) => {
   const [isClickList, setIsClickList] = useState([]);
@@ -207,6 +81,7 @@ const ImageList = ({images}) => {
   }
 
   const handleModalOpen = async (index) => {
+    setModalLoading(true)
     setModalOpen(true)
     const imageData = await getImageInfo(index)
     console.log(imageData)
@@ -307,7 +182,7 @@ const ImageList = ({images}) => {
         ))}
       </MUIImageList>
 
-      <Modal open={modalOpen} handleClose={handleModalClose} data={modalData}/>
+      <Modal open={modalOpen} handleClose={handleModalClose} data={modalData} handleModalOpen={handleModalOpen}/>
     </Box>
   );
 };
