@@ -132,7 +132,7 @@ export const Modal = ({open, handleClose, loadding, data, handleModalOpen}) => {
         {loadding ? <></> : 
         <div>
           <DialogContent>
-            <DialogContentText sx={{ maxHeight: "700px"}}>
+            <DialogContentText sx={{ maxHeight: "900px"}}>
               <Grid container sx={{width:"100%", maxHeight:"100%"}}>
                 <Grid item xl={6} lg={6} sm={12} sx={{ width:"100%", display: "flex", alignItems: "center", padding:"15px"}}>
                   
@@ -144,7 +144,7 @@ export const Modal = ({open, handleClose, loadding, data, handleModalOpen}) => {
                 </Grid>
                 {
                     Object.keys(data).length === 0 ?  <></> :
-                    <Grid item xl={6} lg={6} sm={12} sx={{ padding:"15px", maxHeight:"100%"}}>
+                    <Grid item xl={6} lg={6} sm={12} sx={{ padding:"15px", maxHeight:"400px", overflowY:"auto"}}>
                       <div style={{position:"relative", height:"100%"}}>
                         <div style={{display:"flex", gap:"10px", position:"absolute", right:"0px"}}>
                           <Chip icon={<VisibilityIcon />} label="AI 분석" onClick={() => {setDeug(prevStatus => !prevStatus)}}
