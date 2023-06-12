@@ -116,7 +116,7 @@ def get_search_count_by_age_group_chart(keyword: str, is_random: bool = False, d
 
 # 기간별 검색 추이
 @statistics.get("/statistics/trend", tags=["statistics"], response_model=TrendResponse)
-def get_search_trend_by_period_chart(keyword: str, period: str = 'month', db: Session = Depends(get_db)):
+def get_search_trend_by_period_chart(keyword: str, is_random:bool = False, period: str = 'month', db: Session = Depends(get_db)):
     # Define the period (daily, weekly, monthly)
     period = "month"
     if period == "week":
@@ -151,6 +151,8 @@ def get_search_trend_by_period_chart(keyword: str, period: str = 'month', db: Se
         date = start_date + timedelta(days=i)
         date_str = date.strftime(date_format)
         search_count = next((r.search_count for r in result if r.period == date_str), 0)
+        if is_random:
+            search_count = random.randint(1, 1000)
         chart_data.append({'date':date_str, 'count':search_count})
 
         # return {"chart_type": "line", "data": chart_data}
