@@ -66,22 +66,27 @@ def get_videos_by_keyword(keyword: str, db: Session = Depends(get_db)):
 
 # 검색 결과 만족도
 @statistics.get("/statistics/satisfaction", tags=["statistics"], response_model=SatisfactionResponse)
-def get_search_satisfaction(keyword: str, db: Session = Depends(get_db)):
+def get_search_satisfaction(keyword: str, is_random: bool = False, db: Session = Depends(get_db)):
     # Get the number of likes for the keyword
     # SELECT user_id, keyword FROM likes WHERE keyword LIKE '%<keyword>%';
-    likes = db.query(Like).filter(Like.keyword == keyword).all()
-    likes_count = len(likes)
 
-    # Get the number of searches for the keyword 
-    # SELECT user_id, keyword FROM searches WHERE keyword LIKE '%<keyword>%';
-    searches = db.query(Search).filter(Search.keyword == keyword).all()
-    searches_count = len(searches)
+    if is_random:
+        likes_count = random.randint(1, 100)
+        searches_count = random.randint(likes_count, likes_count * 10)
+    else:
+        likes = db.query(Like).filter(Like.keyword == keyword).all()
+        likes_count = len(likes)
+
+        # Get the number of searches for the keyword 
+        # SELECT user_id, keyword FROM searches WHERE keyword LIKE '%<keyword>%';
+        searches = db.query(Search).filter(Search.keyword == keyword).all()
+        searches_count = len(searches)
 
     if searches_count == 0:
         ratio = 0
     else:
-        ratio = likes_count / searches_count 
-        
+        ratio = int(likes_count / searches_count * 100)
+
     return {"result": {"likes_count": likes_count, "searches_count":searches_count, "ratio": ratio}}
     
 # 연령대별 검색 횟수
@@ -155,19 +160,28 @@ def get_search_trend_by_period_chart(keyword: str, period: str = 'month', db: Se
 
 # 성별별 검색수
 @statistics.get("/statistics/gender", tags=["statistics"], response_model=GenderResponse)
-def search_by_gender(keyword: str = None, db: Session = Depends(get_db)):
+def search_by_gender(keyword: str = None, is_random: bool = False, db: Session = Depends(get_db)):
     # SELECT users.sex, COUNT(*) FROM searches JOIN users ON searches.user_id = users.id WHERE searches.keyword = '<keyword>'GROUP BY users.sex;
-    
-    result = db.query(User.sex, func.count('*')).\
-        join(Search, User.id == Search.user_id).\
-        filter(Search.keyword == keyword).\
-        group_by(User.sex).\
-        all()
+    if is_random:
+        male_cnt = random.randint(1,100)
+        female_cnt = random.randint(1,100)
+        others_cnt = random.randint(1,100)
+        all_cnt = male_cnt + female_cnt + others_cnt
 
-    age_dict = {r[0]: r[1] for r in result}
-    age_dict['male'] = {'count':0, 'ratio':0} if not age_dict.get('male') else {'count':age_dict['male'], 'ratio':age_dict['male'] / len(age_dict)}
-    age_dict['female'] = {'count':0, 'ratio':0} if not age_dict.get('female') else {'count':age_dict['female'], 'ratio':age_dict['female'] / len(age_dict)}
-    age_dict['others'] = {'count':0, 'ratio':0} if not age_dict.get('others') else {'count':age_dict['others'], 'ratio':age_dict['others'] / len(age_dict)}
+        age_dict = {'male': {'count':male_cnt, 'ratio': int(male_cnt / all_cnt * 100)},
+                    'female':{'count':female_cnt, 'ratio': int(female_cnt / all_cnt * 100)}, 
+                    'others':{'count':others_cnt, 'ratio':int(others_cnt / all_cnt * 100)}}
+    else:
+        result = db.query(User.sex, func.count('*')).\
+            join(Search, User.id == Search.user_id).\
+            filter(Search.keyword == keyword).\
+            group_by(User.sex).\
+            all()
+
+        age_dict = {r[0]: r[1] for r in result}
+        age_dict['male'] = {'count':0, 'ratio':0} if not age_dict.get('male') else {'count':age_dict['male'], 'ratio': int(age_dict['male'] / len(age_dict) * 100)}
+        age_dict['female'] = {'count':0, 'ratio':0} if not age_dict.get('female') else {'count':age_dict['female'], 'ratio':int(age_dict['female'] / len(age_dict) * 100)}
+        age_dict['others'] = {'count':0, 'ratio':0} if not age_dict.get('others') else {'count':age_dict['others'], 'ratio':int(age_dict['others'] / len(age_dict) * 100)}
     
     return {'result': age_dict}
 
