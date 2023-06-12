@@ -77,11 +77,12 @@ def get_search_satisfaction(keyword: str, db: Session = Depends(get_db)):
     searches = db.query(Search).filter(Search.keyword == keyword).all()
     searches_count = len(searches)
 
-    # Calculate the SearchSatisfaction score
     if searches_count == 0:
-        return {"result": 0}
+        ratio = 0
     else:
-        return {"result": likes_count / searches_count}
+        ratio = likes_count / searches_count 
+        
+    return {"result": {"likes_count": likes_count, "searches_count":searches_count, "ratio": ratio}}
     
 # 연령대별 검색 횟수
 @statistics.get("/statistics/age", tags=["statistics"], response_model=AgeResponse)
