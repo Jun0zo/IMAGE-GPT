@@ -1,17 +1,24 @@
 import React, { useState, useRef, useEffect } from "react";
 import Chart from "react-apexcharts";
 
-import { Box, Grid, Chip, Avatar, LinearProgress } from "@mui/material";
+import {
+  CircularProgress,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Box, 
+  Grid, 
+  Chip, 
+  Avatar, 
+  LinearProgress
+} from "@mui/material";
+
 import ChartCard from "./ChartCard";
 import TableCard from "./TableCard";
-
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 
 import CheckIcon from "@mui/icons-material/Check";
 
@@ -222,6 +229,14 @@ const VideoTable = ({result}) => {
     </TableContainer>
   );
 };
+
+const LoadingBox = () => {
+  return (
+    <Box sx={{ height:"100%", display:"flex", justifyContent:"center", alignItems:"center"}}>
+        <CircularProgress size={100}/>
+    </Box>
+  )
+}
 
 const SafisfactionShowTable = () => {
   return (
@@ -712,7 +727,7 @@ const SearchTrendWeeklyChart = ({ sx }) => {
   );
 };
 
-const SearchDownloadRatioChart = ({result}) => {
+const SearchDownloadRatioChart = ({result, keyword}) => {
   const [chartData, setChartData] = useState({
     series: [70],
     options: {
@@ -775,11 +790,11 @@ const SearchDownloadRatioChart = ({result}) => {
             sx={{ marginRight: "3px", color: "rgb(0,210,122)" }}
           />
           <p style={{ margin: 0, fontSize: "16px" }}>
-            현재 "안녕" 키워드는 적절합니다.
+            현재 "{keyword}" 키워드는 적절합니다.
           </p>
         </Box>
 
-        <p style={{ fontSize: "12px" }}>전체 검색 {result.search_count}건중 {result.download_count}건 다운로드</p>
+        <p style={{ fontSize: "12px" }}>전체 검색 {result.searches_count}건중 {result.downloads_count}건 다운로드</p>
       </Box>
       </Box>
     
@@ -862,7 +877,7 @@ const GenderCard = ({result}) => {
   )
 }
 
-const OverviewChart = ({isLoading, statisticsData}) => {
+const OverviewChart = ({isLoading, statisticsData, keyword}) => {
   return (
     <div
       style={{
@@ -918,7 +933,7 @@ const OverviewChart = ({isLoading, statisticsData}) => {
             {
               statisticsData && statisticsData.gender && statisticsData.gender.result ? 
               <GenderCard result={statisticsData.gender.result}/> :
-              <></>
+              <LoadingBox/>
             }
           </ChartCard>
         </Grid>
@@ -949,7 +964,7 @@ const OverviewChart = ({isLoading, statisticsData}) => {
             {
               statisticsData && statisticsData.similarKeywords && statisticsData.similarKeywords.result ? 
               <KeywordTable result={statisticsData.similarKeywords.result}/> :
-              <></>
+              <LoadingBox/>
             }
           </TableCard>
         </Grid>
@@ -959,7 +974,7 @@ const OverviewChart = ({isLoading, statisticsData}) => {
             {
               statisticsData && statisticsData.monthlyTrend && statisticsData.monthlyTrend.result ? 
               <SearchTrendByPeriodChart result={statisticsData.monthlyTrend.result}/> :
-              <></>
+              <LoadingBox/>
             }
           </ChartCard>
         </Grid>
@@ -970,7 +985,7 @@ const OverviewChart = ({isLoading, statisticsData}) => {
             {
               statisticsData && statisticsData.relatedVideos && statisticsData.relatedVideos.result ? 
               <VideoTable result={statisticsData.relatedVideos.result}/> :
-              <></>
+              <LoadingBox/>
             }
           </TableCard>
         </Grid>
@@ -980,7 +995,7 @@ const OverviewChart = ({isLoading, statisticsData}) => {
             {
               statisticsData && statisticsData.age && statisticsData.age.result ? 
               <SearchCountByAgeGroupChart result={statisticsData.age.result}/> :
-              <></>
+              <LoadingBox/>
             }
           </ChartCard>
         </Grid>
@@ -989,8 +1004,8 @@ const OverviewChart = ({isLoading, statisticsData}) => {
           <ChartCard title="검색 대비 다운로드 비율" sx={{ height: "250px" }}>
             {
               statisticsData && statisticsData.download && statisticsData.download.result ? 
-              <SearchDownloadRatioChart result={statisticsData.download}/> :
-              <></>
+              <SearchDownloadRatioChart result={statisticsData.download.result} keword={keyword}/> :
+              <LoadingBox/>
             }
           </ChartCard>
         </Grid>
