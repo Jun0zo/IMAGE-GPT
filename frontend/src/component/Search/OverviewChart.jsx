@@ -853,12 +853,12 @@ const OverviewChart = ({isLoading, statisticsData}) => {
                 item
                 xs={4}
                 sx={{
-                  padding: "30px 0px",
                   display: "flex",
                   flexDirection: "column",
+                  justifyContent: "center"
                 }}
               >
-                <span style={{ fontSize: "40px" }}>125회</span>
+                <span style={{ fontSize: "30px" }}>125회</span>
                 <Chip
                   label="+13%"
                   size="small"
