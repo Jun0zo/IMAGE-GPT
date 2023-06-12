@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from datetime import datetime, timedelta
 # from config.db import conn
+import random
 from database.connection import get_db
 
 from sqlalchemy.orm import Session
@@ -91,11 +92,14 @@ def get_search_count_by_age_group_chart(keyword: str, is_random: bool = False, d
     for age_group in age_groups:
         age_group_counts = {}
         for gender in genders:
-            count = db.query(User) \
-                .filter(User.age >= age_group[0], User.age <= age_group[1]) \
-                .join(User.searches) \
-                .filter(Search.keyword == keyword, User.sex == gender) \
-                .count()
+            if is_random:
+                count = random.randint(0, 100)  # Generate a random count between 0 and 100
+            else:
+                count = db.query(User) \
+                    .filter(User.age >= age_group[0], User.age <= age_group[1]) \
+                    .join(User.searches) \
+                    .filter(Search.keyword == keyword, User.sex == gender) \
+                    .count()
             age_group_counts[gender.lower()] = count
         chart_data.append({
             "age_group": f"{age_group[0]}-{age_group[1]}",
