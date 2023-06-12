@@ -413,10 +413,10 @@ const SearchCountByAgeGroupChart = ({result}) => {
   });
 
   useEffect(() => {
-    setChartData(prevState => {
+    if (result) {
+      console.log(result)
+      setChartData(prevState => {
         const updatedHook = {...prevState}
-
-  
         if (Object.keys(updatedHook).length) {
           updatedHook.series[0].data = result.map(row => row.male)
           updatedHook.series[1].data = result.map(row => row.female)
@@ -425,8 +425,7 @@ const SearchCountByAgeGroupChart = ({result}) => {
         return updatedHook
         
       })
-  
-  
+    }
   }, [result])
 
   return (
@@ -579,9 +578,9 @@ const SearchTrendByPeriodChart = ({result}) => {
   );
 };
 
-const SearchByGenderChart = ({data}) => {
+const SearchByGenderChart = ({result}) => {
   const [chartData, setChartData] = useState({
-    series: [data['male']['count'], data['female']['count'], data['others']['count']],
+    series: [result['male']['count'], result['female']['count'], result['others']['count']],
     options: {
       chart: {
         type: "donut",
@@ -713,7 +712,7 @@ const SearchTrendWeeklyChart = ({ sx }) => {
   );
 };
 
-const SearchDownloadRatioChart = () => {
+const SearchDownloadRatioChart = ({result}) => {
   const [chartData, setChartData] = useState({
     series: [70],
     options: {
@@ -740,6 +739,20 @@ const SearchDownloadRatioChart = () => {
     },
   });
 
+  useEffect(() => {
+    if (result) {
+      console.log('down', result)
+      setChartData(prevState => {
+        const updatedHook = {...prevState}
+        if (Object.keys(updatedHook).length) {
+          updatedHook.series[0] = result.ratio
+        }
+        return updatedHook
+        
+      })
+    }
+  }, [result])
+
   return (
     <Box sx={{ height: "75%" }}>
       <Chart
@@ -748,11 +761,32 @@ const SearchDownloadRatioChart = () => {
         type="radialBar"
         height="100%"
       />
-    </Box>
+
+      <Box sx={{ textAlign: "center" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <CheckIcon
+            sx={{ marginRight: "3px", color: "rgb(0,210,122)" }}
+          />
+          <p style={{ margin: 0, fontSize: "16px" }}>
+            현재 "안녕" 키워드는 적절합니다.
+          </p>
+        </Box>
+
+        <p style={{ fontSize: "12px" }}>전체 검색 {result.search_count}건중 {result.download_count}건 다운로드</p>
+      </Box>
+      </Box>
+    
   );
 };
 
-const GenderCard = ({data}) => {
+const GenderCard = ({result}) => {
   return (
     <Grid container>
       <Grid
@@ -787,7 +821,7 @@ const GenderCard = ({data}) => {
             />
             <span>남성</span>
           </Box>
-          <span>{data['male']['ratio']}%</span>
+          <span>{result['male']['ratio']}%</span>
         </Box>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -802,7 +836,7 @@ const GenderCard = ({data}) => {
             />
             <span>여성</span>
           </Box>
-          <span>{data['female']['ratio']}%</span>
+          <span>{result['female']['ratio']}%</span>
         </Box>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -817,21 +851,18 @@ const GenderCard = ({data}) => {
             />
             <span>기타</span>
           </Box>
-          <span>{data['others']['ratio']}%</span>
+          <span>{result['others']['ratio']}%</span>
         </Box>
       </Grid>
       <Grid item xs={1}></Grid>
       <Grid item xs={5}>
-        <SearchByGenderChart data={data}/>
+        <SearchByGenderChart result={result}/>
       </Grid>
     </Grid>
   )
 }
 
 const OverviewChart = ({isLoading, statisticsData}) => {
-  useEffect(()=> {
-    console.log(statisticsData.monthlyTrend.result)
-  }, [statisticsData])
   return (
     <div
       style={{
@@ -884,7 +915,11 @@ const OverviewChart = ({isLoading, statisticsData}) => {
             title="성별별 검색수"
             sx={{ height: "150px", paddingTop: "0px" }}
           >
-           <GenderCard data={statisticsData.gender.result}/> 
+            {
+              statisticsData && statisticsData.gender && statisticsData.gender.result ? 
+              <GenderCard result={statisticsData.gender.result}/> :
+              <></>
+            }
           </ChartCard>
         </Grid>
         <Grid item xs={12} md={6} xl={3} sx={{ padding: "10px" }}>
@@ -911,51 +946,52 @@ const OverviewChart = ({isLoading, statisticsData}) => {
         <Grid item xs={12} lg={6} sx={{ padding: "10px" }}>
           <TableCard title="유사 키워드" sx={{ height: "330px" }}>
             {/* KeywordTable */}
-            <KeywordTable result={statisticsData.similarKeywords.result}/>
+            {
+              statisticsData && statisticsData.similarKeywords && statisticsData.similarKeywords.result ? 
+              <KeywordTable result={statisticsData.similarKeywords.result}/> :
+              <></>
+            }
           </TableCard>
         </Grid>
         <Grid item xs={12} lg={6} sx={{ padding: "10px" }}>
           {/* SearchTrendByPeriodChart */}
           <ChartCard title="기간별 검색 추이" sx={{ height: "300px" }}>
-            <SearchTrendByPeriodChart result={statisticsData.monthlyTrend.result}/>
+            {
+              statisticsData && statisticsData.monthlyTrend && statisticsData.monthlyTrend.result ? 
+              <SearchTrendByPeriodChart result={statisticsData.monthlyTrend.result}/> :
+              <></>
+            }
           </ChartCard>
         </Grid>
 
         <Grid item xs={12} lg={3} sx={{ padding: "10px" }}>
           <TableCard title="비디오 정보" sx={{ height: "280px" }}>
             {/* VideoInfoTable */}
-            <VideoTable result={statisticsData.relatedVideos.result}/>
+            {
+              statisticsData && statisticsData.relatedVideos && statisticsData.relatedVideos.result ? 
+              <VideoTable result={statisticsData.relatedVideos.result}/> :
+              <></>
+            }
           </TableCard>
         </Grid>
         <Grid item xs={12} lg={6} sx={{ padding: "10px" }}>
           <ChartCard title="연령대별 검색 횟수" sx={{ height: "250px" }}>
             {/* SearchCountByAgeGroupChart */}
-            <SearchCountByAgeGroupChart result={statisticsData.age.result} />
+            {
+              statisticsData && statisticsData.age && statisticsData.age.result ? 
+              <SearchCountByAgeGroupChart result={statisticsData.age.result}/> :
+              <></>
+            }
           </ChartCard>
         </Grid>
         <Grid item xs={12} lg={3} sx={{ padding: "10px" }}>
           {/* SearchDownloadRatioChart */}
           <ChartCard title="검색 대비 다운로드 비율" sx={{ height: "250px" }}>
-            <SearchDownloadRatioChart />
-            <Box sx={{ textAlign: "center" }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <CheckIcon
-                  sx={{ marginRight: "3px", color: "rgb(0,210,122)" }}
-                />
-                <p style={{ margin: 0, fontSize: "16px" }}>
-                  현재 "안녕" 키워드는 적절합니다.
-                </p>
-              </Box>
-
-              <p style={{ fontSize: "12px" }}>전체 검색 n건중 m건 다운로드</p>
-            </Box>
+            {
+              statisticsData && statisticsData.download && statisticsData.download.result ? 
+              <SearchDownloadRatioChart result={statisticsData.download}/> :
+              <></>
+            }
           </ChartCard>
         </Grid>
       </Grid>}
