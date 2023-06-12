@@ -4,7 +4,17 @@
     background-color: red;
     animation: slideAnimation infinite linear;
   }
-  
+
+#debug-chip {
+    background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff);
+    background-size: 600% 600%;
+    animation: shiny 6s ease infinite;
+}
+
+#normal-chip {
+    background: linear-gradient(45deg, #eaeaea, #f0f0f0, #eaeaea);
+}
+
 @keyframes slideAnimation {
     0% {
         transform: translateX(0);
@@ -24,5 +34,6 @@
     100% {
       background-position: 0% 50%;
     }
-  }
+}
   
+

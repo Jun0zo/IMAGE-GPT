@@ -1,3 +1,32 @@
+import React, { useEffect, useState, useRef } from "react";
+
+import {
+    ImageList as MUIImageList,
+    ImageListItem,
+    ImageListItemBar,
+    Button,
+    IconButton,
+    TextField,
+    DialogActions,
+    Grid,
+    Box,
+    Chip,
+    Avatar,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogContentText
+  } from "@mui/material";
+
+import VisibilityIcon from '@mui/icons-material/Visibility';
+
+import ShareIcon from '@mui/icons-material/Share';
+
+import server from "config/axiosConfig";
+import API_ENDPOINTS from "config/endpointConfig";
+
+import ImageListStles from 'component/Search/imageListStyles.css'
+
 export const SlidingImageContainer = ({ images, handleModalOpen }) => {
     const containerRef = useRef(null);
     const gap = 10; // Adjust this value based on the desired gap between images
@@ -73,7 +102,7 @@ export const SlidingImageContainer = ({ images, handleModalOpen }) => {
         </div>
       </div>
     );
-  };
+};
   
 export const Modal = ({open, handleClose, loadding, data, handleModalOpen}) => {
     const [relatedImages, setRelatedImages] = useState([])
@@ -119,13 +148,7 @@ export const Modal = ({open, handleClose, loadding, data, handleModalOpen}) => {
                       <div style={{position:"relative", height:"100%"}}>
                         <div style={{display:"flex", gap:"10px", position:"absolute", right:"0px"}}>
                           <Chip icon={<VisibilityIcon />} label="AI 분석" onClick={() => {setDeug(prevStatus => !prevStatus)}}
-                            style={{
-                              background: isDebug
-                                ? 'linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff)'
-                                : 'linear-gradient(45deg, #eaeaea, #f0f0f0, #eaeaea)',
-                              backgroundSize: '600% 600%',
-                              animation: isDebug ? 'shiny 6s ease infinite' : 'none',
-                            }}/>
+                            id={isDebug ? 'debug-chip' : 'normal-chip'}/>
                           <Chip icon={<ShareIcon />} label="공유" />
                         </div>
                         
@@ -163,4 +186,4 @@ export const Modal = ({open, handleClose, loadding, data, handleModalOpen}) => {
           
       </Dialog>
     )
-  }
+}
