@@ -102,7 +102,7 @@ const KeywordTable = ({result}) => {
           createData1("재.롱.이.귀.여.워", 262, 11.3),
           createData1("얀녕?", 305, 73.7),
         ]; */}
-          {result.map((info, idx) => (
+          {result ? (result.map((info, idx) => (
             <TableRow
               key={idx}
               sx={{
@@ -163,7 +163,7 @@ const KeywordTable = ({result}) => {
                 </Box>
               </TableCell>
             </TableRow>
-          ))}
+          ))) : (<></>)}
         </TableBody>
       </Table>
     </TableContainer>
@@ -197,7 +197,7 @@ const VideoTable = ({result}) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {result.map((row) => (
+          {result ? (result.map((row) => (
             <TableRow
               key={row.name}
               sx={{
@@ -229,7 +229,7 @@ const VideoTable = ({result}) => {
                 {row.calories}
               </TableCell>
             </TableRow>
-          ))}
+          ))) : (<></>)}
         </TableBody>
       </Table>
     </TableContainer>
@@ -562,7 +562,6 @@ const SearchTrendByPeriodChart = ({result}) => {
         
       })
     }
-    
     
   }, [result])
 
