@@ -84,18 +84,25 @@ def get_search_satisfaction(keyword: str, db: Session = Depends(get_db)):
     
 # 연령대별 검색 횟수
 @statistics.get("/statistics/age", tags=["statistics"], response_model=AgeResponse)
-def get_search_count_by_age_group_chart(keyword: str, db: Session = Depends(get_db)):
+def get_search_count_by_age_group_chart(keyword: str, is_random: bool = False, db: Session = Depends(get_db)):
     age_groups = [(18, 24), (25, 34), (35, 44), (45, 54), (55, 64), (65, 100)]
+    genders = ["male", "female", "other"]  # Add more genders as necessary
     chart_data = []
     for age_group in age_groups:
-        age_group_count = db.query(User)\
-            .filter(User.age >= age_group[0], User.age <= age_group[1])\
-            .join(User.searches)\
-            .filter(Search.keyword == keyword)\
-            .count()
-        chart_data.append({"age_group": f"{age_group[0]}-{age_group[1]}", "count": age_group_count})
+        age_group_counts = {}
+        for gender in genders:
+            count = db.query(User) \
+                .filter(User.age >= age_group[0], User.age <= age_group[1]) \
+                .join(User.searches) \
+                .filter(Search.keyword == keyword, User.sex == gender) \
+                .count()
+            age_group_counts[gender.lower()] = count
+        chart_data.append({
+            "age_group": f"{age_group[0]}-{age_group[1]}",
+            **age_group_counts
+        })
+    print(chart_data)
     return {"result": chart_data}
-
 
 # 기간별 검색 추이
 @statistics.get("/statistics/trend", tags=["statistics"], response_model=TrendResponse)

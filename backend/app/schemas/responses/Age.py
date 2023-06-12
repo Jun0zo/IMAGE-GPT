@@ -3,8 +3,9 @@ from pydantic import BaseModel
 
 class AgeData(BaseModel):
     age_group: str
-    count: int
-
+    male: str
+    female: str
+    other: str
 
 class AgeResponse(BaseModel):
     result: List[AgeData]
