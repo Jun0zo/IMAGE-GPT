@@ -68,8 +68,8 @@ const animationConfig = {
   },
 };
 
-const KeywordTable = ({data}) => {
-  console.log(data)
+const KeywordTable = ({result}) => {
+  console.log(result)
   return (
     <TableContainer
       sx={{
@@ -102,7 +102,7 @@ const KeywordTable = ({data}) => {
           createData1("재.롱.이.귀.여.워", 262, 11.3),
           createData1("얀녕?", 305, 73.7),
         ]; */}
-          {data.map((info, idx) => (
+          {result.map((info, idx) => (
             <TableRow
               key={idx}
               sx={{
@@ -170,7 +170,7 @@ const KeywordTable = ({data}) => {
   );
 };
 
-const VideoTable = () => {
+const VideoTable = ({result}) => {
   return (
     <TableContainer
       sx={{
@@ -197,7 +197,7 @@ const VideoTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows2.map((row) => (
+          {result.map((row) => (
             <TableRow
               key={row.name}
               sx={{
@@ -220,7 +220,7 @@ const VideoTable = () => {
                 <Box>
                   <img src={row.url} alt="" height="30px" />
                 </Box>
-                {row.name}
+                {row.title}
               </TableCell>
               <TableCell
                 align="right"
@@ -437,7 +437,7 @@ const SearchCountByAgeGroupChart = () => {
   );
 };
 
-const SearchTrendByPeriodChart = ({data}) => {
+const SearchTrendByPeriodChart = ({result}) => {
   const handleChartCreated = (chart) => {
     chart.container.classList.add("apexcharts-draw-animation");
   };
@@ -548,14 +548,14 @@ const SearchTrendByPeriodChart = ({data}) => {
   });
 
   useEffect(() => {
-    if (data) {
+    if (result) {
       setChartData(prevState => {
         const updatedHook = {...prevState}
         console.log(updatedHook)
   
         if (Object.keys(updatedHook).length) {
-          updatedHook.options.xaxis.categories = data.map(row => row.date)
-          updatedHook.series[0].data = data.map(row => row.count)
+          updatedHook.options.xaxis.categories = result.map(row => row.date)
+          updatedHook.series[0].data = result.map(row => row.count)
         }
         console.log(updatedHook)
         return updatedHook
@@ -564,7 +564,7 @@ const SearchTrendByPeriodChart = ({data}) => {
     }
     
     
-  }, [data])
+  }, [result])
 
   return (
     <Box sx={{ height: "100%" }}>
@@ -924,7 +924,7 @@ const OverviewChart = ({isLoading, statisticsData}) => {
         <Grid item xs={12} lg={3} sx={{ padding: "10px" }}>
           <TableCard title="비디오 정보" sx={{ height: "280px" }}>
             {/* VideoInfoTable */}
-            <VideoTable />
+            <VideoTable data={statisticsData.relatedVideos.result}/>
           </TableCard>
         </Grid>
         <Grid item xs={12} lg={6} sx={{ padding: "10px" }}>
