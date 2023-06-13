@@ -182,6 +182,12 @@ const KeywordTable = ({result}) => {
 };
 
 const VideoTable = ({result}) => {
+
+  const getThumbnailImg = (url) => {
+    let youtubeId = url.split("v=")[1];
+    let new_image_url = "https://i.ytimg.com/vi/" + youtubeId + "/hq720.jpg"
+    return new_image_url
+  }
   return (
     <TableContainer
       sx={{
@@ -223,7 +229,7 @@ const VideoTable = ({result}) => {
                 }}
               >
                 <Box>
-                  <img src={row.url} alt="" height="30px" />
+                  <img src={getThumbnailImg(row.url)} alt="" height="30px" />
                 </Box>
                 {row.title.slice(0,20)}
               </TableCell>
