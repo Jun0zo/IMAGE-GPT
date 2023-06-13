@@ -9,7 +9,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 RUN pip install --no-cache-dir --upgrade -r ./requirements.txt
 
-COPY key.pem cert.pem /app/
+# COPY key.pem .
+# COPY cert.pem .
 
 # Set environment variables for the FastAPI app
 ENV PYTHONUNBUFFERED=1
@@ -18,6 +19,7 @@ ENV PORT=8000
 
 # Expose the port that the FastAPI app will be listening on
 EXPOSE $PORT
+
 
 # Start the FastAPI app
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload", "--ssl-keyfile", "./key.pem", "--ssl-certfile", "./cert.pem"]

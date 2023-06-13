@@ -31,7 +31,7 @@ services:
   react:
     build: ./frontend
     environment:
-      - REACT_APP_API_URL=http://fastapi:8000
+      - REACT_APP_API_URL=https://fastapi:8000
     ports:
       - "443:3000"
     volumes:
