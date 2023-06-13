@@ -47,6 +47,12 @@
   <li></li>
 </ul>
 
+<h3 id = "How to use"> 사용법(How to use) </h3>
+<ul>
+  <li></li>
+  <li></li>
+</ul>
+
 <h2 id = "Pre-required"> 컴퓨터 구성/필수 조건 안내 (Pre-required) </h2>
 
 <h2 id = "Technique used"> 사용 기술 (Technique used) </h2>
