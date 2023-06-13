@@ -15,9 +15,7 @@
         <li><a href="#How to use"> 사용법 (How to use) </li>
       </ol>
     <li><a href="#Technique used"> 사용 기술 (Technique used) </li>
-    <li><a href="#How to download"> 설치 안내 (How to download) </li>
     <li><a href="#Meet the team"> 팀원 정보 (Meet the team) </li>
-    <li><a href="#Appendix"> 부록 (Appendix) </li>
   </ol>
 </details>
 
@@ -56,20 +54,19 @@
 <img src = "https://github.com/Jun0zo/IMAGE-GPT/assets/127472783/98da84d0-53a6-4036-b087-50bc18b22bae.png">
 <h3>3. "안녕"과 관련된 이미지가 출력된다. </h3>
 <img src = "https://github.com/Jun0zo/IMAGE-GPT/assets/127472783/d0c4a4ee-a23a-4c62-8dc1-76c63b263da7.png">
-<h3>4. 이미지에 마우스를 갖다 대면 원본영상을 보거나 다운로드 할 수 있다.</h3>
-
+<h3>4. 이미지에 마우스를 갖다 대면 원본영상을 보거나 다운로드 할 수 있고, 영상의 정보를 확인 할 수 있다..</h3>
+<img src = "https://github.com/Jun0zo/IMAGE-GPT/assets/127472783/ac1bf85a-ad53-494b-ae22-5dd126610396.png">
+<h3>5. 이미지를 클릭하여 이미지의 정보를 본다.</h3>
 
 
 
 
   
 <h2 id = "Technique used"> 사용 기술 (Technique used) </h2>
-<img src = "https://github.com/Jun0zo/IMAGE-GPT/assets/127472783/8447a3fc-cc66-445d-a849-ebd67bd35497.png" width = "400" height = "400">  
-<h2 id = "How to download"> 설치 안내 (How to download) </h2>
+<img src = "https://github.com/Jun0zo/IMAGE-GPT/assets/127472783/8447a3fc-cc66-445d-a849-ebd67bd35497.png" width = "400" height = "400">
   
 <h2 id = "Meet the team"> 팀원 정보 (Meet the team) </h2>
-<img src = "https://github.com/Jun0zo/IMAGE-GPT/assets/127472783/6a7142eb-cb71-4253-8433-dbede52818a0.png">
-<h2 id = "Appendix"> 부록 (Appendix) </h2>  
+<img src = "https://github.com/Jun0zo/IMAGE-GPT/assets/127472783/2b472bcf-5141-4d5c-ba98-13628cd672ba.png">
     
     
     
