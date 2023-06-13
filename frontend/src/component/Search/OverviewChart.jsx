@@ -134,7 +134,7 @@ const KeywordTable = ({result}) => {
                 }}
               >
                 <Avatar />
-                {info.subtitle}
+                {info.subtitle.replace(/_/g, " ")}
                 <Chip
                   size="small"
                   label={info.distance + "점"}
