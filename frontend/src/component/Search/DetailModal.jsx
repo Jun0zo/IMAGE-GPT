@@ -34,6 +34,11 @@ export const SlidingImageContainer = ({ images, handleModalOpen }) => {
     let imageWidth;
   
     const slideImages = () => {
+      if (imageWidth < 2) {
+        const firstImage  = containerRef.current.firstChild;
+        imageWidth = firstImage.offsetWidth;
+        return
+      }
       const container = containerRef.current;
       currentPosition -= imageWidth + gap;
       container.style.transform = `translateX(${currentPosition}px)`;
