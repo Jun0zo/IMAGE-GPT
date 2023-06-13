@@ -18,6 +18,10 @@ import {
     DialogContentText
   } from "@mui/material";
 
+
+import YouTubeIcon from '@mui/icons-material/YouTube';
+import ImageSearchIcon from '@mui/icons-material/ImageSearch';
+
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
 import ShareIcon from '@mui/icons-material/Share';
@@ -26,6 +30,7 @@ import server from "config/axiosConfig";
 import API_ENDPOINTS from "config/endpointConfig";
 
 import ImageListStles from 'component/Search/imageListStyles.css'
+import YoutubePNGIcon from 'component/youtubeIcon.png'
 
 export const SlidingImageContainer = ({ images, handleModalOpen }) => {
     const containerRef = useRef(null);
@@ -97,7 +102,7 @@ export const SlidingImageContainer = ({ images, handleModalOpen }) => {
               key={index}
               src={''} // Set an initial placeholder source or an empty string
               data-src={`http://unilab.kro.kr:8000/public/zzals/org/${image.url}`}
-              style={{ height: '100px', width: `${imageWidth}px`, marginRight: `${gap}px`, borderRadius:"10px" }}
+              style={{ height: '100px', width: `${imageWidth}px`, marginRight: `${gap}px`, borderRadius:"10px", cursor: 'pointer' }}
               image_id={image.id}
               alt="Image"
   
@@ -150,23 +155,54 @@ export const Modal = ({open, handleClose, loadding, data, handleModalOpen}) => {
                 {
                     Object.keys(data).length === 0 ?  <></> :
                     <Grid item xl={6} lg={6} sm={12} sx={{ padding:"15px", maxHeight:"400px", overflowY:"auto"}}>
-                      <div style={{position:"relative", height:"100%"}}>
+                      <div style={{position:"relative", height:"100%"}} >
                         <div style={{display:"flex", gap:"10px", position:"absolute", right:"0px"}}>
                           <Chip icon={<VisibilityIcon />} label="AI 분석" onClick={() => {setDeug(prevStatus => !prevStatus)}}
                             id={isDebug ? 'debug-chip' : 'normal-chip'}/>
                           <Chip icon={<ShareIcon />} label="공유" />
                         </div>
                         
-                        <div style={{maxHeight:"100%", overflowY:"auto"}}>
-                          <p style={{fontSize:"24px", marginTop:"0px"}}>{data.image_subtitle.replace(/_/g, " ")}</p>
-                          <p>{data.video_title.length > 30 ? data.video_title.substring(0, 30) + '...' : data.video_title}</p>
-                          <p style={{ whiteSpace: "pre-line" }}>영상 설명 : {data.video_description.substring(0,50)}</p>
-                          <p style={{ lineHeight: "40px"}}>태그 정보 : {
-                            data.video_tags.split(', ').slice(0, 10).map(video_tag => <Chip label={video_tag} style={{marginRight:"10px"}}/>)
-                          }
-                          {data.video_tags.split(", ").length > 10 && "..." /* Add ellipsis if tags exceed 20 */}
-                          </p>
-                      
+                        <div sx={{maxHeight:"100%", overflowY:"auto"}}>
+                          <Box sx={{display:"flex", gap:"10px"}}>
+                            <div style={{paddingTop:"5px"}}>
+                              <ImageSearchIcon sx={{width:"30px"}}/>
+                            </div>
+                            <div>
+                              <p style={{fontSize:"24px", marginTop:"0px", color:"#272727", fontWeight:"600"}}>
+                                {data.image_subtitle.replace(/_/g, " ").slice(0, 30)}
+                                {data.image_subtitle.length > 30 && "..."}
+                              </p>
+                            </div>
+                          </Box>
+                          
+                          
+                          <Box sx={{display:"flex", gap:"10px"}}>
+                            <div >
+                              <div>
+                                <img src={YoutubePNGIcon} style={{width:"30px"}}/>
+                              </div>
+                              
+                            </div>
+                            <div>
+                              <p style={{fontWeight: "600", fontSize:"20px", "marginTop":"0px"}}>{data.video_title.length > 30 ? data.video_title.substring(0, 30) + '...' : data.video_title}</p>
+                              <hr/>
+                              <p >동영상 태그</p>
+                              <p style={{ fontWeight:"400", lineHeight: "30px"}}>
+                                {
+                                  data.video_tags.split(', ').slice(0, 20).map(video_tag => <Chip size="small" label={video_tag} style={{marginRight:"6px"}}/>)
+                                }
+                                {data.video_tags.split(", ").length > 20 && "..." /* Add ellipsis if tags exceed 20 */}
+                              </p>
+                              
+                              <hr/>
+                              <p style={{ fontWeight:"400", whiteSpace: "pre-line" }}>동영상 설명</p>
+                              <p style={{cololr:"#414141"}}>
+                                {data.video_description}
+                                {/* {data.video_description.substring(0,200)} */}
+                                {/* {data.video_description.length > 200 && "..." /* Add ellipsis if tags exceed 20 */}
+                                </p>
+                            </div>
+                          </Box>
                         </div>
                       </div>
                       
