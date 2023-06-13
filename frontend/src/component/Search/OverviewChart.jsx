@@ -14,13 +14,18 @@ import {
   Grid, 
   Chip, 
   Avatar, 
-  LinearProgress
+  LinearProgress,
+  Stack,
+  Button
 } from "@mui/material";
 
 import ChartCard from "./ChartCard";
 import TableCard from "./TableCard";
 
 import CheckIcon from "@mui/icons-material/Check";
+import RefreshIcon from '@mui/icons-material/Refresh';
+import CloudDoneIcon from '@mui/icons-material/CloudDone';
+import CloudOffIcon from '@mui/icons-material/CloudOff';
 
 import "styles/chart-animation.css";
 
@@ -233,12 +238,12 @@ const VideoTable = ({result}) => {
 const LoadingBox = () => {
   return (
     <Box sx={{ height:"100%", display:"flex", justifyContent:"center", alignItems:"center"}}>
-        <CircularProgress size={100}/>
+        <CircularProgress size={70}/>
     </Box>
   )
 }
 
-const SafisfactionShowTable = () => {
+const SafisfactionShowTable = ({result}) => {
   return (
     <Box
       sx={{
@@ -297,7 +302,7 @@ const SafisfactionShowTable = () => {
             >
               평균
             </span>
-            <span>좋아요 비율 : 32%</span>
+            <span>좋아요 비율 : {result.ratio}%</span>
           </Box>
         </Box>
         <Box
@@ -315,9 +320,9 @@ const SafisfactionShowTable = () => {
               margin: "8px 0px",
             }}
           >
-            31
+            {result.likes_count}
           </span>
-          <span style={{ fontSize: "12px" }}>31 / 3212</span>
+          <span style={{ fontSize: "12px" }}>{result.likes_count} / {result.searches_count}</span>
         </Box>
       </Box>
     </Box>
@@ -728,6 +733,7 @@ const SearchTrendWeeklyChart = ({ sx }) => {
 };
 
 const SearchDownloadRatioChart = ({result, keyword}) => {
+
   const [chartData, setChartData] = useState({
     series: [70],
     options: {
@@ -756,7 +762,6 @@ const SearchDownloadRatioChart = ({result, keyword}) => {
 
   useEffect(() => {
     if (result) {
-      console.log('down', result)
       setChartData(prevState => {
         const updatedHook = {...prevState}
         if (Object.keys(updatedHook).length) {
@@ -877,7 +882,7 @@ const GenderCard = ({result}) => {
   )
 }
 
-const OverviewChart = ({isLoading, statisticsData, keyword}) => {
+const OverviewChart = ({isLoading, statisticsData, keyword, handleReload, isRandom, setRandom}) => {
   return (
     <div
       style={{
@@ -886,7 +891,21 @@ const OverviewChart = ({isLoading, statisticsData, keyword}) => {
         alignItems: "stretch",
       }}
     >
-      {isLoading ? null : <Grid container sx={{ width: "81%" }}>
+      {isLoading ? null : 
+      <Grid container sx={{ width: "81%" }}>
+        <Grid item xs={12} sx={{padding:"0px 10px"}}>
+          <Stack direction="row" spacing={2}>
+            <Button variant="outlined" startIcon={<RefreshIcon />} onClick={()=>{handleReload();}}>
+              새로고침
+            </Button>
+            {
+              isRandom ? 
+              <Button variant="contained" startIcon={<CloudOffIcon />} onClick={() => {setRandom(false); handleReload();}} >랜덤 데이터</Button> : 
+              <Button variant="outlined" startIcon={<CloudDoneIcon />} onClick={() => {setRandom(true); handleReload();}}>실제 데이터</Button>
+            }
+            
+          </Stack>
+        </Grid>
         <Grid item xs={12} md={6} xl={3} sx={{ padding: "10px" }}>
           {/* SearchTrendWeeklyChart */}
           <ChartCard
@@ -944,7 +963,11 @@ const OverviewChart = ({isLoading, statisticsData, keyword}) => {
             title="검색 결과 만족도"
             sx={{ height: "150px", paddingTop: "0px" }}
           >
-            <SafisfactionShowTable />
+            {
+              statisticsData && statisticsData.satisfaction && statisticsData.satisfaction.result ? 
+              <SafisfactionShowTable result={statisticsData.satisfaction.result}/> :
+              <LoadingBox/>
+            }
           </ChartCard>
         </Grid>
         <Grid item xs={12} md={6} xl={3} sx={{ padding: "10px" }}>
@@ -1004,7 +1027,7 @@ const OverviewChart = ({isLoading, statisticsData, keyword}) => {
           <ChartCard title="검색 대비 다운로드 비율" sx={{ height: "250px" }}>
             {
               statisticsData && statisticsData.download && statisticsData.download.result ? 
-              <SearchDownloadRatioChart result={statisticsData.download.result} keword={keyword}/> :
+              <SearchDownloadRatioChart result={statisticsData.download.result} keyword={keyword}/> :
               <LoadingBox/>
             }
           </ChartCard>

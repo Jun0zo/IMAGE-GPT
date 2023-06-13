@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 
 import NavBar from "component/NavBar";
 import SearchBar from "component/Home/SearchBar";
@@ -25,11 +25,13 @@ const Search = () => {
   const [isImagesError, setImagesError] = useState(null);
 
   const [value, setValue] = useState(keyword);
+  const [isRandom, setRandom] = useState(true);
 
-  useEffect(() => {
+  const loadAll = (is_random) => {
     const fetchStatisticsData = async () => {
       try {
-        setIsStatisticsLoading(true);
+        setIsStatisticsLoading(false);
+        setStatisticsData(undefined)
         const response1 = await server.get(
           API_ENDPOINTS.STATISTICS.SIMILAR_KEYWORDS,
           { params: { keyword } }
@@ -40,22 +42,22 @@ const Search = () => {
         );
         const response3 = await server.get(
           API_ENDPOINTS.STATISTICS.SATISFACTION,
-          { params: { keyword } }
+          { params: { keyword, is_random } }
         );
         const response4 = await server.get(API_ENDPOINTS.STATISTICS.AGE, {
-          params: { keyword },
+          params: { keyword, is_random },
         });
         const response5 = await server.get(API_ENDPOINTS.STATISTICS.TREND, {
-          params: { keyword, period:'month' },
+          params: { keyword, is_random, period:'month' },
         });
         const response6 = await server.get(API_ENDPOINTS.STATISTICS.GENDER, {
-          params: { keyword },
+          params: { keyword, is_random },
         });
         const response7 = await server.get(API_ENDPOINTS.STATISTICS.TREND, {
           params: { keyword, period:'month' },
         });
         const response8 = await server.get(API_ENDPOINTS.STATISTICS.DOWNLOAD, {
-          params: { keyword },
+          params: { keyword, is_random },
         });
 
         setStatisticsData({
@@ -95,23 +97,31 @@ const Search = () => {
 
     fetchImages();
     fetchStatisticsData();
-    
-    console.log('or data ', statisticsData)
+  }
+
+  const handleReloadAll = () => {
+    loadAll(isRandom)
+  }
+
+  useEffect(() => {
+    loadAll(isRandom)
   }, [keyword]);
   return (
     <div>
       <NavBar />
       <div style={{ display: "flex", flexDirection: "column" }}>
-        {/* <Box sx={{ height: "100vh" }}> */}
         <Box sx={{ padding: "30px 0px" }}>
           <SearchBar keyword={keyword} value={value} handleValue={setValue} />
           {isImagesLoading ? null : <ImageList images={images}/>}  
         </Box>
-
-        {/* <Box sx={{ height: "100vh" }}> */}
         <Box sx={{ padding: "30px 0px" }}>
-          <OverviewChart isStatisticsLoading={isStatisticsLoading} statisticsData={statisticsData} keyword={keyword}/>
-          
+          <OverviewChart isStatisticsLoading={isStatisticsLoading} 
+          statisticsData={statisticsData} 
+          keyword={keyword} 
+          handleReload={handleReloadAll}
+          isRandom={isRandom}
+          setRandom={setRandom}
+          />
         </Box>
       </div>
       {keyword}
