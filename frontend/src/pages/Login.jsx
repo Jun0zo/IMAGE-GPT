@@ -3,6 +3,7 @@ import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 
 import { Box } from '@mui/material';
 
+import server from "config/axiosConfig";
 
 // import Button from
 
@@ -12,13 +13,13 @@ const Login = () => {
   console.log("!!");
   const responseMessage = (response) => {
       console.log(response);
-      // server.post("/", {  })
-      // .then((response) => {
+      server.post("/auth/login/google", { client_id: response.credential })
+      .then(response => {
+        console.log(response)
+      })
+      .catch(error => {
 
-      // })
-      // .catch(error => {
-
-      // })
+      })
   };
   const errorMessage = (error) => {
       console.log(error);

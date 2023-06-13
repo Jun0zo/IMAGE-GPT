@@ -38,38 +38,41 @@ scope = [
 ]
 
 # auth endpoint
-# @auth.get("/auth/login/google")
-# def login_with_google():
-#     google = OAuth2Session(client_id, redirect_uri=redirect_uri, scope=scope)
-#     authorization_url, state = google.authorization_url(authorization_base_url, access_type="offline")
+@auth.post("/auth/login/google")
+def login_with_google():
+    google = OAuth2Session(client_id, redirect_uri=redirect_uri, scope=scope)
+    print(google)
+    authorization_url, state = google.authorization_url(authorization_base_url, access_type="offline")
+    print(authorization_url, state)
 
-#     # Save the session state for later use in the callback
-#     # You can store it in the session, a database, or a cookie
-#     # For simplicity, we'll store it in a global variable here
-#     auth.google_session_state = state
+    # Save the session state for later use in the callback
+    # You can store it in the session, a database, or a cookie
+    # For simplicity, we'll store it in a global variable here
+    auth.google_session_state = state
 
-#     return RedirectResponse(authorization_url)
+    return RedirectResponse(authorization_url)
+    # return authorization_url
 
 
 # # Callback endpoint
-# @auth.get("/auth/login/google/callback")
-# async def google_callback(code: str, state: str):
-#     print('callback call!!')
-#     # Ensure the session state is the same as the one stored previously
-#     if state != auth.google_session_state:
-#         raise HTTPException(status_code=400, detail="Invalid session state")
+@auth.post("/auth/login/google/callback")
+async def google_callback(code: str, state: str):
+    print('callback call!!')
+    # Ensure the session state is the same as the one stored previously
+    if state != auth.google_session_state:
+        raise HTTPException(status_code=400, detail="Invalid session state")
 
-#     google = OAuth2Session(client_id, redirect_uri=redirect_uri, state=state)
-#     token = google.fetch_token(token_url, client_secret=client_secret, code=code)
+    google = OAuth2Session(client_id, redirect_uri=redirect_uri, state=state)
+    token = google.fetch_token(token_url, client_secret=client_secret, code=code)
 
-#     # Use the token to make requests to Google APIs
-#     response = google.get("https://www.googleapis.com/oauth2/v1/userinfo")
-#     user_info = response.json()
+    # Use the token to make requests to Google APIs
+    response = google.get("https://www.googleapis.com/oauth2/v1/userinfo")
+    user_info = response.json()
 
-#     age = user_info.get("birthday")
-#     gender = user_info.get("gender")
+    age = user_info.get("birthday")
+    gender = user_info.get("gender")
 
-#     # Process the user information as needed
-#     # For example, you can create a user account or authenticate the user in your application
+    # Process the user information as needed
+    # For example, you can create a user account or authenticate the user in your application
 
-#     return {"user_info": user_info, "age": age, "gender": gender}
+    return {"user_info": user_info, "age": age, "gender": gender}
