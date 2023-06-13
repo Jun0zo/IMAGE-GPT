@@ -15,6 +15,7 @@ from routes.details import details
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
+from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 from middleware.SearchHistoryMiddleware import SearchHistoryMiddleware
 
 app = FastAPI(
@@ -23,6 +24,8 @@ app = FastAPI(
     version="0.0.1",
     # openapi_tags=tags_metadata,
 )
+
+app.add_middleware(HTTPSRedirectMiddleware)
 
 app.add_middleware(
     CORSMiddleware,
