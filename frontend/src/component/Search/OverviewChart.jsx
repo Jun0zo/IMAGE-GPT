@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import Chart from "react-apexcharts";
+import PremiumPng from 'component/premium.png'
 
 import {
   CircularProgress,
@@ -297,7 +298,18 @@ const SafisfactionShowTable = ({result}) => {
 };
 
 const SatisfactionVoteTable = () => {
-  return null;
+  return (
+    <Box sx={{display:"flex", height:"100%", alignItems:"center"}}>
+      <Box>
+          <p style={{fontSize:"18px", fontWeight:"600", color:"white"}}>Premium 계정</p>
+          <p style={{fontSize:"14px"}}>유료 계정으로 업그레이드하여 IMAGE-GPT의 다양한 기능을 사용해보세요!</p>
+          <p style={{marginTop:"2px", fontSize:"8px"}}>자세히보기</p>
+      </Box>
+      <Box sx={{display:"flex", alignItems:"center", padding:"10px"}}>
+        <img src={PremiumPng} style={{height:"100px"}}/>
+      </Box>
+    </Box>
+  )
 };
 
 const SearchCountByAgeGroupChart = ({result}) => {
@@ -946,8 +958,8 @@ const OverviewChart = ({isLoading, statisticsData, keyword, handleReload, isRand
           {/* SearchSatisfaction */}
           <ChartCard
             isSmallCard
-            title="만족도 투표"
-            sx={{ height: "150px", paddingTop: "0px" }}
+            title=""
+            sx={{ height: "100%", paddingTop: "0px" }}
           >
             <SatisfactionVoteTable />
           </ChartCard>
