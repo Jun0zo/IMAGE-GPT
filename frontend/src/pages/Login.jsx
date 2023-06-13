@@ -8,10 +8,17 @@ import { Box } from '@mui/material';
 
 
 
-const Home = () => {
+const Login = () => {
   console.log("!!");
   const responseMessage = (response) => {
       console.log(response);
+      server.post("/", {  })
+      .then((response) => {
+
+      })
+      .catch(error => {
+
+      })
   };
   const errorMessage = (error) => {
       console.log(error);
@@ -25,7 +32,9 @@ const Home = () => {
 
         <div>
           <GoogleOAuthProvider clientId={"121079642070-uphpll1qg5mpv0ils68ssk9o0n5q3hdc.apps.googleusercontent.com"}>
-            <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
+            <GoogleLogin 
+            onSuccess={responseMessage} 
+            onError={errorMessage} />
           </GoogleOAuthProvider>
         </div>
       </Box>
@@ -35,4 +44,4 @@ const Home = () => {
   );
 }
 
-export default Home;
+export default Login;
