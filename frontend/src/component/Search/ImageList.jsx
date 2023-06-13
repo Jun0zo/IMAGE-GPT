@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import Heart from "react-animated-heart";
+import axios from 'axios';
 
 import {
   ImageList as MUIImageList,
@@ -99,6 +100,11 @@ const ImageList = ({images}) => {
     target.querySelector('.overlay').style.opacity = 0
   }
 
+  const handleDownload = (image_url) => {
+    const url = `https://unilab.kro.kr:8000/public/zzals/org/${image_url}`
+    window.open(url, '_blank');
+  }
+
   return (
     <Box sx={{ display: "flex", justifyContent: "center", marginTop: "50px" }}>
       <MUIImageList cols={cols} gap={20} sx={{ gap: "20px", width: "70vw" }}>
@@ -155,13 +161,24 @@ const ImageList = ({images}) => {
                       backgroundColor:"rgba(181,181,181, .9)",
                       cursor:"pointer"
                     }}}
+                    
                     onClick={async (event) => {
                       // await server.get(API_ENDPOINTS.DETAILS.VIDEO_IMAGES, { params : {}})
                       // window.open(image.video_url)
                       event.stopPropagation();
+                      const imageData = await getImageInfo(image.id)
+                      const url = imageData.video_url;
+                      window.open(url, "_blank", "noopener, noreferrer");
                     }}
                   />
-                  <Chip
+                  <a
+                    href={
+                      `https://unilab.kro.kr:8000/public/zzals/org/${image.url}`
+                    }
+                    download={image.url}
+                    target="_self"
+                  >
+                    <Chip
                     icon={<DownloadIcon style={{color:"#3580f2"}}/>}
                     label="다운로드"
                     sx={{backgroundColor:"rgba(181,181,181,.5)", 
@@ -172,10 +189,9 @@ const ImageList = ({images}) => {
                       backgroundColor:"rgba(181,181,181, .9)",
                       cursor:"pointer"
                     }}}
-                    onClick={(event) => {
-                      event.stopPropagation();
-                    }}
                     />
+                </a>
+                  
                 </div>
              </div>
           </ImageListItem>
