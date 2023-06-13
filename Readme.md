@@ -47,10 +47,12 @@
 </ul>
 
 <h3 id = "How to use"> 사용법(How to use) </h3>
-<img src = "https://github.com/Jun0zo/IMAGE-GPT/assets/127472783/4cb747c6-dfbb-49f6-8eaa-f08a77c18ab7.png")
+<img src = "https://github.com/Jun0zo/IMAGE-GPT/assets/127472783/4cb747c6-dfbb-49f6-8eaa-f08a77c18ab7.png">
+<h3>
 <ol>
-  <li><a href = "https://unilab.kro.kr">링크</li>
-  <li></li>
+  <li><a href = "https://unilab.kro.kr">https://unilab.kro.kr <- 링크를 클릭하여 사이트로 이동한다.</li>
+  
+  <li><img src = "https://github.com/Jun0zo/IMAGE-GPT/assets/127472783/06dca5e7-bf65-4a9b-a886-99d04fbd9320.png"></li>
 </ol>
 
 <h2 id = "Technique used"> 사용 기술 (Technique used) </h2>
