@@ -6,6 +6,7 @@ class DetailedImageResult(BaseModel):
     image_subtitle: str
     video_id: str
     video_title: str
+    video_url: str
     video_description: str
     video_tags: str
 
