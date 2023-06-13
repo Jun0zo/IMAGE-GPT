@@ -12,13 +12,13 @@ const Login = () => {
   console.log("!!");
   const responseMessage = (response) => {
       console.log(response);
-      server.post("/", {  })
-      .then((response) => {
+      // server.post("/", {  })
+      // .then((response) => {
 
-      })
-      .catch(error => {
+      // })
+      // .catch(error => {
 
-      })
+      // })
   };
   const errorMessage = (error) => {
       console.log(error);
