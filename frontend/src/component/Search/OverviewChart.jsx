@@ -31,45 +31,6 @@ import "styles/chart-animation.css";
 
 import good from "images/good.svg";
 
-function createData1(name, score, similarity) {
-  return { name, score, similarity };
-}
-
-function createData2(name, url, tags, score) {
-  return { name, url, tags, score };
-}
-
-const rows = [
-  createData1("안녕하세요", 159, 62.1),
-  createData1("안녕히 계세요 여러분", 237, 34.9),
-  createData1("재.롱.이.귀.여.워", 262, 11.3),
-  createData1("얀녕?", 305, 73.7),
-];
-
-const rows2 = [
-  createData2(
-    "갈아버리는 거 아니었어?",
-    "https://img.youtube.com/vi/q1cSkIbGCAI/0.jpg",
-    159,
-    6.0,
-    24
-  ),
-  createData2(
-    "배고플 때 먹는 영상",
-    "https://img.youtube.com/vi/LWpGpK0QbOQ/0.jpg",
-    237,
-    9.0,
-    37
-  ),
-  createData2(
-    "침펄 만두 먹방",
-    "https://img.youtube.com/vi/miKN0Gyz9H0/0.jpg",
-    237,
-    9.0,
-    12
-  ),
-];
-
 const animationConfig = {
   enabled: true,
   easing: "easeinout",
