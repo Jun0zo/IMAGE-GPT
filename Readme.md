@@ -44,17 +44,25 @@
 <ul>
   <li>유튜브, 트위치, 틱톡등, 영상등을 크롤링 한뒤, AI를 활용하여 영상내의 텍스트를 기준으로 영상을 슬라이싱 한다.</li>
   <li>슬라이싱된 이미지는 슬라이싱의 기준이된 텍스트를 태깅하여 키워드의 입력에 맞게 출력되도록 DB에 저장한다.</li>
+  <li>사용자가 원하는 이미지의 키워드를 입력하면, 입력받은 키워드가 태깅된 이미지를 DB에서 불러와 출력한다.</li>
 </ul>
 
 <h3 id = "How to use"> 사용법(How to use) </h3>
 <img src = "https://github.com/Jun0zo/IMAGE-GPT/assets/127472783/4cb747c6-dfbb-49f6-8eaa-f08a77c18ab7.png">
-<h3>
-<ol>
-  <li><a href = "https://unilab.kro.kr">https://unilab.kro.kr <- 링크를 클릭하여 사이트로 이동한다.</li>
-  
-  <li><img src = "https://github.com/Jun0zo/IMAGE-GPT/assets/127472783/06dca5e7-bf65-4a9b-a886-99d04fbd9320.png"></li>
-</ol>
 
+<h3><a href = "https://unilab.kro.kr">1. https://unilab.kro.kr <- 링크를 클릭하여 사이트로 이동한다.</h3>
+<img src = "https://github.com/Jun0zo/IMAGE-GPT/assets/127472783/40a7a2f3-f6c2-4c8c-9ee5-e7d6dde590b0.png">
+<h3>2. 찾고 싶은 자막이나 텍스트를 키워드로 입력한다. (ex : "안녕")</h3>
+<img src = "https://github.com/Jun0zo/IMAGE-GPT/assets/127472783/98da84d0-53a6-4036-b087-50bc18b22bae.png">
+<h3>3. "안녕"과 관련된 이미지가 출력된다. </h3>
+<img src = "https://github.com/Jun0zo/IMAGE-GPT/assets/127472783/d0c4a4ee-a23a-4c62-8dc1-76c63b263da7.png">
+<h3>4. 이미지에 마우스를 갖다 대면 원본영상을 보거나 다운로드 할 수 있다.</h3>
+
+
+
+
+
+  
 <h2 id = "Technique used"> 사용 기술 (Technique used) </h2>
 <img src = "https://github.com/Jun0zo/IMAGE-GPT/assets/127472783/8447a3fc-cc66-445d-a849-ebd67bd35497.png" width = "400" height = "400">  
 <h2 id = "How to download"> 설치 안내 (How to download) </h2>
