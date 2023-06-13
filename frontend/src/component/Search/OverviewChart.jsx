@@ -867,8 +867,8 @@ const OverviewChart = ({isLoading, statisticsData, keyword, handleReload, isRand
             </Button>
             {
               isRandom ? 
-              <Button variant="contained" startIcon={<CloudOffIcon />} onClick={() => {setRandom(false); handleReload();}} >랜덤 데이터</Button> : 
-              <Button variant="outlined" startIcon={<CloudDoneIcon />} onClick={() => {setRandom(true); handleReload();}}>실제 데이터</Button>
+              <Button variant="outlined" startIcon={<CloudOffIcon />} onClick={() => {setRandom(false);}} >랜덤 데이터</Button> : 
+              <Button variant="contained" startIcon={<CloudDoneIcon />} onClick={() => {setRandom(true);}}>실제 데이터</Button>
             }
             
           </Stack>
@@ -880,7 +880,9 @@ const OverviewChart = ({isLoading, statisticsData, keyword, handleReload, isRand
             title="일주일간 검색추이"
             sx={{ height: "150px", paddingTop: "0px" }}
           >
-            <Grid container>
+            {
+              statisticsData && statisticsData.gender && statisticsData.gender.result ? 
+              <Grid container>
               <Grid
                 item
                 xs={4}
@@ -906,7 +908,10 @@ const OverviewChart = ({isLoading, statisticsData, keyword, handleReload, isRand
               <Grid item xs={8}>
                 <SearchTrendWeeklyChart sx={{ height: "90%" }} />
               </Grid>
-            </Grid>
+            </Grid> :
+              <LoadingBox/>
+            }
+            
           </ChartCard>
         </Grid>
         <Grid item xs={12} md={6} xl={3} sx={{ padding: "10px" }}>
