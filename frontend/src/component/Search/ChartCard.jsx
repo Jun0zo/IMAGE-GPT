@@ -11,6 +11,7 @@ const ChartCard = (props) => {
         borderRadius: "15px",
         boxShadow:
           "0 7px 14px 0 rgba(3, 12, 51, 0.15), 0 3px 6px 0 rgba(0, 0, 0, 0.2)",
+          height: title ? undefined : "100%"
       }}
     >
       {title ? (

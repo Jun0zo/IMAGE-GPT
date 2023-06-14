@@ -125,11 +125,9 @@ function NavBar() {
           </Box>
 
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
-            {Log.map((item) => (
-              <Button key={item} sx={{ color: "#fff" }}>
-                {item}
-              </Button>
-            ))}
+            <Button sx={{ color: "#fff" }} onClick={() => {window.location.href='/login'}}>
+              {"SIGN IN"}
+            </Button>
           </Box>
           {/* <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">

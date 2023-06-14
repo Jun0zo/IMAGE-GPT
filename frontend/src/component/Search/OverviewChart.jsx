@@ -1,62 +1,36 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Chart from "react-apexcharts";
+import PremiumPng from 'component/premium.png'
 
-import { Box, Grid, Chip, Avatar, LinearProgress } from "@mui/material";
+import {
+  CircularProgress,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Box, 
+  Grid, 
+  Chip, 
+  Avatar, 
+  LinearProgress,
+  Stack,
+  Button
+} from "@mui/material";
+
 import ChartCard from "./ChartCard";
 import TableCard from "./TableCard";
 
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-
 import CheckIcon from "@mui/icons-material/Check";
+import RefreshIcon from '@mui/icons-material/Refresh';
+import CloudDoneIcon from '@mui/icons-material/CloudDone';
+import CloudOffIcon from '@mui/icons-material/CloudOff';
 
 import "styles/chart-animation.css";
 
 import good from "images/good.svg";
-
-function createData1(name, score, similarity) {
-  return { name, score, similarity };
-}
-
-function createData2(name, url, tags, score) {
-  return { name, url, tags, score };
-}
-
-const rows = [
-  createData1("안녕하세요", 159, 62.1),
-  createData1("안녕히 계세요 여러분", 237, 34.9),
-  createData1("재.롱.이.귀.여.워", 262, 11.3),
-  createData1("얀녕?", 305, 73.7),
-];
-
-const rows2 = [
-  createData2(
-    "갈아버리는 거 아니었어?",
-    "https://img.youtube.com/vi/q1cSkIbGCAI/0.jpg",
-    159,
-    6.0,
-    24
-  ),
-  createData2(
-    "배고플 때 먹는 영상",
-    "https://img.youtube.com/vi/LWpGpK0QbOQ/0.jpg",
-    237,
-    9.0,
-    37
-  ),
-  createData2(
-    "침펄 만두 먹방",
-    "https://img.youtube.com/vi/miKN0Gyz9H0/0.jpg",
-    237,
-    9.0,
-    12
-  ),
-];
 
 const animationConfig = {
   enabled: true,
@@ -68,7 +42,7 @@ const animationConfig = {
   },
 };
 
-const KeywordTable = () => {
+const KeywordTable = ({result}) => {
   return (
     <TableContainer
       sx={{
@@ -95,9 +69,15 @@ const KeywordTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+        {/* const rows = [
+          createData1("안녕하세요", 159, 62.1),
+          createData1("안녕히 계세요 여러분", 237, 34.9),
+          createData1("재.롱.이.귀.여.워", 262, 11.3),
+          createData1("얀녕?", 305, 73.7),
+        ]; */}
+          {result ? (result.map((info, idx) => (
             <TableRow
-              key={row.name}
+              key={idx}
               sx={{
                 "&:last-child td, &:last-child th": { border: 0 },
               }}
@@ -116,10 +96,10 @@ const KeywordTable = () => {
                 }}
               >
                 <Avatar />
-                {row.name}
+                {info.subtitle.replace(/_/g, " ")}
                 <Chip
                   size="small"
-                  label={row.score + "점"}
+                  label={info.distance + "점"}
                   sx={{
                     backgroundColor: "rgb(35,46,68)",
                     color: "rgb(44,123,229)",
@@ -144,7 +124,7 @@ const KeywordTable = () => {
                 >
                   <LinearProgress
                     variant="determinate"
-                    value={row.similarity}
+                    value={info.distance}
                     sx={{
                       backgroundColor: "#242e3c",
                       borderRadius: "50px",
@@ -152,18 +132,24 @@ const KeywordTable = () => {
                       height: "10px",
                     }}
                   />
-                  <Box sx={{ fontSize: "12px" }}>{row.similarity}</Box>
+                  <Box sx={{ fontSize: "12px" }}>{info.similarity}</Box>
                 </Box>
               </TableCell>
             </TableRow>
-          ))}
+          ))) : (<></>)}
         </TableBody>
       </Table>
     </TableContainer>
   );
 };
 
-const VideoTable = () => {
+const VideoTable = ({result}) => {
+
+  const getThumbnailImg = (url) => {
+    let youtubeId = url.split("v=")[1];
+    let new_image_url = "https://i.ytimg.com/vi/" + youtubeId + "/hq720.jpg"
+    return new_image_url
+  }
   return (
     <TableContainer
       sx={{
@@ -181,18 +167,12 @@ const VideoTable = () => {
             >
               영상 이름
             </TableCell>
-            <TableCell
-              align="right"
-              sx={{ color: "#e2e2e2", borderBottom: "1px solid #242e3c" }}
-            >
-              감성점수
-            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows2.map((row) => (
+          {result ? (result.map((row, index) => (
             <TableRow
-              key={row.name}
+              key={index}
               sx={{
                 "&:last-child td, &:last-child th": { border: 0 },
               }}
@@ -211,25 +191,27 @@ const VideoTable = () => {
                 }}
               >
                 <Box>
-                  <img src={row.url} alt="" height="30px" />
+                  <img src={getThumbnailImg(row.url)} alt="" height="30px" />
                 </Box>
-                {row.name}
-              </TableCell>
-              <TableCell
-                align="right"
-                sx={{ color: "#e2e2e2", borderBottom: "1px solid #242e3c" }}
-              >
-                {row.calories}
+                {row.title.slice(0,20)}
               </TableCell>
             </TableRow>
-          ))}
+          ))) : (<></>)}
         </TableBody>
       </Table>
     </TableContainer>
   );
 };
 
-const SafisfactionShowTable = () => {
+const LoadingBox = () => {
+  return (
+    <Box sx={{ height:"100%", display:"flex", justifyContent:"center", alignItems:"center"}}>
+        <CircularProgress size={70}/>
+    </Box>
+  )
+}
+
+const SafisfactionShowTable = ({result}) => {
   return (
     <Box
       sx={{
@@ -288,7 +270,7 @@ const SafisfactionShowTable = () => {
             >
               평균
             </span>
-            <span>좋아요 비율 : 32%</span>
+            <span>좋아요 비율 : {result.ratio}%</span>
           </Box>
         </Box>
         <Box
@@ -306,9 +288,9 @@ const SafisfactionShowTable = () => {
               margin: "8px 0px",
             }}
           >
-            31
+            {result.likes_count}
           </span>
-          <span style={{ fontSize: "12px" }}>31 / 3212</span>
+          <span style={{ fontSize: "12px" }}>{result.likes_count} / {result.searches_count}</span>
         </Box>
       </Box>
     </Box>
@@ -316,10 +298,21 @@ const SafisfactionShowTable = () => {
 };
 
 const SatisfactionVoteTable = () => {
-  return null;
+  return (
+    <Box sx={{display:"flex", height:"100%", alignItems:"center"}}>
+      <Box>
+          <p style={{fontSize:"18px", fontWeight:"600", color:"white"}}>Premium 계정</p>
+          <p style={{fontSize:"14px"}}>유료 계정으로 업그레이드하여 IMAGE-GPT의 다양한 기능을 사용해보세요!</p>
+          <p style={{marginTop:"2px", fontSize:"8px"}}>자세히보기</p>
+      </Box>
+      <Box sx={{display:"flex", alignItems:"center", padding:"10px"}}>
+        <img src={PremiumPng} style={{height:"100px"}}/>
+      </Box>
+    </Box>
+  )
 };
 
-const SearchCountByAgeGroupChart = () => {
+const SearchCountByAgeGroupChart = ({result}) => {
   const [chartData, setChartData] = useState({
     series: [
       {
@@ -418,6 +411,22 @@ const SearchCountByAgeGroupChart = () => {
     },
   });
 
+  useEffect(() => {
+    if (result) {
+      console.log(result)
+      setChartData(prevState => {
+        const updatedHook = {...prevState}
+        if (Object.keys(updatedHook).length) {
+          updatedHook.series[0].data = result.map(row => row.male)
+          updatedHook.series[1].data = result.map(row => row.female)
+          updatedHook.series[2].data = result.map(row => row.other)
+        }
+        return updatedHook
+        
+      })
+    }
+  }, [result])
+
   return (
     <Box sx={{ height: "100%" }}>
       <Chart
@@ -430,7 +439,7 @@ const SearchCountByAgeGroupChart = () => {
   );
 };
 
-const SearchTrendByPeriodChart = () => {
+const SearchTrendByPeriodChart = ({result}) => {
   const handleChartCreated = (chart) => {
     chart.container.classList.add("apexcharts-draw-animation");
   };
@@ -534,11 +543,27 @@ const SearchTrendByPeriodChart = () => {
 
     series: [
       {
-        name: "Sales",
+        name: "count",
         data: [30, 40, 35, 50, 49, 60, 70, 91, 125, 150, 200, 220],
       },
     ],
   });
+
+  useEffect(() => {
+    if (result) {
+      setChartData(prevState => {
+        const updatedHook = {...prevState}
+  
+        if (Object.keys(updatedHook).length) {
+          updatedHook.options.xaxis.categories = result.map(row => row.date)
+          updatedHook.series[0].data = result.map(row => row.count)
+        }
+        return updatedHook
+        
+      })
+    }
+    
+  }, [result])
 
   return (
     <Box sx={{ height: "100%" }}>
@@ -552,9 +577,9 @@ const SearchTrendByPeriodChart = () => {
   );
 };
 
-const SearchByGenderChart = () => {
+const SearchByGenderChart = ({result}) => {
   const [chartData, setChartData] = useState({
-    series: [29, 45, 11],
+    series: [result['male']['count'], result['female']['count'], result['others']['count']],
     options: {
       chart: {
         type: "donut",
@@ -686,7 +711,8 @@ const SearchTrendWeeklyChart = ({ sx }) => {
   );
 };
 
-const SearchDownloadRatioChart = () => {
+const SearchDownloadRatioChart = ({result, keyword}) => {
+
   const [chartData, setChartData] = useState({
     series: [70],
     options: {
@@ -713,6 +739,19 @@ const SearchDownloadRatioChart = () => {
     },
   });
 
+  useEffect(() => {
+    if (result) {
+      setChartData(prevState => {
+        const updatedHook = {...prevState}
+        if (Object.keys(updatedHook).length) {
+          updatedHook.series[0] = result.ratio
+        }
+        return updatedHook
+        
+      })
+    }
+  }, [result])
+
   return (
     <Box sx={{ height: "75%" }}>
       <Chart
@@ -721,11 +760,108 @@ const SearchDownloadRatioChart = () => {
         type="radialBar"
         height="100%"
       />
-    </Box>
+
+      <Box sx={{ textAlign: "center" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <CheckIcon
+            sx={{ marginRight: "3px", color: "rgb(0,210,122)" }}
+          />
+          <p style={{ margin: 0, fontSize: "16px" }}>
+            현재 "{keyword}" 키워드는 적절합니다.
+          </p>
+        </Box>
+
+        <p style={{ fontSize: "12px" }}>전체 검색 {result.searches_count}건중 {result.downloads_count}건 다운로드</p>
+      </Box>
+      </Box>
+    
   );
 };
 
-const OverviewChart = () => {
+const GenderCard = ({result}) => {
+  return (
+    <Grid container>
+      <Grid
+        item
+        xs={6}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          gap: "5px",
+          width: "100%",
+          padding: "5px 0px 20px 0px",
+          color: "rgb(157,169,187)",
+          fontSize: "12px",
+        }}
+      >
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <Box
+              sx={{
+                bgcolor: "#008FFB",
+                borderRadius: "50%",
+                height: "10px",
+                width: "10px",
+                marginRight: "6px",
+              }}
+            />
+            <span>남성</span>
+          </Box>
+          <span>{result['male']['ratio']}%</span>
+        </Box>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box
+              sx={{
+                bgcolor: "#FF4560",
+                borderRadius: "50%",
+                height: "10px",
+                width: "10px",
+                marginRight: "6px",
+              }}
+            />
+            <span>여성</span>
+          </Box>
+          <span>{result['female']['ratio']}%</span>
+        </Box>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box
+              sx={{
+                bgcolor: "#354050",
+                borderRadius: "50%",
+                height: "10px",
+                width: "10px",
+                marginRight: "6px",
+              }}
+            />
+            <span>기타</span>
+          </Box>
+          <span>{result['others']['ratio']}%</span>
+        </Box>
+      </Grid>
+      <Grid item xs={1}></Grid>
+      <Grid item xs={5}>
+        <SearchByGenderChart result={result}/>
+      </Grid>
+    </Grid>
+  )
+}
+
+const OverviewChart = ({isLoading, statisticsData, keyword, handleReload, isRandom, setRandom}) => {
   return (
     <div
       style={{
@@ -734,7 +870,21 @@ const OverviewChart = () => {
         alignItems: "stretch",
       }}
     >
+      {isLoading ? null : 
       <Grid container sx={{ width: "81%" }}>
+        <Grid item xs={12} sx={{padding:"0px 10px"}}>
+          <Stack direction="row" spacing={2}>
+            <Button variant="outlined" startIcon={<RefreshIcon />} onClick={()=>{handleReload();}}>
+              새로고침
+            </Button>
+            {
+              isRandom ? 
+              <Button variant="outlined" startIcon={<CloudOffIcon />} onClick={() => {setRandom(false);}} >랜덤 데이터</Button> : 
+              <Button variant="contained" startIcon={<CloudDoneIcon />} onClick={() => {setRandom(true);}}>실제 데이터</Button>
+            }
+            
+          </Stack>
+        </Grid>
         <Grid item xs={12} md={6} xl={3} sx={{ padding: "10px" }}>
           {/* SearchTrendWeeklyChart */}
           <ChartCard
@@ -742,17 +892,19 @@ const OverviewChart = () => {
             title="일주일간 검색추이"
             sx={{ height: "150px", paddingTop: "0px" }}
           >
-            <Grid container>
+            {
+              statisticsData && statisticsData.gender && statisticsData.gender.result ? 
+              <Grid container>
               <Grid
                 item
                 xs={4}
                 sx={{
-                  padding: "30px 0px",
                   display: "flex",
                   flexDirection: "column",
+                  justifyContent: "center"
                 }}
               >
-                <span style={{ fontSize: "40px" }}>125회</span>
+                <span style={{ fontSize: "30px" }}>125회</span>
                 <Chip
                   label="+13%"
                   size="small"
@@ -768,7 +920,10 @@ const OverviewChart = () => {
               <Grid item xs={8}>
                 <SearchTrendWeeklyChart sx={{ height: "90%" }} />
               </Grid>
-            </Grid>
+            </Grid> :
+              <LoadingBox/>
+            }
+            
           </ChartCard>
         </Grid>
         <Grid item xs={12} md={6} xl={3} sx={{ padding: "10px" }}>
@@ -778,77 +933,11 @@ const OverviewChart = () => {
             title="성별별 검색수"
             sx={{ height: "150px", paddingTop: "0px" }}
           >
-            <Grid container>
-              <Grid
-                item
-                xs={6}
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  gap: "5px",
-                  width: "100%",
-                  padding: "5px 0px 20px 0px",
-                  color: "rgb(157,169,187)",
-                  fontSize: "12px",
-                }}
-              >
-                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        bgcolor: "#008FFB",
-                        borderRadius: "50%",
-                        height: "10px",
-                        width: "10px",
-                        marginRight: "6px",
-                      }}
-                    />
-                    <span>남성</span>
-                  </Box>
-                  <span>43%</span>
-                </Box>
-                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <Box
-                      sx={{
-                        bgcolor: "#FF4560",
-                        borderRadius: "50%",
-                        height: "10px",
-                        width: "10px",
-                        marginRight: "6px",
-                      }}
-                    />
-                    <span>여성</span>
-                  </Box>
-                  <span>12%</span>
-                </Box>
-                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <Box
-                      sx={{
-                        bgcolor: "#354050",
-                        borderRadius: "50%",
-                        height: "10px",
-                        width: "10px",
-                        marginRight: "6px",
-                      }}
-                    />
-                    <span>기타</span>
-                  </Box>
-                  <span>32%</span>
-                </Box>
-              </Grid>
-              <Grid item xs={1}></Grid>
-              <Grid item xs={5}>
-                <SearchByGenderChart />
-              </Grid>
-            </Grid>
+            {
+              statisticsData && statisticsData.gender && statisticsData.gender.result ? 
+              <GenderCard result={statisticsData.gender.result}/> :
+              <LoadingBox/>
+            }
           </ChartCard>
         </Grid>
         <Grid item xs={12} md={6} xl={3} sx={{ padding: "10px" }}>
@@ -858,15 +947,19 @@ const OverviewChart = () => {
             title="검색 결과 만족도"
             sx={{ height: "150px", paddingTop: "0px" }}
           >
-            <SafisfactionShowTable />
+            {
+              statisticsData && statisticsData.satisfaction && statisticsData.satisfaction.result ? 
+              <SafisfactionShowTable result={statisticsData.satisfaction.result}/> :
+              <LoadingBox/>
+            }
           </ChartCard>
         </Grid>
         <Grid item xs={12} md={6} xl={3} sx={{ padding: "10px" }}>
           {/* SearchSatisfaction */}
           <ChartCard
             isSmallCard
-            title="만족도 투표"
-            sx={{ height: "150px", paddingTop: "0px" }}
+            title=""
+            sx={{ height: "100%", paddingTop: "0px" }}
           >
             <SatisfactionVoteTable />
           </ChartCard>
@@ -875,54 +968,56 @@ const OverviewChart = () => {
         <Grid item xs={12} lg={6} sx={{ padding: "10px" }}>
           <TableCard title="유사 키워드" sx={{ height: "330px" }}>
             {/* KeywordTable */}
-            <KeywordTable />
+            {
+              statisticsData && statisticsData.similarKeywords && statisticsData.similarKeywords.result ? 
+              <KeywordTable result={statisticsData.similarKeywords.result}/> :
+              <LoadingBox/>
+            }
           </TableCard>
         </Grid>
         <Grid item xs={12} lg={6} sx={{ padding: "10px" }}>
           {/* SearchTrendByPeriodChart */}
           <ChartCard title="기간별 검색 추이" sx={{ height: "300px" }}>
-            <SearchTrendByPeriodChart />
+            {
+              statisticsData && statisticsData.monthlyTrend && statisticsData.monthlyTrend.result ? 
+              <SearchTrendByPeriodChart result={statisticsData.monthlyTrend.result}/> :
+              <LoadingBox/>
+            }
           </ChartCard>
         </Grid>
 
         <Grid item xs={12} lg={3} sx={{ padding: "10px" }}>
           <TableCard title="비디오 정보" sx={{ height: "280px" }}>
             {/* VideoInfoTable */}
-            <VideoTable />
+            {
+              statisticsData && statisticsData.relatedVideos && statisticsData.relatedVideos.result ? 
+              <VideoTable result={statisticsData.relatedVideos.result}/> :
+              <LoadingBox/>
+            }
           </TableCard>
         </Grid>
         <Grid item xs={12} lg={6} sx={{ padding: "10px" }}>
           <ChartCard title="연령대별 검색 횟수" sx={{ height: "250px" }}>
             {/* SearchCountByAgeGroupChart */}
-            <SearchCountByAgeGroupChart />
+            {
+              statisticsData && statisticsData.age && statisticsData.age.result ? 
+              <SearchCountByAgeGroupChart result={statisticsData.age.result}/> :
+              <LoadingBox/>
+            }
           </ChartCard>
         </Grid>
         <Grid item xs={12} lg={3} sx={{ padding: "10px" }}>
           {/* SearchDownloadRatioChart */}
           <ChartCard title="검색 대비 다운로드 비율" sx={{ height: "250px" }}>
-            <SearchDownloadRatioChart />
-            <Box sx={{ textAlign: "center" }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <CheckIcon
-                  sx={{ marginRight: "3px", color: "rgb(0,210,122)" }}
-                />
-                <p style={{ margin: 0, fontSize: "16px" }}>
-                  현재 "안녕" 키워드는 적절합니다.
-                </p>
-              </Box>
-
-              <p style={{ fontSize: "12px" }}>전체 검색 n건중 m건 다운로드</p>
-            </Box>
+            {
+              statisticsData && statisticsData.download && statisticsData.download.result ? 
+              <SearchDownloadRatioChart result={statisticsData.download.result} keyword={keyword}/> :
+              <LoadingBox/>
+            }
           </ChartCard>
         </Grid>
-      </Grid>
+      </Grid>}
+      
     </div>
   );
 };

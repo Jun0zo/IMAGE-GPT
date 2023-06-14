@@ -10,11 +10,14 @@ COPY package*.json ./
 # Install the dependencies
 RUN npm install
 
+# Copy key.pem and csr.pem
+COPY key.pem cert.pem /app/
+
 # Copy the rest of the application files
 COPY . .
 
 # Set the environment variable to specify the API URL
-ENV REACT_APP_API_URL=http://fastapi:8000
+ENV REACT_APP_API_URL=https://fastapi:8000
 
 # Build the application
 RUN npm run build
