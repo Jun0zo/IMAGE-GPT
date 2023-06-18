@@ -15,13 +15,11 @@ import CommentIcon from "@mui/icons-material/Comment";
 
 const SearchBar = (props) => {
   const { keyword, value, handleValue } = props;
-  console.log(props);
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     handleValue(event.target.value);
     if (event.key === "Enter") {
-      alert(`/search/${event.target.value}`);
       navigate(`/search/${event.target.value}`);
       return false; // 추가적인 이벤트 실행을 방지하기 위해 false 리턴
     }
