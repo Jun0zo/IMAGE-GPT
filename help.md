@@ -1,5 +1,3 @@
-docker-compose build or docker-compose build --no-chache
-
 # (Python -> docker mysql)python script에서 안될때
 
 docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' image-gpt-db-1 로 ip받고
@@ -32,3 +30,11 @@ docker exec -it image-gpt-db-1 mysql -u root -ptest
 # mysql docker terminal에서 접속
 
 docker exec -it image-gpt-db-1 mysql -u root -ptest
+
+# docker build 중 에러
+
+ERROR [internal] load metadata for docker.io/library/node:14-alpine
+
+# 해결
+
+docker pull node:14-alpine
