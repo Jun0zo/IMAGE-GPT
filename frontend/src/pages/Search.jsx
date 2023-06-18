@@ -84,7 +84,7 @@ const Search = () => {
 
         {/* <Box sx={{ height: "100vh" }}> */}
         <Box sx={{ padding: "30px 0px" }}>
-          <OverviewChart />
+          <OverviewChart statisticsData={statisticsData} />
         </Box>
       </div>
       {keyword}

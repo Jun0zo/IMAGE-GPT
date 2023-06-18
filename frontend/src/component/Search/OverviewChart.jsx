@@ -725,7 +725,7 @@ const SearchDownloadRatioChart = () => {
   );
 };
 
-const OverviewChart = () => {
+const OverviewChart = ({ statisticsData }) => {
   return (
     <div
       style={{
